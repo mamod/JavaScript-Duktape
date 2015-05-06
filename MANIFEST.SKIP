@@ -1,0 +1,16 @@
+MANIFEST.bak
+MANIFEST.SKIP
+Makefile.old
+Makefile$
+README.pod
+.gitignore
+.git/
+blib/
+pm_to_blib
+MYMETA.*
+JavaScript-Duktape.*tar[.]gz$
+.inline
+_inline
+c_tests
+Dev
+tests
