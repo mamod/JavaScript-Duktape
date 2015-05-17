@@ -149,6 +149,12 @@ sub get {
 sub vm { shift->{duk}; }
 sub duk { shift->{duk}; }
 
+sub DESTROY {
+    my $self = shift;
+    my $duk = $self->duk;
+    $duk->destroy_heap();
+}
+
 =head1 NAME
 
 JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
@@ -176,7 +182,6 @@ JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
         })();
     ~);
 =cut
-
 
 package JavaScript::Duktape::Vm;
 use strict;
@@ -481,6 +486,8 @@ sub dump {
     }
     printf $fh "\n";
 }
+
+sub DESTROY {}
 
 package JavaScript::Duktape::Bool; {
     use warnings;

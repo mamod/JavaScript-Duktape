@@ -192,10 +192,8 @@ SV *perl_duk_require_context(duk_context *ctx, duk_idx_t index) {
 
 void DESTROY(duk_context *ctx) {
     printf("Destroying %p\n", ctx);
-    // Safefree(ctx);
-    //duk_destroy_heap(ctx);
+    Safefree(ctx);
 }
-
 
 
 /* 
