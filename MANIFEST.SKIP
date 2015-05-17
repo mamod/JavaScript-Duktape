@@ -15,3 +15,4 @@ c_tests
 Dev
 tests
 README.md
+.travis.yml
