@@ -4,7 +4,7 @@ use warnings;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.0.1_1';
+our $VERSION = '0.0.1_2';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -110,7 +110,6 @@ use constant {
     DUK_DEFPROP_HAVE_GETTER        => (1 << 7),
     DUK_DEFPROP_HAVE_SETTER        => (1 << 8),
     DUK_DEFPROP_FORCE              => (1 << 9),
-
     DUK_VARARGS                    => -1
 };
 
@@ -122,14 +121,7 @@ sub new {
     return $self;
 }
 
-my $t = 1;
-my $f = 0;
-my $n = '';
-my $null  = bless \$n, 'JS::NULL';
-my $true  = bless \$t, 'JS::TRUE';
-my $false = bless \$f, 'JS::FALSE';
-
-sub null  { $null }
+sub null  { $JavaScript::Duktape::Data::null; }
 sub true  { $JavaScript::Duktape::Bool::true; }
 sub false { $JavaScript::Duktape::Bool::false }
 
@@ -160,6 +152,9 @@ sub duk { shift->{duk}; }
 =head1 NAME
 
 JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
+
+=for html
+<a href="https://travis-ci.org/mamod/JavaScript-Duktape"><img src="https://travis-ci.org/mamod/JavaScript-Duktape.svg?branch=master"></a>
 
 =head1 SYNOPSIS
     
@@ -207,6 +202,7 @@ use Inline C => config =>
     typemaps => JavaScript::Duktape::C::libPath::getPath('typemap'),
     INC => '-I' . JavaScript::Duktape::C::libPath::getPath('../C');
 
+#XXX : build duktape as a shared library and link it
 # use Inline C => config =>
 #     myextlib => $Duklib,
 #     LIBS => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
@@ -216,58 +212,7 @@ use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
 my $SUB = 0;
 my $Functions = {};
 
-use constant {
-    DUK_TYPE_NONE      => 0,
-    DUK_TYPE_UNDEFINED => 1,
-    DUK_TYPE_NULL      => 2,
-    DUK_TYPE_BOOLEAN   => 3,
-    DUK_TYPE_NUMBER    => 4,
-    DUK_TYPE_STRING    => 5,
-    DUK_TYPE_OBJECT    => 6,
-    DUK_TYPE_BUFFER    => 7,
-    DUK_TYPE_POINTER   => 8,
-    DUK_TYPE_LIGHTFUNC => 9,
 
-    DUK_TYPE_MASK_NONE       => (1 << 0),
-    DUK_TYPE_MASK_UNDEFINED  => (1 << 1),
-    DUK_TYPE_MASK_NULL       => (1 << 2),
-    DUK_TYPE_MASK_BOOLEAN    => (1 << 3),
-    DUK_TYPE_MASK_NUMBER     => (1 << 4),
-    DUK_TYPE_MASK_STRING     => (1 << 5),
-    DUK_TYPE_MASK_OBJECT     => (1 << 6),
-    DUK_TYPE_MASK_BUFFER     => (1 << 7),
-    DUK_TYPE_MASK_POINTER    => (1 << 8),
-    DUK_TYPE_MASK_LIGHTFUNC  => (1 << 9),
-    DUK_TYPE_MASK_THROW      => (1 << 10),
-
-    # Enumeration flags for duk_enum()
-    DUK_ENUM_INCLUDE_NONENUMERABLE => (1 << 0),
-    DUK_ENUM_INCLUDE_INTERNAL      => (1 << 1),
-    DUK_ENUM_OWN_PROPERTIES_ONLY   => (1 << 2),
-    DUK_ENUM_ARRAY_INDICES_ONLY    => (1 << 3),
-    DUK_ENUM_SORT_ARRAY_INDICES    => (1 << 4),
-    DUK_ENUM_NO_PROXY_BEHAVIOR     => (1 << 5),
-
-    DUK_COMPILE_EVAL               => (1 << 0),   
-    DUK_COMPILE_FUNCTION           => (1 << 1),
-    DUK_COMPILE_STRICT             => (1 << 2),
-    DUK_COMPILE_SAFE               => (1 << 3),
-    DUK_COMPILE_NORESULT           => (1 << 4),
-    DUK_COMPILE_NOSOURCE           => (1 << 5),
-    DUK_COMPILE_STRLEN             => (1 << 6),
-
-    #Flags for duk_def_prop() and its variants
-    DUK_DEFPROP_WRITABLE           => (1 << 0),
-    DUK_DEFPROP_ENUMERABLE         => (1 << 1),
-    DUK_DEFPROP_CONFIGURABLE       => (1 << 2),
-    DUK_DEFPROP_HAVE_WRITABLE      => (1 << 3),
-    DUK_DEFPROP_HAVE_ENUMERABLE    => (1 << 4),
-    DUK_DEFPROP_HAVE_CONFIGURABLE  => (1 << 5),
-    DUK_DEFPROP_HAVE_VALUE         => (1 << 6),
-    DUK_DEFPROP_HAVE_GETTER        => (1 << 7),
-    DUK_DEFPROP_HAVE_SETTER        => (1 << 8),
-    DUK_DEFPROP_FORCE              => (1 << 9),
-};
 
 sub push_perl {
     my $self = shift;
@@ -275,7 +220,7 @@ sub push_perl {
 
     my $ref = ref $val;
     if ($ref){
-        if ($ref eq 'JS::NULL'){
+        if ($ref eq 'JavaScript::Duktape::Data'){
             $self->push_null();
         } elsif ($ref eq 'JavaScript::Duktape::Bool'){
             if ($val){
@@ -327,15 +272,15 @@ sub to_perl {
     
     my $type = $self->get_type($index);
 
-    if ($type == DUK_TYPE_STRING){
+    if ($type == JavaScript::Duktape::DUK_TYPE_STRING){
         $ret = $self->get_string($index);
     }
 
-    elsif ($type == DUK_TYPE_NUMBER){
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_NUMBER){
         $ret = $self->get_number($index) + 0;
     }
 
-    elsif ($type == DUK_TYPE_OBJECT){
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_OBJECT){
 
         if ($self->is_function($index)){
             my $ptr = $self->get_heapptr($index);
@@ -354,7 +299,7 @@ sub to_perl {
 
         my $isArray = $self->is_array($index);
         $ret = $isArray ? [] : {};
-        $self->enum($index, DUK_ENUM_OWN_PROPERTIES_ONLY);
+        $self->enum($index, JavaScript::Duktape::DUK_ENUM_OWN_PROPERTIES_ONLY);
 
         while ($self->next(-1, 1)) {
             my $key = $self->to_perl(-2);
@@ -371,7 +316,7 @@ sub to_perl {
         $self->pop();
     }
 
-    elsif ($type == DUK_TYPE_BOOLEAN){
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_BOOLEAN){
         my $bool =  $self->get_boolean($index);
         if ($bool == 1){
             $ret = JavaScript::Duktape::Bool::true();
@@ -380,11 +325,12 @@ sub to_perl {
         }
     }
 
-    elsif ($type == DUK_TYPE_NULL){
-        $ret = $null;
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_NULL){
+        $ret = JavaScript::Duktape::Data::null();
     }
 
-    elsif ($type == DUK_TYPE_POINTER){
+    ##XXX to do
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_POINTER){
         $ret = "pointer";
     }
 
@@ -445,19 +391,8 @@ above but with using C<dump> function to get a glance of stack top
 =cut
 
 ##############################################
-# eval functions
+# push functions
 ##############################################
-
-sub call_function {
-    my $args = shift;
-    my $self = $args->{self};
-    my $sub = $args->{sub};
-    my $top = $self->get_top();
-    eval { $self->perl_duk_safe_call($sub, $top, 1) };
-    if ($@){ die $@; }
-    return 0;
-}
-
 sub push_function {
     my $self = shift;
     my $sub = shift;
@@ -465,17 +400,25 @@ sub push_function {
     if (!defined $nargs){ $nargs = -1 }
 
     $SUB++;
-    $Functions->{$SUB} = {
-        sub => sub {
-            my $ret = $sub->($self);
-            if ($ret > 1){
-                $self->eval_string("throw new Error('unknown return value')");
-                return 1;
+    $Functions->{$SUB} = sub {
+        my $top = $self->get_top();
+        my $ret = 1;
+        $self->perl_duk_safe_call(sub {
+            eval { $ret = $sub->($self) };
+            my $error = $@;
+            if ($error){
+                if ($error =~ /^Duk::Error/){
+                    die $@;
+                } else {
+                    $error =~ s/\n//g;
+                    $self->eval_string("throw new Error('$error')");
+                }
             }
             return $ret;
-        },
-        self => $self
+        }, $top, 1);
+        return $ret;
     };
+
     $self->perl_push_function($Functions->{$SUB}, $nargs);
 }
 
@@ -486,22 +429,28 @@ sub safe_call {
     my $self = shift;
     my $sub = shift;
     my $safe = sub {
-        my $ret;
-        eval { $ret = $sub->($self) };
-        my $error = $@;
-        if ($error) {
-            if ($error =~ /^Duk::Error/i) {
-                die;
-            } else {
-                $error =~ s/\n//g;
-                $self->peval_string_noresult("throw new Error('$error')");
-            }
-        }
-        return $ret;
+        return $sub->($self);
     };
 
+    my $oldtop = $self->get_top();
     eval { $self->perl_duk_safe_call($safe, @_) };
-    if ($@){ return 1 }
+    my $error = $@;
+    if ($error) {
+        if ($error =~ /^Duk::Error/i) {
+            # error came from duktape do nothing;
+        } else {
+            #error from perl push error object
+            #and clear previous pushed stack
+            my $newtop = $self->get_top();
+            if ($newtop > $oldtop){
+                $self->pop_n($newtop - $oldtop);
+            }
+            $error =~ s/\n//g;
+            $self->reset_top();
+            $self->eval_string("var t = new Error('$error'); t;");
+        }
+        return 1;
+    }
     return 0;
 }
 
@@ -537,7 +486,6 @@ package JavaScript::Duktape::Bool; {
     our ($true, $false);
     use overload
         '""' => sub { ${$_[0]} },
-        # '!' => sub { !${$_[0]} },
         'bool' => sub { ${$_[0]} ? 1 : 0 },
         fallback => 1;
 
@@ -550,6 +498,23 @@ package JavaScript::Duktape::Bool; {
 
     sub true  { $true }
     sub false { $false }
+}
+
+package JavaScript::Duktape::Data; {
+    use warnings;
+    use strict;
+    our ($null);
+    use overload
+        '""' => sub { ${$_[0]} },
+        'bool' => sub { ${$_[0]} ? 1 : 0 },
+        fallback => 1;
+
+    BEGIN {
+        my $n = '';
+        $null  = bless \$n, 'JavaScript::Duktape::Data';
+    }
+
+    sub null  { $null }
 }
 
 1;

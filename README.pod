@@ -1,0 +1,77 @@
+=head1 NAME
+
+JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
+
+=for html
+<a href="https://travis-ci.org/mamod/JavaScript-Duktape"><img src="https://travis-ci.org/mamod/JavaScript-Duktape.svg?branch=master"></a>
+
+=head1 SYNOPSIS
+    
+    use JavaScript::Duktape;
+
+    ##create new js context
+    my $js = JavaScript::Duktape->new();
+
+    #set function to be used from javascript land
+    $js->set('write' => sub {
+        print $_[0], "\n";
+    });
+
+    $js->eval(qq~
+        (function(){
+            for (var i = 0; i < 100; i++){
+                write(i);
+            }
+        })();
+    ~);
+=cut
+
+
+=head1 duktape API
+
+duk api corresponds to Duktape Engine API see L<http://duktape.org/api.html>
+To access vm create new context then call C<vm>
+
+    my $js = JavaScript::Duktape->new();
+    my $duk = $js->vm;
+
+    #now you can call Duktape API from perl 
+
+    $duk->push_string('print');
+    $duk->eval();
+    $duk->push_string('hi');
+    $duk->call(1);
+    $duk->pop();
+
+Also you may find it useful to use C<dump> function
+regularly to get a better idea where you're in the stack, the following code is the same example
+above but with using C<dump> function to get a glance of stack top
+
+    my $js = JavaScript::Duktape->new();
+    my $duk = $js->duk;
+
+    #push "print" string
+    $duk->push_string('print');
+    $duk->dump(); #-> [ Duktape (top=1): print ]
+    
+    #since print is a native function we need to evaluate it
+    $duk->eval();
+    $duk->dump(); #-> [ Duktape (top=1): function print() {/* native */} ]
+
+    #push one argument to print function
+    $duk->push_string('hi');
+    $duk->dump(); #-> [ Duktape (top=2): function print() {/* native */} hi ]
+    
+    #now call print function and pass "hi" as one argument
+    $duk->call(1);
+
+    #since print function doesn't return any value, it will push undefined to the stack
+    $duk->dump(); #-> [ Duktape (top=1): undefined ]
+
+    #pop to remove undefined from stack top
+    $duk->pop();
+
+    #Bingo
+    $duk->dump(); #-> [ Duktape (top=0): ]
+
+=cut

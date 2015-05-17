@@ -71,7 +71,7 @@ $duk->reset_top();
 
 	$duk->push_function(\&safe_fn_2, 3);
 	$duk->push_string("Hi");
-	$duk->pcall(1);
+	eval { $duk->pcall(1) };
 
 	my $top = $duk->get_top;
 	is($top,1);

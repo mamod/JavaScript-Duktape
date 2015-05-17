@@ -8,10 +8,9 @@ use Test::More;
 my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
-
 my $count = 0;
 
-$js->set('perlFn', sub {
+$duk->push_function(sub {
 	eval {};
 	$count++;
 	$duk->push_string("hi");
@@ -19,6 +18,8 @@ $js->set('perlFn', sub {
 	$duk->require_string(99);
 	fail("should never get here");
 });
+
+$duk->put_global_string("perlFn");
 
 
 {  #eval with try
@@ -33,11 +34,6 @@ $js->set('perlFn', sub {
 	};
 	ok ($@, $@);
 	is($count, 1, "called once");
-
-	my $top = $duk->get_top();
-	
-	is($top, 0, "Error On Top");
-	$duk->dump("1");
 }
 
 { #eval without try
@@ -52,7 +48,6 @@ $js->set('perlFn', sub {
 
 	my $top = $duk->get_top();
 	is($top, 0, "Error on Top");
-	$duk->dump("2");
 }
 
 {  #peval with try/catch
@@ -95,7 +90,6 @@ $js->set('perlFn', sub {
 
 	my $top = $duk->get_top();
 	is($top, 1, "Error is on top");
-	$duk->dump();
 	my $err_str = $duk->to_string(0);
 	ok($err_str =~ /^Error: Died at/, $err_str);
 }
@@ -111,7 +105,7 @@ $js->set('perlFn', sub {
 		fail("should never get here");
 	});
 
-	$duk->eval_string("perlFn");
+	$duk->peval_string("perlFn");
 	eval {
 		$duk->call(0);
 	};
@@ -128,4 +122,4 @@ $js->set('perlFn', sub {
 	is($str, "TypeError: not string");
 }
 
-done_testing();
+done_testing(15);

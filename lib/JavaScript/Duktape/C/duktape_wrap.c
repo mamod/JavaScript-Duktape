@@ -9,8 +9,6 @@
 #define NEED_newRV_noinc
 #include "duktape.c"
 
-
-
 #ifndef Newx
 #  define Newx(v,n,t) New(0,v,n,t)
 #endif
@@ -37,7 +35,7 @@ int dump_stack(duk_context *ctx, const char *name) {
 void perl_duk_reset_top(duk_context *ctx);
 
 void fatal_handler (duk_context *ctx, duk_errcode_t code, const char *str) {
-    perl_duk_reset_top(ctx);
+    // perl_duk_reset_top(ctx);
     if (duk_get_error_code(ctx, -1) > 0){
         croak(duk_to_string(ctx, -1));
     } else {
@@ -80,9 +78,7 @@ int call_safe_perl_sub(duk_context *ctx) {
 
     dTHX;
     dSP;
-    int n;
-    dJMPENV;
-    JMPENV_PUSH(n);
+
     char *error = NULL;
     STRLEN error_len;
     SV    *sv;
@@ -92,27 +88,13 @@ int call_safe_perl_sub(duk_context *ctx) {
     SAVETMPS;
     PUSHMARK(SP);
     PUTBACK;
-    if (n == 0){
-        count = call_sv(gCallback, G_NOARGS | G_SCALAR);
-        JMPENV_POP;
-        SPAGAIN;
-        if( count > 0) {
-            sv = POPs;
-            if(SvIOK(sv)) {
-                ret = SvIV(sv);
-            }
+    count = call_sv(gCallback, G_NOARGS | G_SCALAR );
+    SPAGAIN;
+    if( count > 0) {
+        sv = POPs;
+        if(SvIOK(sv)) {
+            ret = SvIV(sv);
         }
-    } else {
-        JMPENV_POP;
-        FREETMPS;
-        LEAVE;
-        
-        if (SvTRUE(ERRSV)){
-            error = SvPV( ERRSV, error_len);
-            duk_error(ctx, 100, error);
-        }
-        
-        JMPENV_JUMP(n);
     }
 
     PUTBACK;
@@ -125,7 +107,6 @@ duk_int_t perl_duk_safe_call(duk_context *ctx, SV *func, duk_idx_t nargs, duk_id
     
     dTHX;
     duk_int_t ret;
-
     if (gCallback == (SV*)NULL) {
         gCallback = newSVsv(func);
     } else {
@@ -147,31 +128,43 @@ duk_int_t perl_duk_safe_call(duk_context *ctx, SV *func, duk_idx_t nargs, duk_id
     return ret;
 }
 
+int call_perl_function(duk_context *ctx) {
 
-/**
-  * process.call_perl_sub(ptr)
-******************************************************************************/
-static const int call_perl_function(duk_context *ctx) {
     duk_push_current_function(ctx);
     duk_get_prop_string(ctx, -1, "_my_perl_sub");
     SV *sub = duk_require_pointer(ctx, -1);
     duk_pop_2(ctx);
 
+    char *error = NULL;
+    STRLEN error_len;
+    
     dSP;
+    SV    *sv;
     int count;
+    int ret = 0;
     ENTER;
     SAVETMPS;
     PUSHMARK(SP);
     XPUSHs(sub);
     PUTBACK;
-    call_pv("JavaScript::Duktape::Vm::call_function", G_DISCARD | G_EVAL);
+    count = call_sv(sub, G_NOARGS | G_EVAL);
+    SPAGAIN;
+    if( count > 0) {
+        sv = POPs;
+        if(SvIOK(sv)) {
+            ret = SvIV(sv);
+        }
+    }
+
     PUTBACK;
     FREETMPS;
     LEAVE;
     if (SvTRUE(ERRSV)){
+        POPs;
+        error = SvPV( ERRSV, error_len);
         duk_throw(ctx);
     }
-    return 1;
+    return ret;
 }
 
 duk_idx_t perl_push_function (duk_context *ctx, SV *sub, duk_idx_t nargs) {

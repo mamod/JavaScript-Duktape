@@ -22,10 +22,13 @@ my $data = {
 		is("Hi", $_[1]);
 		is($_[2], true); #true
 		ok($_[2]); #true
+		
 		is($_[3], false); #false
 		ok(!$_[3]); #false
 
 		#XXX : test null $_[4]
+		ok(!$_[4]);
+		is($_[4], null);
 
 		##fifth argument passed as javascript function
 		$_[5]->(sub {
@@ -71,4 +74,4 @@ if (false){
 	print "OK\n";
 }
 
-done_testing(16);
+done_testing(18);
