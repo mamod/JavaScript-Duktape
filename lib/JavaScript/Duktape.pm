@@ -411,6 +411,7 @@ sub push_function {
                     die $@;
                 } else {
                     $error =~ s/\n//g;
+                    $error =~ s/\\/\\\\/g;
                     $self->eval_string("throw new Error('$error')");
                 }
             }
@@ -446,6 +447,7 @@ sub safe_call {
                 $self->pop_n($newtop - $oldtop);
             }
             $error =~ s/\n//g;
+            $error =~ s/\\/\\\\/g;
             $self->reset_top();
             $self->eval_string("var t = new Error('$error'); t;");
         }
