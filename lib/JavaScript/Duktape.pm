@@ -5,7 +5,7 @@ use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.0.1_2';
+our $VERSION = '0.0.2_1';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -118,7 +118,7 @@ sub new {
     my $class= shift;
     my $self = bless {}, $class;
     $self->{duk} = JavaScript::Duktape::Vm->new();
-    $self->{func} = {};
+    $self->{pid} = $$;
     return $self;
 }
 
@@ -195,7 +195,9 @@ sub duk { shift->{duk}; }
 sub DESTROY {
     my $self = shift;
     my $duk = $self->duk;
-    $duk->destroy_heap();
+    if ($self->{pid} == $$){
+        $duk->destroy_heap();
+    }
 }
 
 package JavaScript::Duktape::Vm;
@@ -221,11 +223,8 @@ BEGIN {
 use Inline C => config =>
     typemaps => JavaScript::Duktape::C::libPath::getPath('typemap'),
     INC => '-I' . JavaScript::Duktape::C::libPath::getPath('../C');
-
-#XXX : build duktape as a shared library and link it
-# use Inline C => config =>
-#     myextlib => $Duklib,
-#     LIBS => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
+    # myextlib => $Duklib,
+    # LIBS => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
 
 use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
 
@@ -419,7 +418,6 @@ sub safe_call {
             }
             $error =~ s/\n//g;
             $error =~ s/\\/\\\\/g;
-            $self->reset_top();
             $self->eval_string("var t = new Error('$error'); t;");
         }
         return 1;

@@ -13,10 +13,6 @@
 #  define Newx(v,n,t) New(0,v,n,t)
 #endif
 
-void Throw_pDuk_Error (){
-    croak("Duk::Error");
-}
-
 int dump_stack(duk_context *ctx, const char *name) {
     duk_idx_t i, n;
     n = duk_get_top(ctx);
@@ -37,7 +33,7 @@ void perl_duk_reset_top(duk_context *ctx);
 void fatal_handler (duk_context *ctx, duk_errcode_t code, const char *str) {
     // perl_duk_reset_top(ctx);
     if (duk_get_error_code(ctx, -1) > 0){
-        croak(duk_to_string(ctx, -1));
+        croak(duk_safe_to_string(ctx, -1));
     } else {
         croak("duktape uncaught error");
     }
@@ -74,11 +70,11 @@ void perl_duk_reset_top(duk_context *ctx){
   *
 ******************************************************************************/
 static SV * gCallback = (SV*)NULL;
+JMPENV *old_perl_top;
+
 int call_safe_perl_sub(duk_context *ctx) {
 
-    dTHX;
     dSP;
-
     char *error = NULL;
     STRLEN error_len;
     SV    *sv;
@@ -88,7 +84,7 @@ int call_safe_perl_sub(duk_context *ctx) {
     SAVETMPS;
     PUSHMARK(SP);
     PUTBACK;
-    count = call_sv(gCallback, G_NOARGS | G_SCALAR );
+    count = call_sv(gCallback, G_NOARGS | G_SCALAR);
     SPAGAIN;
     if( count > 0) {
         sv = POPs;
@@ -100,31 +96,26 @@ int call_safe_perl_sub(duk_context *ctx) {
     PUTBACK;
     FREETMPS;
     LEAVE;
+
     return ret;
 }
 
 duk_int_t perl_duk_safe_call(duk_context *ctx, SV *func, duk_idx_t nargs, duk_idx_t nrets) {
     
-    dTHX;
-    duk_int_t ret;
+    duk_int_t ret = 0;
     if (gCallback == (SV*)NULL) {
         gCallback = newSVsv(func);
     } else {
         SvSetSV(gCallback, func);
     }
 
-    int n;
-    dJMPENV;
-    JMPENV_PUSH(n);
-    if (n == 0){
-        ret = duk_safe_call(ctx, call_safe_perl_sub, nargs, nrets);
-        JMPENV_POP;
-    } else {
-        JMPENV_POP;
-        JMPENV_JUMP(n);
+    old_perl_top = PL_top_env;
+    ret = duk_safe_call(ctx, call_safe_perl_sub, nargs, nrets);
+    if (ret == 1){
+        PL_top_env = old_perl_top;
+        croak("Duk::Error");
     }
-
-    if (ret != 0){ Throw_pDuk_Error(); }
+    
     return ret;
 }
 
@@ -145,11 +136,13 @@ int call_perl_function(duk_context *ctx) {
     ENTER;
     SAVETMPS;
     PUSHMARK(SP);
-    XPUSHs(sub);
     PUTBACK;
-    count = call_sv(sub, G_NOARGS | G_EVAL);
+    count = call_sv(sub, G_NOARGS | G_EVAL | G_SCALAR);
     SPAGAIN;
-    if( count > 0) {
+    if (SvTRUE(ERRSV)){
+        POPs;
+        error = SvPV( ERRSV, error_len);
+    } else if( count > 0) {
         sv = POPs;
         if(SvIOK(sv)) {
             ret = SvIV(sv);
@@ -159,11 +152,10 @@ int call_perl_function(duk_context *ctx) {
     PUTBACK;
     FREETMPS;
     LEAVE;
-    if (SvTRUE(ERRSV)){
-        POPs;
-        error = SvPV( ERRSV, error_len);
+    if (error){
         duk_throw(ctx);
     }
+
     return ret;
 }
 
@@ -192,7 +184,7 @@ SV *perl_duk_require_context(duk_context *ctx, duk_idx_t index) {
 
 void DESTROY(duk_context *ctx) {
     printf("Destroying %p\n", ctx);
-    Safefree(ctx);
+    //Safefree(ctx);
 }
 
 
