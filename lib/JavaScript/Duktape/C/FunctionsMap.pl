@@ -1,4 +1,7 @@
 #This File auto generated
+use strict;
+use warnings;
+
 =over
 
 =cut

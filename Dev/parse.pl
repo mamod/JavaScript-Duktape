@@ -120,6 +120,9 @@ print $out $output;
 my $fjoin = join "\n", @map;
 my $foutput = qq~
 #This File auto generated
+use strict;
+use warnings;
+
 =over
 
 =cut
