@@ -1,5 +1,9 @@
 Revision history for Perl module JavaScript::Duktape
 
+0.0.3  2015 2015-06-13
+	- Development Release
+	- updating Duktape engine to v 1.2.2
+
 0.0.2_1  2015 2015-05-20
 	- 3rd Development Release
 	- Code Clean

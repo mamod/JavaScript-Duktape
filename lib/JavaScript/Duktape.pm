@@ -5,7 +5,7 @@ use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.0.2_1';
+our $VERSION = '0.0.3';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -16,7 +16,7 @@ our @EXPORT = qw (
     DUK_TYPE_NUMBER
     DUK_TYPE_STRING
     DUK_TYPE_OBJECT
-    DUK_TYPE_BUFFER 
+    DUK_TYPE_BUFFER
     DUK_TYPE_POINTER
     DUK_TYPE_LIGHTFUNC
     DUK_ENUM_INCLUDE_NONENUMERABLE
