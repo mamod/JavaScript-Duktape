@@ -19,7 +19,7 @@ WriteMakefile(
         'ExtUtils::MakeMaker' => '6.63',
     },
     PREREQ_PM         => {
-        'Inline'      => '0.51',
-        'Inline::C'   => '0.51',
+        'Inline'      => '0.80',
+        'Inline::C'   => '0.75',
     }
 );
