@@ -615,8 +615,8 @@ you can translate duktape api to perl
     
     $duk->push_c_function(sub { 
         my $duk = shift;
-        my $num1 = shift;
-        my $num2 = shift;
+        my $num1 = $duk->get_int(0);
+        my $num2 = $duk->get_int(1);
 
         my $total = $num1+$num2;
         $duk->push_number($total);
