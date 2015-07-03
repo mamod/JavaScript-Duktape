@@ -5,7 +5,7 @@ use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.0.3';
+our $VERSION = '0.0.4';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
