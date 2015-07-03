@@ -2,6 +2,7 @@ Revision history for Perl module JavaScript::Duktape
 
 0.0.4 2015 2015-06-17
 	- fix 'typemaps' is not a valid config option for Inline::C by requirung last Inline & Inline::C versions
+	- fix documentation example
 
 0.0.3  2015 2015-06-13
 	- Development Release
