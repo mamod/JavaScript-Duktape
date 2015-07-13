@@ -122,7 +122,7 @@ sub new {
     return $self;
 }
 
-sub null  { $JavaScript::Duktape::Data::null; }
+sub null  { $JavaScript::Duktape::NULL::null; }
 sub true  { $JavaScript::Duktape::Bool::true; }
 sub false { $JavaScript::Duktape::Bool::false }
 
@@ -237,7 +237,7 @@ sub push_perl {
 
     my $ref = ref $val;
     if ($ref){
-        if ($ref eq 'JavaScript::Duktape::Data'){
+        if ($ref eq 'JavaScript::Duktape::NULL'){
             $self->push_null();
         } elsif ($ref eq 'JavaScript::Duktape::Bool'){
             if ($val){
@@ -270,6 +270,8 @@ sub push_perl {
                 $self->push_perl($ret);
                 return 1;
             });
+        } elsif ($ref eq 'JavaScript::Duktape::Pointer'){
+            $self->push_pointer($$val);
         }
     } else {
         if (!defined $val){
@@ -343,12 +345,13 @@ sub to_perl {
     }
 
     elsif ($type == JavaScript::Duktape::DUK_TYPE_NULL){
-        $ret = JavaScript::Duktape::Data::null();
+        $ret = JavaScript::Duktape::NULL::null();
     }
 
     ##XXX to do
     elsif ($type == JavaScript::Duktape::DUK_TYPE_POINTER){
-        $ret = "pointer";
+        my $p = $self->get_pointer($index);
+        $ret = bless \$p, 'JavaScript::Duktape::Pointer';
     }
 
     else {
@@ -366,7 +369,6 @@ sub push_function {
     my $sub = shift;
     my $nargs = shift;
     if (!defined $nargs){ $nargs = -1 }
-
     $SUB++;
     $Functions->{$SUB} = sub {
         my $top = $self->get_top();
@@ -473,7 +475,7 @@ package JavaScript::Duktape::Bool; {
     sub false { $false }
 }
 
-package JavaScript::Duktape::Data; {
+package JavaScript::Duktape::NULL; {
     use warnings;
     use strict;
     our ($null);
@@ -484,7 +486,7 @@ package JavaScript::Duktape::Data; {
 
     BEGIN {
         my $n = '';
-        $null  = bless \$n, 'JavaScript::Duktape::Data';
+        $null  = bless \$n, 'JavaScript::Duktape::NULL';
     }
 
     sub null  { $null }
