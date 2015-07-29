@@ -1,5 +1,8 @@
 Revision history for Perl module JavaScript::Duktape
 
+0.1.0 2015 2015-07-29
+	- Adding dlopen and dlclose functions
+
 0.0.5 2015 2015-07-16
 	- JavaScript::Duktape::Data -> JavaScript::Duktape::NULL
 	- Adding push_pointer and get_pointer support

@@ -7,6 +7,9 @@
 #include "ppport.h"
 
 #define NEED_newRV_noinc
+
+#define DUKTAPE_DONT_LOAD_SHARED
+#include "como.h"
 #include "duktape.c"
 
 #ifndef Newx
@@ -180,6 +183,40 @@ SV *perl_duk_require_context(duk_context *ctx, duk_idx_t index) {
     sv_bless(obj_ref, gv_stashpv("JavaScript::Duktape::Vm", GV_ADD));
     SvREADONLY_on(obj);
     return obj_ref;
+}
+
+
+/**
+  * open c shared library
+******************************************************************************/
+int duktape_dlClose(duk_context *ctx, void *dlHandle){
+    int ret = dlclose(dlHandle);
+    #ifndef _WIN32
+        if (ret == 0) ret = 1;
+        else ret = 0;
+    #endif
+
+    duk_push_int(ctx, ret);
+    return ret;
+}
+
+void *duktape_dlOpen(duk_context *ctx, const char *ModuleName) {
+    void *handle = dlopen(ModuleName, RTLD_LAZY);
+
+    if (!handle){
+        croak("Loading Module %s Aborted\n", ModuleName);
+    }
+
+    typedef void (*init_t)(duk_context *ctx, const char *ModuleName);
+    init_t func = (init_t) dlsym(handle, "_como_init_module");
+
+    if (!func){
+        croak("Loading Module %s Aborted\n", ModuleName);
+    }
+
+    //init module
+    func(ctx, ModuleName);
+    return handle;
 }
 
 void DESTROY(duk_context *ctx) {

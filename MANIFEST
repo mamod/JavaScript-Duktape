@@ -1,5 +1,6 @@
 Changes
 lib/JavaScript/Duktape.pm
+lib/JavaScript/Duktape/C/como.h
 lib/JavaScript/Duktape/C/duktape.c
 lib/JavaScript/Duktape/C/duktape.h
 lib/JavaScript/Duktape/C/duktape_wrap.c
@@ -36,10 +37,10 @@ t/api/pushers.pl
 t/api/require-lstring.t
 t/api/safe-call.t
 t/api/safe-to-string.t
-t/api/ttt.t
 t/eval-function.t
 t/helper.pl
 t/perl-data.t
+t/pointer.t
 t/prop.t
 t/safe-call.t
 t/trycatch.t
