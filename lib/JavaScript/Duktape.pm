@@ -5,7 +5,7 @@ use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.0.4';
+our $VERSION = '0.0.5';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -347,8 +347,7 @@ sub to_perl {
     elsif ($type == JavaScript::Duktape::DUK_TYPE_NULL){
         $ret = JavaScript::Duktape::NULL::null();
     }
-
-    ##XXX to do
+    
     elsif ($type == JavaScript::Duktape::DUK_TYPE_POINTER){
         my $p = $self->get_pointer($index);
         $ret = bless \$p, 'JavaScript::Duktape::Pointer';
