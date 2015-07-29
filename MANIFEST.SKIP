@@ -10,10 +10,10 @@ pm_to_blib
 MYMETA.*
 JavaScript-Duktape.*tar[.]gz$
 .inline
-_inline
 c_tests
 Dev
 tests
 README.md
 .travis.yml
 ex/
+_Inline/
