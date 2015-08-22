@@ -13,7 +13,7 @@ my $duk = $js->duk;
 my $duktapePath = JavaScript::Duktape::C::libPath::getPath('../C');
 my $duktape = JavaScript::Duktape::C::libPath::getPath('duktape.c');
 
-my $build = "gcc -Wall -I$duktapePath $duktape ./t/dll.c -shared -o dll.shared";
+my $build = "gcc -Wall -I$duktapePath $duktape ./t/dll.c -shared -fPIC -o dll.shared";
 system($build) && plan skip_all => "Can't compile shared library using gcc compiler";
 
 # print Dumper $build;
