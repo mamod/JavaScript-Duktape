@@ -9,8 +9,9 @@
 #define NEED_newRV_noinc
 
 #define DUKTAPE_DONT_LOAD_SHARED
-#include "como.h"
+
 #include "duktape.c"
+#include "como.h"
 
 #ifndef Newx
 #  define Newx(v,n,t) New(0,v,n,t)
