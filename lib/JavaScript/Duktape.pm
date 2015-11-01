@@ -5,7 +5,7 @@ use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.1.1';
+our $VERSION = '0.2.0';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -272,6 +272,8 @@ sub push_perl {
             });
         } elsif ($ref eq 'JavaScript::Duktape::Pointer'){
             $self->push_pointer($$val);
+        } elsif ($ref eq 'JavaScript::Duktape::Buffer'){
+            $self->push_heapptr($val->{heapptr});
         }
     } else {
         if (!defined $val){
@@ -351,6 +353,14 @@ sub to_perl {
     elsif ($type == JavaScript::Duktape::DUK_TYPE_POINTER){
         my $p = $self->get_pointer($index);
         $ret = bless \$p, 'JavaScript::Duktape::Pointer';
+    }
+
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_BUFFER){
+        my $heapptr = $self->get_heapptr($index);
+        $ret = bless {
+            duk => $self,
+            heapptr => $heapptr
+        }, 'JavaScript::Duktape::Buffer';
     }
 
     else {
@@ -489,6 +499,60 @@ package JavaScript::Duktape::NULL; {
     }
 
     sub null  { $null }
+}
+
+package JavaScript::Duktape::Buffer; {
+    use strict;
+    use warnings;
+    use Data::Dumper;
+    use overload '""' => \&inspect , fallback => 1;
+    use overload '&{}' => sub{
+        my $self = shift;
+        return sub{ $self->bufArray(@_) }
+    } , fallback => 1;
+
+    sub bufArray {
+        my $self = shift;
+        my $duk = $self->{duk};
+        my $heapptr = $self->{heapptr};
+        $duk->push_heapptr($heapptr);
+        
+        if (@_ == 1){
+            my $t = $duk->get_prop_index(-1, $_[0]);
+            my $ret = $duk->to_perl(-1);
+            $duk->pop_2();
+            return $ret;
+        } elsif (@_ == 2) {
+            #todo
+        }
+    }
+
+    our $AUTOLOAD;
+    sub AUTOLOAD {
+        my $self = shift;
+        my ($method) = ($AUTOLOAD =~ /([^:']+$)/);
+        return if $method eq 'DESTROY';
+        my $duk = $self->{duk};
+        my $heapptr = $self->{heapptr};
+        $duk->push_heapptr($heapptr);
+        $duk->push_string($method);
+        my $len = @_ + 0;
+        for (my $i = 0; $i < $len; $i++){
+            $duk->push_perl($_[$i]);
+        }
+        
+        my $e = $duk->pcall_prop(-2 - $len, $len);
+        if ($e){
+            print STDERR "\n\n================\n" .
+                         "can't call method $method on " . ref $self . 
+                         "\n\n================\n";
+            die $@;
+        }
+
+        my $ret = $duk->to_perl(-1);
+        $duk->pop();
+        return $ret;
+    }
 }
 
 1;
