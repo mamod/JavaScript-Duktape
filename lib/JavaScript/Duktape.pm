@@ -228,7 +228,7 @@ use Inline C => config =>
 
 use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
 
-my $SUB = 0;
+
 my $Functions = {};
 
 sub push_perl {
@@ -373,13 +373,17 @@ sub to_perl {
 ##############################################
 # push functions
 ##############################################
+sub delete_function {
+    my $sub = shift;
+    delete $Functions->{"$sub"};
+}
+
 sub push_function {
     my $self = shift;
     my $sub = shift;
     my $nargs = shift;
     if (!defined $nargs){ $nargs = -1 }
-    $SUB++;
-    $Functions->{$SUB} = sub {
+    $Functions->{"$sub"} = sub {
         my $top = $self->get_top();
         my $ret = 1;
         $self->perl_duk_safe_call(sub {
@@ -398,8 +402,7 @@ sub push_function {
         }, $top, 1);
         return $ret;
     };
-
-    $self->perl_push_function($Functions->{$SUB}, $nargs);
+    $self->perl_push_function($Functions->{"$sub"}, $nargs);
 }
 
 *push_c_function = \&push_function;
