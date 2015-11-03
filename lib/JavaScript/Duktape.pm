@@ -5,7 +5,7 @@ use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.2.0';
+our $VERSION = '0.2.1';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -289,6 +289,7 @@ sub push_perl {
 sub to_perl {
     my $self = shift;
     my $index = shift;
+    my $prev = shift;
     my $ret;
     
     my $type = $self->get_type($index);
@@ -323,9 +324,26 @@ sub to_perl {
         $self->enum($index, JavaScript::Duktape::DUK_ENUM_OWN_PROPERTIES_ONLY);
 
         while ($self->next(-1, 1)) {
-            my $key = $self->to_perl(-2);
-            my $val = $self->to_perl(-1);
+            my ($key, $val);
+
+            #I'm not sure why I need to
+            #substract 4 from stack top!!
+            my $top = $self->get_top() - 4;
             
+            $key = $self->to_perl(-2);
+            my $found = 0;
+            while ($top--){
+                last if $top == -1;
+                if ($self->strict_equals(-1, $top)){
+                    $found = 1;
+                    $val = defined $prev ? $prev : $ret;
+                    last;
+                }
+            }
+
+            ##no circular object found
+            $val = $self->to_perl(-1, $ret) if !$found;
+
             $self->pop_n(2);
 
             if ($isArray) {
@@ -334,6 +352,7 @@ sub to_perl {
                 $ret->{$key} = $val;
             }
         }
+
         $self->pop();
     }
 
