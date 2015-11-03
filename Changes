@@ -1,5 +1,13 @@
 Revision history for Perl module JavaScript::Duktape
 
+0.2.1 2015 2015-11-03
+	- Fix deep recursion circular objects
+	- deep recursion test
+
+0.2.0 2015 2015-11-01
+	- Adding Duktape Buffer support
+	- adding nested objects tests
+
 0.1.1 2015 2015-10-24
 	- upgrade duktape to version 1.3.0
 	- fix broken tests with duktape new version
