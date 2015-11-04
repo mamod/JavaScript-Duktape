@@ -225,19 +225,11 @@ void DESTROY(duk_context *ctx) {
     //Safefree(ctx);
 }
 
-
 /* 
     Auto Generated C Code by parser.pl
     parser.pl reads duktape.h file and create both
     perl & C map code to Duktape API
 */
-
-//duk_int_t duk_pcall_method(duk_context *ctx, duk_idx_t nargs);
-duk_int_t aperl_duk_pcall(duk_context *ctx, duk_idx_t nargs) {
-    duk_int_t ret = duk_pcall(ctx, nargs);
-    //if (ret == 1){ croak("Duk::Error"); }
-    return ret;
-}
 
 //void *duk_alloc(duk_context *ctx, duk_size_t size);
 void *aperl_duk_alloc(duk_context *ctx, duk_size_t size) {
@@ -347,6 +339,11 @@ void aperl_duk_concat(duk_context *ctx, duk_idx_t count) {
     duk_concat(ctx, count);
 }
 
+//void duk_config_buffer(duk_context *ctx, duk_idx_t index, void *ptr, duk_size_t len);
+void aperl_duk_config_buffer(duk_context *ctx, duk_idx_t index, void *ptr, duk_size_t len) {
+    duk_config_buffer(ctx, index, ptr, len);
+}
+
 //void duk_copy(duk_context *ctx, duk_idx_t from_index, duk_idx_t to_index);
 void aperl_duk_copy(duk_context *ctx, duk_idx_t from_index, duk_idx_t to_index) {
     duk_copy(ctx, from_index, to_index);
@@ -393,6 +390,11 @@ void aperl_duk_dump_context_stderr(duk_context *ctx) {
 //void duk_dump_context_stdout(duk_context *ctx);
 void aperl_duk_dump_context_stdout(duk_context *ctx) {
     duk_dump_context_stdout(ctx);
+}
+
+//void duk_dump_function(duk_context *ctx);
+void aperl_duk_dump_function(duk_context *ctx) {
+    duk_dump_function(ctx);
 }
 
 //void duk_dup(duk_context *ctx, duk_idx_t from_index);
@@ -491,6 +493,14 @@ duk_bool_t aperl_duk_get_boolean(duk_context *ctx, duk_idx_t index) {
 void *aperl_duk_get_buffer(duk_context *ctx, duk_idx_t index, SV *out_len) {
     duk_size_t sz;
     void *ret = duk_get_buffer(ctx, index, &sz);
+    sv_setnv(out_len, sz);
+    return ret;
+}
+
+//void *duk_get_buffer_data(duk_context *ctx, duk_idx_t index, duk_size_t *out_size);
+void *aperl_duk_get_buffer_data(duk_context *ctx, duk_idx_t index, SV *out_len) {
+    duk_size_t sz;
+    void *ret = duk_get_buffer_data(ctx, index, &sz);
     sv_setnv(out_len, sz);
     return ret;
 }
@@ -672,6 +682,12 @@ void aperl_duk_insert(duk_context *ctx, duk_idx_t to_index) {
     duk_insert(ctx, to_index);
 }
 
+//duk_bool_t duk_instanceof(duk_context *ctx, duk_idx_t index1, duk_idx_t index2);
+duk_bool_t aperl_duk_instanceof(duk_context *ctx, duk_idx_t index1, duk_idx_t index2) {
+    duk_bool_t ret = duk_instanceof(ctx, index1, index2);
+    return ret;
+}
+
 //duk_bool_t duk_is_array(duk_context *ctx, duk_idx_t index);
 duk_bool_t aperl_duk_is_array(duk_context *ctx, duk_idx_t index) {
     duk_bool_t ret = duk_is_array(ctx, index);
@@ -844,6 +860,11 @@ const char *aperl_duk_json_encode(duk_context *ctx, duk_idx_t index) {
     return ret;
 }
 
+//void duk_load_function(duk_context *ctx);
+void aperl_duk_load_function(duk_context *ctx) {
+    duk_load_function(ctx);
+}
+
 //void duk_log_va(duk_context *ctx, duk_int_t level, const char *fmt, va_list ap);
 void aperl_duk_log_va(duk_context *ctx, duk_int_t level, const char *fmt, va_list ap) {
     duk_log_va(ctx, level, fmt, ap);
@@ -872,12 +893,16 @@ duk_idx_t aperl_duk_normalize_index(duk_context *ctx, duk_idx_t index) {
 }
 
 //duk_int_t duk_pcall(duk_context *ctx, duk_idx_t nargs);
+duk_int_t aperl_duk_pcall(duk_context *ctx, duk_idx_t nargs) {
+    duk_int_t ret = duk_pcall(ctx, nargs);
+    return ret;
+}
+
+//duk_int_t duk_pcall_method(duk_context *ctx, duk_idx_t nargs);
 duk_int_t aperl_duk_pcall_method(duk_context *ctx, duk_idx_t nargs) {
     duk_int_t ret = duk_pcall_method(ctx, nargs);
     return ret;
 }
-
-
 
 //duk_int_t duk_pcall_prop(duk_context *ctx, duk_idx_t obj_index, duk_idx_t nargs);
 duk_int_t aperl_duk_pcall_prop(duk_context *ctx, duk_idx_t obj_index, duk_idx_t nargs) {
@@ -969,6 +994,12 @@ duk_int_t aperl_duk_peval_string_noresult(duk_context *ctx, const char *src) {
     return ret;
 }
 
+//duk_ret_t duk_pnew(duk_context *ctx, duk_idx_t nargs);
+duk_ret_t aperl_duk_pnew(duk_context *ctx, duk_idx_t nargs) {
+    duk_ret_t ret = duk_pnew(ctx, nargs);
+    return ret;
+}
+
 //void duk_pop(duk_context *ctx);
 void aperl_duk_pop(duk_context *ctx) {
     duk_pop(ctx);
@@ -1004,6 +1035,11 @@ void aperl_duk_push_boolean(duk_context *ctx, duk_bool_t val) {
 void *aperl_duk_push_buffer(duk_context *ctx, duk_size_t size, duk_bool_t dynamic) {
     void *ret = duk_push_buffer(ctx, size, dynamic);
     return ret;
+}
+
+//void duk_push_buffer_object(duk_context *ctx, duk_idx_t idx_buffer, duk_size_t byte_offset, duk_size_t byte_length, duk_uint_t flags);
+void aperl_duk_push_buffer_object(duk_context *ctx, duk_idx_t idx_buffer, duk_size_t byte_offset, duk_size_t byte_length, duk_uint_t flags) {
+    duk_push_buffer_object(ctx, idx_buffer, byte_offset, byte_length, flags);
 }
 
 //duk_idx_t duk_push_c_function(duk_context *ctx, duk_c_function func, duk_idx_t nargs);
@@ -1043,6 +1079,11 @@ void *aperl_duk_push_dynamic_buffer(duk_context *ctx, duk_size_t size) {
 duk_idx_t aperl_duk_push_error_object_va(duk_context *ctx, duk_errcode_t err_code, const char *fmt, va_list ap) {
     duk_idx_t ret = duk_push_error_object_va(ctx, err_code, fmt, ap);
     return ret;
+}
+
+//void duk_push_external_buffer(duk_context *ctx);
+void aperl_duk_push_external_buffer(duk_context *ctx) {
+    duk_push_external_buffer(ctx);
 }
 
 //void duk_push_false(duk_context *ctx);
@@ -1143,9 +1184,9 @@ duk_idx_t aperl_duk_push_thread_new_globalenv(duk_context *ctx) {
     return ret;
 }
 
-//void duk_push_thread_stash(duk_context *ctx, duk_context *target_ctx) ;
-void aperl_duk_push_thread_stash(duk_context *ctx, duk_context *target_ctx)  {
-    duk_push_thread_stash (ctx, target_ctx);
+//void duk_push_thread_stash(duk_context *ctx, duk_context *target_ctx);
+void aperl_duk_push_thread_stash(duk_context *ctx, duk_context *target_ctx) {
+    duk_push_thread_stash(ctx, target_ctx);
 }
 
 //void duk_push_true(duk_context *ctx);
@@ -1235,6 +1276,14 @@ duk_bool_t aperl_duk_require_boolean(duk_context *ctx, duk_idx_t index) {
 void *aperl_duk_require_buffer(duk_context *ctx, duk_idx_t index, SV *out_len) {
     duk_size_t sz;
     void *ret = duk_require_buffer(ctx, index, &sz);
+    sv_setnv(out_len, sz);
+    return ret;
+}
+
+//void *duk_require_buffer_data(duk_context *ctx, duk_idx_t index, duk_size_t *out_size);
+void *aperl_duk_require_buffer_data(duk_context *ctx, duk_idx_t index, SV *out_len) {
+    duk_size_t sz;
+    void *ret = duk_require_buffer_data(ctx, index, &sz);
     sv_setnv(out_len, sz);
     return ret;
 }
@@ -1391,6 +1440,14 @@ void aperl_duk_set_prototype(duk_context *ctx, duk_idx_t index) {
 //void duk_set_top(duk_context *ctx, duk_idx_t index);
 void aperl_duk_set_top(duk_context *ctx, duk_idx_t index) {
     duk_set_top(ctx, index);
+}
+
+//void *duk_steal_buffer(duk_context *ctx, duk_idx_t index, duk_size_t *out_size);
+void *aperl_duk_steal_buffer(duk_context *ctx, duk_idx_t index, SV *out_len) {
+    duk_size_t sz;
+    void *ret = duk_steal_buffer(ctx, index, &sz);
+    sv_setnv(out_len, sz);
+    return ret;
 }
 
 //duk_bool_t duk_strict_equals(duk_context *ctx, duk_idx_t index1, duk_idx_t index2);
