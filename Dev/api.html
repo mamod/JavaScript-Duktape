@@ -63,6 +63,7 @@ WebFontConfig = {
 <li><a href="download.html">Download</a></li>
 <li class="selected"><a href="api.html">API</a></li>
 <li><a href="guide.html">Guide</a></li>
+<li><a href="http://wiki.duktape.org/">Wiki</a></li>
 <li><a href="dukweb.html">REPL</a></li>
 </ul>
 </div> <!-- site-top-nav -->
@@ -98,6 +99,7 @@ WebFontConfig = {
 <li><a href="#duk_compile_string">duk_compile_string</a></li>
 <li><a href="#duk_compile_string_filename">duk_compile_string_filename</a></li>
 <li><a href="#duk_concat">duk_concat</a></li>
+<li><a href="#duk_config_buffer">duk_config_buffer</a></li>
 <li><a href="#duk_copy">duk_copy</a></li>
 <li><a href="#duk_create_heap">duk_create_heap</a></li>
 <li><a href="#duk_create_heap_default">duk_create_heap_default</a></li>
@@ -112,6 +114,7 @@ WebFontConfig = {
 <li><a href="#duk_destroy_heap">duk_destroy_heap</a></li>
 <li><a href="#duk_dump_context_stderr">duk_dump_context_stderr</a></li>
 <li><a href="#duk_dump_context_stdout">duk_dump_context_stdout</a></li>
+<li><a href="#duk_dump_function">duk_dump_function</a></li>
 <li><a href="#duk_dup">duk_dup</a></li>
 <li><a href="#duk_dup_top">duk_dup_top</a></li>
 <li><a href="#duk_enum">duk_enum</a></li>
@@ -132,6 +135,7 @@ WebFontConfig = {
 <li><a href="#duk_gc">duk_gc</a></li>
 <li><a href="#duk_get_boolean">duk_get_boolean</a></li>
 <li><a href="#duk_get_buffer">duk_get_buffer</a></li>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
 <li><a href="#duk_get_c_function">duk_get_c_function</a></li>
 <li><a href="#duk_get_context">duk_get_context</a></li>
 <li><a href="#duk_get_current_magic">duk_get_current_magic</a></li>
@@ -162,6 +166,7 @@ WebFontConfig = {
 <li><a href="#duk_hex_decode">duk_hex_decode</a></li>
 <li><a href="#duk_hex_encode">duk_hex_encode</a></li>
 <li><a href="#duk_insert">duk_insert</a></li>
+<li><a href="#duk_instanceof">duk_instanceof</a></li>
 <li><a href="#duk_is_array">duk_is_array</a></li>
 <li><a href="#duk_is_boolean">duk_is_boolean</a></li>
 <li><a href="#duk_is_bound_function">duk_is_bound_function</a></li>
@@ -191,6 +196,7 @@ WebFontConfig = {
 <li><a href="#duk_join">duk_join</a></li>
 <li><a href="#duk_json_decode">duk_json_decode</a></li>
 <li><a href="#duk_json_encode">duk_json_encode</a></li>
+<li><a href="#duk_load_function">duk_load_function</a></li>
 <li><a href="#duk_log">duk_log</a></li>
 <li><a href="#duk_log_va">duk_log_va</a></li>
 <li><a href="#duk_map_string">duk_map_string</a></li>
@@ -214,6 +220,7 @@ WebFontConfig = {
 <li><a href="#duk_peval_noresult">duk_peval_noresult</a></li>
 <li><a href="#duk_peval_string">duk_peval_string</a></li>
 <li><a href="#duk_peval_string_noresult">duk_peval_string_noresult</a></li>
+<li><a href="#duk_pnew">duk_pnew</a></li>
 <li><a href="#duk_pop">duk_pop</a></li>
 <li><a href="#duk_pop_2">duk_pop_2</a></li>
 <li><a href="#duk_pop_3">duk_pop_3</a></li>
@@ -221,6 +228,7 @@ WebFontConfig = {
 <li><a href="#duk_push_array">duk_push_array</a></li>
 <li><a href="#duk_push_boolean">duk_push_boolean</a></li>
 <li><a href="#duk_push_buffer">duk_push_buffer</a></li>
+<li><a href="#duk_push_buffer_object">duk_push_buffer_object</a></li>
 <li><a href="#duk_push_c_function">duk_push_c_function</a></li>
 <li><a href="#duk_push_c_lightfunc">duk_push_c_lightfunc</a></li>
 <li><a href="#duk_push_context_dump">duk_push_context_dump</a></li>
@@ -229,6 +237,7 @@ WebFontConfig = {
 <li><a href="#duk_push_dynamic_buffer">duk_push_dynamic_buffer</a></li>
 <li><a href="#duk_push_error_object">duk_push_error_object</a></li>
 <li><a href="#duk_push_error_object_va">duk_push_error_object_va</a></li>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
 <li><a href="#duk_push_false">duk_push_false</a></li>
 <li><a href="#duk_push_fixed_buffer">duk_push_fixed_buffer</a></li>
 <li><a href="#duk_push_global_object">duk_push_global_object</a></li>
@@ -265,6 +274,7 @@ WebFontConfig = {
 <li><a href="#duk_replace">duk_replace</a></li>
 <li><a href="#duk_require_boolean">duk_require_boolean</a></li>
 <li><a href="#duk_require_buffer">duk_require_buffer</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
 <li><a href="#duk_require_c_function">duk_require_c_function</a></li>
 <li><a href="#duk_require_context">duk_require_context</a></li>
 <li><a href="#duk_require_heapptr">duk_require_heapptr</a></li>
@@ -292,6 +302,7 @@ WebFontConfig = {
 <li><a href="#duk_set_magic">duk_set_magic</a></li>
 <li><a href="#duk_set_prototype">duk_set_prototype</a></li>
 <li><a href="#duk_set_top">duk_set_top</a></li>
+<li><a href="#duk_steal_buffer">duk_steal_buffer</a></li>
 <li><a href="#duk_strict_equals">duk_strict_equals</a></li>
 <li><a href="#duk_substring">duk_substring</a></li>
 <li><a href="#duk_swap">duk_swap</a></li>
@@ -319,7 +330,7 @@ WebFontConfig = {
 <li><a href="#duk_xcopy_top">duk_xcopy_top</a></li>
 <li><a href="#duk_xmove_top">duk_xmove_top</a></li>
 </ul></div> <!-- site-middle-nav -->
-<div class="content" id="site-middle-content"><div class="main-title"><strong>Duktape API</strong></div><hr/><h1 class="sectiontitle" id="introduction">Introduction <a class="sectionlink" href="#introduction">§</a></h1><p>Version: 1.2.0 (2015-04-05)</p><h2 class="sectiontitle" id="introduction.1">Document scope <a class="sectionlink" href="#introduction.1">§</a></h2><p>The Duktape API (defined in <code>duktape.h</code>) is a set of constants
+<div class="content" id="site-middle-content"><div class="main-title"><strong>Duktape API</strong></div><hr/><h1 class="sectiontitle" id="introduction">Introduction <a class="sectionlink" href="#introduction">§</a></h1><p>Version: 1.3.0 (2015-09-12)</p><h2 class="sectiontitle" id="introduction.1">Document scope <a class="sectionlink" href="#introduction.1">§</a></h2><p>The Duktape API (defined in <code>duktape.h</code>) is a set of constants
 and API calls which allows C/C++ programs to interface with Ecmascript
 code and shields them from internal details like value representation.
 </p><p>This document provides a concise reference for the Duktape API and
@@ -348,7 +359,7 @@ between compatible releases.  See <a href="guide.html#duktape-api">Duktape API</
 for more discussion.</p><h2 class="sectiontitle" id="introduction.6">Minimal Duktape program <a class="sectionlink" href="#introduction.6">§</a></h2><pre class="c-code"><span class="preproc">#include</span><span class="normal"> </span><span class="string">"duktape.h"</span>
 
 <span class="type">int</span><span class="normal"> </span><span class="function">main</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> argc</span><span class="symbol">,</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">argv</span><span class="symbol">[])</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">    </span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_create_heap_default</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_create_heap_default</span><span class="symbol">();</span>
 <span class="normal">    </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
 <span class="normal">        </span><span class="function">duk_eval_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"print('Hello world from Javascript!');"</span><span class="symbol">);</span>
 <span class="normal">        </span><span class="function">duk_destroy_heap</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
@@ -464,7 +475,7 @@ the Duktape build.  For official releases this is just "v1.0.0" or similar,
 but for snapshot builds it provides useful version information (e.g.
 "v1.0.0-155-g5b7ef1f-dirty").  There is no equivalent of this define in the
 Ecmascript environment.</p><h2 class="sectiontitle" id="defines.2">Debug protocol version <a class="sectionlink" href="#defines.2">§</a></h2><p>The version number of the debug protocol (a single integer) is available as
-the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" id="defines.3">Structs and typedefs <a class="sectionlink" href="#defines.3">§</a></h2><pre class="c-code"><span class="keyword">typedef</span><span class="normal"> </span><span class="type">void</span><span class="normal"> duk_context</span><span class="symbol">;</span>
+the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" id="defines.3">Structs and typedefs <a class="sectionlink" href="#defines.3">§</a></h2><pre class="c-code"><span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="classname">duk_hthread</span><span class="normal"> duk_context</span><span class="symbol">;</span>
 
 <span class="keyword">typedef</span><span class="normal"> </span><span class="function">duk_ret_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal">duk_c_function</span><span class="symbol">)(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">);</span>
 <span class="keyword">typedef</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">*(*</span><span class="normal">duk_alloc_function</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">(</span><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">udata</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_size_t</span><span class="normal"> size</span><span class="symbol">);</span>
@@ -490,15 +501,15 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="classname">duk_memory_functions</span><span class="normal"> duk_memory_functions</span><span class="symbol">;</span>
 
 <span class="keyword">struct</span><span class="normal"> </span><span class="classname">duk_function_list_entry</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">	</span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key</span><span class="symbol">;</span>
-<span class="normal">	</span><span class="usertype">duk_c_function</span><span class="normal"> value</span><span class="symbol">;</span>
-<span class="normal">	</span><span class="usertype">duk_int_t</span><span class="normal"> nargs</span><span class="symbol">;</span>
+<span class="normal">   </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key</span><span class="symbol">;</span>
+<span class="normal">   </span><span class="usertype">duk_c_function</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="normal">   </span><span class="usertype">duk_int_t</span><span class="normal"> nargs</span><span class="symbol">;</span>
 <span class="cbracket">}</span><span class="symbol">;</span>
 <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="classname">duk_function_list_entry</span><span class="normal"> duk_function_list_entry</span><span class="symbol">;</span>
 
 <span class="keyword">struct</span><span class="normal"> </span><span class="classname">duk_number_list_entry</span><span class="normal"> </span><span class="cbracket">{</span>
-<span class="normal">	</span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key</span><span class="symbol">;</span>
-<span class="normal">	</span><span class="usertype">duk_double_t</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="normal">   </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key</span><span class="symbol">;</span>
+<span class="normal">   </span><span class="usertype">duk_double_t</span><span class="normal"> value</span><span class="symbol">;</span>
 <span class="cbracket">}</span><span class="symbol">;</span>
 <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="classname">duk_number_list_entry</span><span class="normal"> duk_number_list_entry</span><span class="symbol">;</span>
 </pre><h2 class="sectiontitle" id="defines.4">Error codes <a class="sectionlink" href="#defines.4">§</a></h2><pre class="c-code"><span class="comment">/* Internal error codes */</span>
@@ -819,6 +830,17 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_debugger_attach">duk_debugger_attach</a></li>
 <li><a href="#duk_debugger_cooperate">duk_debugger_cooperate</a></li>
 <li><a href="#duk_debugger_detach">duk_debugger_detach</a></li>
+</ul><h2 class="sectiontitle" id="taglist-1.3.0">1.3.0 <a class="sectionlink" href="#taglist-1.3.0">§</a></h2><ul class="taglist">
+<li><a href="#duk_config_buffer">duk_config_buffer</a></li>
+<li><a href="#duk_dump_function">duk_dump_function</a></li>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
+<li><a href="#duk_instanceof">duk_instanceof</a></li>
+<li><a href="#duk_load_function">duk_load_function</a></li>
+<li><a href="#duk_pnew">duk_pnew</a></li>
+<li><a href="#duk_push_buffer_object">duk_push_buffer_object</a></li>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
+<li><a href="#duk_steal_buffer">duk_steal_buffer</a></li>
 </ul><h2 class="sectiontitle" id="taglist-borrowed">borrowed <a class="sectionlink" href="#taglist-borrowed">§</a></h2><ul class="taglist">
 <li><a href="#duk_get_context">duk_get_context</a></li>
 <li><a href="#duk_get_heapptr">duk_get_heapptr</a></li>
@@ -829,18 +851,30 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_require_context">duk_require_context</a></li>
 <li><a href="#duk_require_heapptr">duk_require_heapptr</a></li>
 </ul><h2 class="sectiontitle" id="taglist-buffer">buffer <a class="sectionlink" href="#taglist-buffer">§</a></h2><ul class="taglist">
+<li><a href="#duk_config_buffer">duk_config_buffer</a></li>
 <li><a href="#duk_get_buffer">duk_get_buffer</a></li>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
 <li><a href="#duk_is_buffer">duk_is_buffer</a></li>
 <li><a href="#duk_is_dynamic_buffer">duk_is_dynamic_buffer</a></li>
 <li><a href="#duk_is_fixed_buffer">duk_is_fixed_buffer</a></li>
 <li><a href="#duk_push_buffer">duk_push_buffer</a></li>
 <li><a href="#duk_push_dynamic_buffer">duk_push_dynamic_buffer</a></li>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
 <li><a href="#duk_push_fixed_buffer">duk_push_fixed_buffer</a></li>
 <li><a href="#duk_require_buffer">duk_require_buffer</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
 <li><a href="#duk_resize_buffer">duk_resize_buffer</a></li>
+<li><a href="#duk_steal_buffer">duk_steal_buffer</a></li>
 <li><a href="#duk_to_buffer">duk_to_buffer</a></li>
 <li><a href="#duk_to_dynamic_buffer">duk_to_dynamic_buffer</a></li>
 <li><a href="#duk_to_fixed_buffer">duk_to_fixed_buffer</a></li>
+</ul><h2 class="sectiontitle" id="taglist-bufferobject">bufferobject <a class="sectionlink" href="#taglist-bufferobject">§</a></h2><ul class="taglist">
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
+<li><a href="#duk_push_buffer_object">duk_push_buffer_object</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
+</ul><h2 class="sectiontitle" id="taglist-bytecode">bytecode <a class="sectionlink" href="#taglist-bytecode">§</a></h2><ul class="taglist">
+<li><a href="#duk_dump_function">duk_dump_function</a></li>
+<li><a href="#duk_load_function">duk_load_function</a></li>
 </ul><h2 class="sectiontitle" id="taglist-call">call <a class="sectionlink" href="#taglist-call">§</a></h2><ul class="taglist">
 <li><a href="#duk_call">duk_call</a></li>
 <li><a href="#duk_call_method">duk_call_method</a></li>
@@ -849,6 +883,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_pcall">duk_pcall</a></li>
 <li><a href="#duk_pcall_method">duk_pcall_method</a></li>
 <li><a href="#duk_pcall_prop">duk_pcall_prop</a></li>
+<li><a href="#duk_pnew">duk_pnew</a></li>
 <li><a href="#duk_safe_call">duk_safe_call</a></li>
 </ul><h2 class="sectiontitle" id="taglist-codec">codec <a class="sectionlink" href="#taglist-codec">§</a></h2><ul class="taglist">
 <li><a href="#duk_base64_decode">duk_base64_decode</a></li>
@@ -859,6 +894,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_json_encode">duk_json_encode</a></li>
 </ul><h2 class="sectiontitle" id="taglist-compare">compare <a class="sectionlink" href="#taglist-compare">§</a></h2><ul class="taglist">
 <li><a href="#duk_equals">duk_equals</a></li>
+<li><a href="#duk_instanceof">duk_instanceof</a></li>
 <li><a href="#duk_strict_equals">duk_strict_equals</a></li>
 </ul><h2 class="sectiontitle" id="taglist-compile">compile <a class="sectionlink" href="#taglist-compile">§</a></h2><ul class="taglist">
 <li><a href="#duk_compile">duk_compile</a></li>
@@ -906,12 +942,15 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_push_error_object_va">duk_push_error_object_va</a></li>
 <li><a href="#duk_throw">duk_throw</a></li>
 </ul><h2 class="sectiontitle" id="taglist-experimental">experimental <a class="sectionlink" href="#taglist-experimental">§</a></h2><ul class="taglist">
-<li><a href="#duk_debugger_attach">duk_debugger_attach</a></li>
-<li><a href="#duk_debugger_cooperate">duk_debugger_cooperate</a></li>
-<li><a href="#duk_debugger_detach">duk_debugger_detach</a></li>
-<li><a href="#duk_def_prop">duk_def_prop</a></li>
-<li><a href="#duk_push_c_lightfunc">duk_push_c_lightfunc</a></li>
+<li><a href="#duk_config_buffer">duk_config_buffer</a></li>
+<li><a href="#duk_dump_function">duk_dump_function</a></li>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
+<li><a href="#duk_load_function">duk_load_function</a></li>
+<li><a href="#duk_push_buffer_object">duk_push_buffer_object</a></li>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
 <li><a href="#duk_set_global_object">duk_set_global_object</a></li>
+<li><a href="#duk_steal_buffer">duk_steal_buffer</a></li>
 </ul><h2 class="sectiontitle" id="taglist-finalizer">finalizer <a class="sectionlink" href="#taglist-finalizer">§</a></h2><ul class="taglist">
 <li><a href="#duk_get_finalizer">duk_get_finalizer</a></li>
 <li><a href="#duk_set_finalizer">duk_set_finalizer</a></li>
@@ -984,6 +1023,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_is_object_coercible">duk_is_object_coercible</a></li>
 <li><a href="#duk_new">duk_new</a></li>
 <li><a href="#duk_next">duk_next</a></li>
+<li><a href="#duk_pnew">duk_pnew</a></li>
 <li><a href="#duk_push_array">duk_push_array</a></li>
 <li><a href="#duk_push_error_object">duk_push_error_object</a></li>
 <li><a href="#duk_push_error_object_va">duk_push_error_object_va</a></li>
@@ -1038,6 +1078,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_peval_noresult">duk_peval_noresult</a></li>
 <li><a href="#duk_peval_string">duk_peval_string</a></li>
 <li><a href="#duk_peval_string_noresult">duk_peval_string_noresult</a></li>
+<li><a href="#duk_pnew">duk_pnew</a></li>
 <li><a href="#duk_safe_call">duk_safe_call</a></li>
 <li><a href="#duk_safe_to_string">duk_safe_to_string</a></li>
 </ul><h2 class="sectiontitle" id="taglist-prototype">prototype <a class="sectionlink" href="#taglist-prototype">§</a></h2><ul class="taglist">
@@ -1057,13 +1098,16 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_check_stack_top">duk_check_stack_top</a></li>
 <li><a href="#duk_check_type">duk_check_type</a></li>
 <li><a href="#duk_check_type_mask">duk_check_type_mask</a></li>
+<li><a href="#duk_config_buffer">duk_config_buffer</a></li>
 <li><a href="#duk_copy">duk_copy</a></li>
 <li><a href="#duk_dump_context_stderr">duk_dump_context_stderr</a></li>
 <li><a href="#duk_dump_context_stdout">duk_dump_context_stdout</a></li>
+<li><a href="#duk_dump_function">duk_dump_function</a></li>
 <li><a href="#duk_dup">duk_dup</a></li>
 <li><a href="#duk_dup_top">duk_dup_top</a></li>
 <li><a href="#duk_get_boolean">duk_get_boolean</a></li>
 <li><a href="#duk_get_buffer">duk_get_buffer</a></li>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
 <li><a href="#duk_get_c_function">duk_get_c_function</a></li>
 <li><a href="#duk_get_context">duk_get_context</a></li>
 <li><a href="#duk_get_error_code">duk_get_error_code</a></li>
@@ -1107,6 +1151,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_is_thread">duk_is_thread</a></li>
 <li><a href="#duk_is_undefined">duk_is_undefined</a></li>
 <li><a href="#duk_is_valid_index">duk_is_valid_index</a></li>
+<li><a href="#duk_load_function">duk_load_function</a></li>
 <li><a href="#duk_normalize_index">duk_normalize_index</a></li>
 <li><a href="#duk_pop">duk_pop</a></li>
 <li><a href="#duk_pop_2">duk_pop_2</a></li>
@@ -1115,6 +1160,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_push_array">duk_push_array</a></li>
 <li><a href="#duk_push_boolean">duk_push_boolean</a></li>
 <li><a href="#duk_push_buffer">duk_push_buffer</a></li>
+<li><a href="#duk_push_buffer_object">duk_push_buffer_object</a></li>
 <li><a href="#duk_push_c_function">duk_push_c_function</a></li>
 <li><a href="#duk_push_c_lightfunc">duk_push_c_lightfunc</a></li>
 <li><a href="#duk_push_context_dump">duk_push_context_dump</a></li>
@@ -1123,6 +1169,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_push_dynamic_buffer">duk_push_dynamic_buffer</a></li>
 <li><a href="#duk_push_error_object">duk_push_error_object</a></li>
 <li><a href="#duk_push_error_object_va">duk_push_error_object_va</a></li>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
 <li><a href="#duk_push_false">duk_push_false</a></li>
 <li><a href="#duk_push_fixed_buffer">duk_push_fixed_buffer</a></li>
 <li><a href="#duk_push_global_object">duk_push_global_object</a></li>
@@ -1151,6 +1198,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_replace">duk_replace</a></li>
 <li><a href="#duk_require_boolean">duk_require_boolean</a></li>
 <li><a href="#duk_require_buffer">duk_require_buffer</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
 <li><a href="#duk_require_c_function">duk_require_c_function</a></li>
 <li><a href="#duk_require_context">duk_require_context</a></li>
 <li><a href="#duk_require_heapptr">duk_require_heapptr</a></li>
@@ -1174,6 +1222,7 @@ the define <code>DUK_DEBUG_PROTOCOL_VERSION</code>.</p><h2 class="sectiontitle" 
 <li><a href="#duk_safe_to_string">duk_safe_to_string</a></li>
 <li><a href="#duk_set_global_object">duk_set_global_object</a></li>
 <li><a href="#duk_set_top">duk_set_top</a></li>
+<li><a href="#duk_steal_buffer">duk_steal_buffer</a></li>
 <li><a href="#duk_swap">duk_swap</a></li>
 <li><a href="#duk_swap_top">duk_swap_top</a></li>
 <li><a href="#duk_to_boolean">duk_to_boolean</a></li>
@@ -1846,7 +1895,7 @@ internal limit errors, etc).</p>
 </ul>
 <p>The source code being compiled may be:</p>
 <ul>
-<li>Program code: compiles into a function with zero arguments, which
+<li>Global code: compiles into a function with zero arguments, which
     executes like a top level Ecmascript program (default)</li>
 <li>Eval code: compiles into a function with zero arguments, which
     executes like an Ecmascript <code>eval</code> call
@@ -1857,13 +1906,13 @@ internal limit errors, etc).</p>
 <p>All of these have slightly different semantics in Ecmascript.  See
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-10.4">Establishing an Execution Context</a>
 for a detailed discussion.
-One major difference is that program and eval contexts have an implicit
+One major difference is that global and eval contexts have an implicit
 return value: the last <i>non-empty</i> statement value is an automatic
 return value for the program or eval code, whereas functions don't have
 an automatic return value.
 </p>
-<p>Program and eval code don't have an explicit <code>function</code> syntax.
-For instance, the following can be compiled both as a program and as an
+<p>Global and eval code don't have an explicit <code>function</code> syntax.
+For instance, the following can be compiled both as a global and as an
 eval expression:</p>
 <pre class="ecmascript-code"><span class="function">print</span><span class="symbol">(</span><span class="string">"Hello world!"</span><span class="symbol">);</span>
 <span class="number">123</span><span class="symbol">;</span><span class="normal">  </span><span class="comment">// implicit return value</span>
@@ -1882,13 +1931,13 @@ of returning a plain function value:</p>
 <span class="normal">    </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">+</span><span class="normal">y</span><span class="symbol">;</span>
 <span class="cbracket">}</span><span class="symbol">)</span>
 </pre>
-<p>The bytecode generated for program and eval code is currently slower
+<p>The bytecode generated for global and eval code is currently slower
 than that generated for functions: a "slow path" is used for all variable
 accesses in program and eval code, and the implicit return value handling
 of program and eval code generates some unnecessary bytecode.  From a
 performance point of view (both memory and execution performance) it is
 thus preferable to have as much code inside functions as possible.</p>
-<p>When compiling eval and program expressions, be careful to avoid the
+<p>When compiling eval and global expressions, be careful to avoid the
 usual Ecmascript gotchas, such as:</p>
 <pre class="ecmascript-code"><span class="comment">/* Function at top level is a function declaration which registers a global</span>
 <span class="comment"> * function, and is different from a function expression.  Use parentheses</span>
@@ -1911,12 +1960,12 @@ usual Ecmascript gotchas, such as:</p>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_compile.4">Example <a class="sectionlink" href="#duk_compile.4">§</a></h2>
-<pre class="c-code"><span class="comment">/* Program code.  Note that the hello() function is a function</span>
+<pre class="c-code"><span class="comment">/* Global code.  Note that the hello() function is a function</span>
 <span class="comment"> * declaration which gets registered into the global object when</span>
 <span class="comment"> * executed.  Implicit return value is 123.</span>
 <span class="comment"> */</span>
 
-<span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"print('program');</span><span class="specialchar">\n</span><span class="string">"</span>
+<span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"print('global');</span><span class="specialchar">\n</span><span class="string">"</span>
 <span class="normal">                     </span><span class="string">"function hello() { print('Hello world!'); }</span><span class="specialchar">\n</span><span class="string">"</span>
 <span class="normal">                     </span><span class="string">"123;"</span><span class="symbol">);</span>
 <span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"hello"</span><span class="symbol">);</span>
@@ -2156,6 +2205,41 @@ operations and is better than concatenating strings manually.</p>
 <li><a href="#duk_join">duk_join</a></li>
 </ul>
 </div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_config_buffer">
+<a href="#duk_config_buffer"><span class="hidechar">.</span>duk_config_buffer()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-buffer">buffer</a>
+ <a class="sectionlink" href="#duk_config_buffer">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_config_buffer.1">Prototype <a class="sectionlink" href="#duk_config_buffer.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void duk_config_buffer(duk_context *ctx, int index, void *ptr, size_t len);"><span class="type">void</span><span class="normal"> </span><span class="function">duk_config_buffer</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> index</span><span class="symbol">,</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_size_t</span><span class="normal"> len</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_config_buffer.2">Stack <a class="sectionlink" href="#duk_config_buffer.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">buf</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">buf</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_config_buffer.3">Summary <a class="sectionlink" href="#duk_config_buffer.3">§</a></h2>
+<p>Set the external buffer pointer and length of an external buffer value.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_config_buffer.4">Example <a class="sectionlink" href="#duk_config_buffer.4">§</a></h2>
+<pre class="c-code"><span class="comment">/* Create an external buffer and point it to my_buffer containing</span>
+<span class="comment"> * my_length bytes.</span>
+<span class="comment"> */</span>
+<span class="function">duk_push_external_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+<span class="function">duk_config_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> my_buffer</span><span class="symbol">,</span><span class="normal"> my_length</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_config_buffer.5">See also <a class="sectionlink" href="#duk_config_buffer.5">§</a></h2>
+<ul>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_copy">
 <a href="#duk_copy"><span class="hidechar">.</span>duk_copy()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
@@ -2321,7 +2405,6 @@ handler functions.  This API call is equivalent to:</p>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_debugger_attach">
 <a href="#duk_debugger_attach"><span class="hidechar">.</span>duk_debugger_attach()</a>
 <a class="apitag" href="#taglist-1.2.0">1.2.0</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
 <a class="apitag" href="#taglist-debug">debug</a>
  <a class="sectionlink" href="#duk_debugger_attach">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -2377,11 +2460,9 @@ optional.  Unimplemented callbacks are indicated using a <code>NULL</code>.</p>
 <li><a href="#duk_debugger_cooperate">duk_debugger_cooperate</a></li>
 </ul>
 </div>
-
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_debugger_cooperate">
 <a href="#duk_debugger_cooperate"><span class="hidechar">.</span>duk_debugger_cooperate()</a>
 <a class="apitag" href="#taglist-1.2.0">1.2.0</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
 <a class="apitag" href="#taglist-debug">debug</a>
  <a class="sectionlink" href="#duk_debugger_cooperate">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -2414,11 +2495,9 @@ for more information.</p>
 <li><a href="#duk_debugger_detach">duk_debugger_detach</a></li>
 </ul>
 </div>
-
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_debugger_detach">
 <a href="#duk_debugger_detach"><span class="hidechar">.</span>duk_debugger_detach()</a>
 <a class="apitag" href="#taglist-1.2.0">1.2.0</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
 <a class="apitag" href="#taglist-debug">debug</a>
  <a class="sectionlink" href="#duk_debugger_detach">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -2449,7 +2528,6 @@ for more information.</p>
 <li><a href="#duk_debugger_cooperate">duk_debugger_cooperate</a></li>
 </ul>
 </div>
-
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_decode_string">
 <a href="#duk_decode_string"><span class="hidechar">.</span>duk_decode_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
@@ -2492,7 +2570,6 @@ invalid, throws an error.</p>
 <a class="apitag" href="#taglist-1.1.0">1.1.0</a>
 <a class="apitag" href="#taglist-sandbox">sandbox</a>
 <a class="apitag" href="#taglist-property">property</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
  <a class="sectionlink" href="#duk_def_prop">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_def_prop.1">Prototype <a class="sectionlink" href="#duk_def_prop.1">§</a></h2>
@@ -2553,7 +2630,7 @@ don't have concrete internal storage and thus no way of recording changes.</p>
 <li>To modify the property attributes of existing properties directly from C code.</li>
 </ul>
 <p>See API testcase
-<a href="https://github.com/svaarala/duktape/blob/master/api-testcases/test-def-prop.c">test-def-prop.c</a>
+<a href="https://github.com/svaarala/duktape/blob/master/tests/api/test-def-prop.c">test-def-prop.c</a>
 for more examples.</p>
 </div>
 <div class="api-part">
@@ -2861,6 +2938,47 @@ You should not leave dump calls in production code.
 <span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"foo"</span><span class="symbol">);</span>
 <span class="function">duk_dump_context_stdout</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 </pre>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_dump_function">
+<a href="#duk_dump_function"><span class="hidechar">.</span>duk_dump_function()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-bytecode">bytecode</a>
+ <a class="sectionlink" href="#duk_dump_function">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_dump_function.1">Prototype <a class="sectionlink" href="#duk_dump_function.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void duk_dump_function(duk_context *ctx);"><span class="type">void</span><span class="normal"> </span><span class="function">duk_dump_function</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_dump_function.2">Stack <a class="sectionlink" href="#duk_dump_function.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">function</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">bytecode</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_dump_function.3">Summary <a class="sectionlink" href="#duk_dump_function.3">§</a></h2>
+<p>Dump an Ecmascript function at stack top into
+<a href="https://github.com/svaarala/duktape/blob/master/doc/bytecode.rst">bytecode</a>,
+replacing the function with a buffer containing the bytecode data.
+The bytecode can be loaded back using
+<code><a href="#duk_load_function">duk_load_function()</a></code>.</p>
+<div class="note">
+For more information on Duktape bytecode dump/load, supported features,
+and known limitations, see <a href="https://github.com/svaarala/duktape/blob/master/doc/bytecode.rst">bytecode.rst</a>.
+</div>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_dump_function.4">Example <a class="sectionlink" href="#duk_dump_function.4">§</a></h2>
+<pre class="c-code"><span class="function">duk_eval_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"(function helloWorld() { print('hello world'); })"</span><span class="symbol">);</span>
+<span class="function">duk_dump_function</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+<span class="comment">/* stack top now contains a buffer containing helloWorld bytecode */</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_dump_function.5">See also <a class="sectionlink" href="#duk_dump_function.5">§</a></h2>
+<ul>
+<li><a href="#duk_load_function">duk_load_function</a></li>
+</ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_dup">
 <a href="#duk_dup"><span class="hidechar">.</span>duk_dup()</a>
@@ -3613,13 +3731,18 @@ the value, use <code><a href="#duk_to_boolean">duk_to_boolean()</a></code>.</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_get_buffer.3">Summary <a class="sectionlink" href="#duk_get_buffer.3">§</a></h2>
-<p>Get the data pointer for a buffer value at <code>index</code> without modifying
-or coercing the value.  Returns a non-<code>NULL</code> pointer if the value is a
-valid buffer (fixed or dynamic) with a non-zero size.  For a zero-size buffer,
-may return a <code>NULL</code> or a <code>non-NULL</code> pointer.  Returns <code>NULL</code>
+<p>Get the data pointer for a (plain) buffer value at <code>index</code> without
+modifying or coercing the value.  Returns a non-<code>NULL</code> pointer if the value
+is a valid buffer with a non-zero size.  For a zero-size buffer, may return a
+<code>NULL</code> or a non-<code>NULL</code> pointer.  Returns <code>NULL</code>
 if the value is not a buffer or the index is invalid.  If <code>out_size</code> is
 non-<code>NULL</code>, the size of the buffer is written to <code>*out_size</code>; 0
 is written if the return value is <code>NULL</code>.</p>
+<p>If the target value is a fixed buffer, the returned pointer is stable and
+won't change during the lifetime of the buffer.  For dynamic and external
+buffers the pointer may change as the buffer is resized or reconfigured;
+the caller is responsible for ensuring pointer values returned from this API
+call are not used after the buffer is resized/reconfigured.</p>
 <div class="note">
 There is no reliable way to distinguish a zero-size buffer from a non-buffer
 based on the return values.  A <code>NULL</code> with zero size is returned for
@@ -3635,6 +3758,90 @@ it is also possible that a non-<code>NULL</code> pointer is returned).
 <span class="normal">ptr </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_get_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal">sz</span><span class="symbol">);</span>
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"buf=%p, size=%lu</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> ptr</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">unsigned</span><span class="normal"> </span><span class="type">long</span><span class="symbol">)</span><span class="normal"> sz</span><span class="symbol">);</span>
 </pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_get_buffer.5">See also <a class="sectionlink" href="#duk_get_buffer.5">§</a></h2>
+<ul>
+<li><a href="#duk_require_buffer">duk_require_buffer</a></li>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_get_buffer_data">
+<a href="#duk_get_buffer_data"><span class="hidechar">.</span>duk_get_buffer_data()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-bufferobject">bufferobject</a>
+<a class="apitag" href="#taglist-buffer">buffer</a>
+ <a class="sectionlink" href="#duk_get_buffer_data">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_get_buffer_data.1">Prototype <a class="sectionlink" href="#duk_get_buffer_data.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void *duk_get_buffer_data(duk_context *ctx, int index, size_t *out_size);"><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="function">duk_get_buffer_data</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> index</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_size_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">out_size</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_get_buffer_data.2">Stack <a class="sectionlink" href="#duk_get_buffer_data.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_get_buffer_data.3">Summary <a class="sectionlink" href="#duk_get_buffer_data.3">§</a></h2>
+<p>Get the data pointer for a plain buffer or a Buffer object (Duktape.Buffer,
+Node.js Buffer, ArrayBuffer, DataView, or TypedArray view) value at
+<code>index</code> without modifying or coercing the value.  Return a
+non-<code>NULL</code> pointer if the value is a valid buffer with a non-zero
+size.  For a zero-size buffer, may return a <code>NULL</code> or a
+non-<code>NULL</code> pointer.  Returns <code>NULL</code> if the value is
+not a buffer or the index is invalid.  If <code>out_size</code> is
+non-<code>NULL</code>, the size of the buffer is written to <code>*out_size</code>;
+0 is written if the return value is <code>NULL</code>.</p>
+<p>The data area indicated by the return pointer and length is the full
+buffer for a plain buffer value, and the active "slice" for a buffer object.
+The length returned is expressed in bytes (instead of elements), so that you
+can always access <code>ptr[0]</code> to <code>ptr[len - 1]</code>.
+For example:</p>
+<ul>
+<li>For <code>new Uint8Array(16)</code> the return pointer would point to
+    start of the array and length would be 16.</li>
+<li>For <code>new Uint32Array(16)</code> the return pointer would point to
+    start of the array and length would be 64.</li>
+<li>For <code>new Uint32Array(16).subarray(2, 6)</code> the return pointer
+    would point to the start of the subarray (2 x 4 = 8 bytes from the start
+    of the Uint32Array) and length would be 16 ((6-2) x 4).</li>
+</ul>
+<p>If the target value or the underlying buffer value of a buffer object is a
+fixed buffer, the returned pointer is stable and won't change during the
+lifetime of the buffer.  For dynamic and external buffers the pointer may
+change as the buffer is resized or reconfigured; the caller is responsible for
+ensuring pointer values returned from this API call are not used after the
+buffer is resized/reconfigured.  Buffers created from Ecmascript code directly
+e.g. as <code>new Buffer(8)</code> are backed by an automatic fixed buffer, so
+their pointers are always stable.</p>
+<div class="note">
+There is no reliable way to distinguish a zero-size buffer from a non-buffer
+based on the return values.  A <code>NULL</code> with zero size is returned for
+a non-buffer.  The same values may be returned for a zero-size buffer (although
+it is also possible that a non-<code>NULL</code> pointer is returned).
+</div>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_get_buffer_data.4">Example <a class="sectionlink" href="#duk_get_buffer_data.4">§</a></h2>
+<pre class="c-code"><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">;</span>
+<span class="usertype">duk_size_t</span><span class="normal"> sz</span><span class="symbol">;</span>
+
+<span class="function">duk_eval_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"new Uint16Array(16)"</span><span class="symbol">);</span>
+<span class="normal">ptr </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_get_buffer_data</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal">sz</span><span class="symbol">);</span>
+
+<span class="comment">/* Here 'ptr' would be non-NULL and sz would be 32 (bytes). */</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_get_buffer_data.5">See also <a class="sectionlink" href="#duk_get_buffer_data.5">§</a></h2>
+<ul>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
+<li><a href="#duk_get_buffer">duk_get_buffer</a></li>
+<li><a href="#duk_require_buffer">duk_require_buffer</a></li>
+</ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_c_function">
 <a href="#duk_get_c_function"><span class="hidechar">.</span>duk_get_c_function()</a>
@@ -4832,6 +5039,46 @@ top.  This is also illustrated by the example.
 <li><a href="#duk_replace">duk_replace</a></li>
 </ul>
 </div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_instanceof">
+<a href="#duk_instanceof"><span class="hidechar">.</span>duk_instanceof()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-compare">compare</a>
+ <a class="sectionlink" href="#duk_instanceof">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_instanceof.1">Prototype <a class="sectionlink" href="#duk_instanceof.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_instanceof(duk_context *ctx, int index1, int index2);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_instanceof</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> index1</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> index2</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_instanceof.2">Stack <a class="sectionlink" href="#duk_instanceof.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val1</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val2</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_instanceof.3">Summary <a class="sectionlink" href="#duk_instanceof.3">§</a></h2>
+<p>Compare values at <code>index1</code> and <code>index2</code> using the
+Ecmascript <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.8.6">instanceof</a>
+operator.  Returns 1 if <code>val1 instanceof val2</code>, 0 if not.  Throws an error
+if either index is invalid; <code>instanceof</code> itself also throws errors for
+invalid argument types.</p>
+<div class="note">
+The error throwing behavior for invalid indices differs from the behavior of
+e.g. <code>duk_equals()</code>, and matches the strictness of <code>instanceof</code>.
+For example, if rval (index2) is not a callable object <code>instanceof</code>
+throws a TypeError.  Throwing an error for an invalid index is consistent with
+instanceof strictness.
+</div>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_instanceof.4">Example <a class="sectionlink" href="#duk_instanceof.4">§</a></h2>
+<pre class="c-code"><span class="usertype">duk_idx_t</span><span class="normal"> idx_val</span><span class="symbol">;</span>
+
+<span class="function">duk_get_global_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"Error"</span><span class="symbol">);</span>
+
+<span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">duk_instanceof</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> idx_val</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"value at idx_val is an instanceof Error</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
+<span class="cbracket">}</span>
+</pre>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_is_array">
 <a href="#duk_is_array"><span class="hidechar">.</span>duk_is_array()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
@@ -5713,6 +5960,52 @@ operation.  Returns pointer to the resulting string for convenience.</p>
 <li><a href="#duk_json_decode">duk_json_decode</a></li>
 </ul>
 </div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_load_function">
+<a href="#duk_load_function"><span class="hidechar">.</span>duk_load_function()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-bytecode">bytecode</a>
+ <a class="sectionlink" href="#duk_load_function">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_load_function.1">Prototype <a class="sectionlink" href="#duk_load_function.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void duk_load_function(duk_context *ctx);"><span class="type">void</span><span class="normal"> </span><span class="function">duk_load_function</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_load_function.2">Stack <a class="sectionlink" href="#duk_load_function.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">bytecode</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">function</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_load_function.3">Summary <a class="sectionlink" href="#duk_load_function.3">§</a></h2>
+<p>Load a buffer containing
+<a href="https://github.com/svaarala/duktape/blob/master/doc/bytecode.rst">bytecode</a>,
+recreating the original Ecmascript function (with some limitations).  You <b>must</b>
+ensure that the bytecode has been dumped with a compatible Duktape version and that the
+bytecode has not been modified since.  <b>Loading bytecode from an untrusted source is
+memory unsafe and may load to exploitable vulnerabilities.</b></p>
+<div class="note">
+For more information on Duktape bytecode dump/load, supported features,
+and known limitations, see <a href="https://github.com/svaarala/duktape/blob/master/doc/bytecode.rst">bytecode.rst</a>.
+</div>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_load_function.4">Example <a class="sectionlink" href="#duk_load_function.4">§</a></h2>
+<pre class="c-code"><span class="function">duk_eval_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"(function helloWorld() { print('hello world'); })"</span><span class="symbol">);</span>
+<span class="function">duk_dump_function</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+<span class="comment">/* stack top now contains a buffer containing helloWorld bytecode */</span>
+
+<span class="function">duk_load_function</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span><span class="normal">  </span><span class="comment">/* [ ... bytecode ] -&gt; [ ... function ] */</span>
+<span class="function">duk_call</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">);</span>
+<span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_load_function.5">See also <a class="sectionlink" href="#duk_load_function.5">§</a></h2>
+<ul>
+<li><a href="#duk_dump_function">duk_dump_function</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_log">
 <a href="#duk_log"><span class="hidechar">.</span>duk_log()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
@@ -5874,6 +6167,12 @@ See <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-13.2.2">[[Const
 <span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 </pre>
 </div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_new.5">See also <a class="sectionlink" href="#duk_new.5">§</a></h2>
+<ul>
+<li><a href="#duk_pnew">duk_pnew</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_next">
 <a href="#duk_next"><span class="hidechar">.</span>duk_next()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
@@ -5941,7 +6240,7 @@ an invalid index, use
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_normalize_index.4">Example <a class="sectionlink" href="#duk_normalize_index.4">§</a></h2>
-<pre class="c-code"><span class="usertype">duk_idx_t</span><span class="normal"> idx </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_normalize_index</span><span class="symbol">(-</span><span class="number">3</span><span class="symbol">);</span>
+<pre class="c-code"><span class="usertype">duk_idx_t</span><span class="normal"> idx </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_normalize_index</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">);</span>
 </pre>
 </div>
 <div class="api-part">
@@ -6687,6 +6986,53 @@ useful in low memory environments.
 <span class="cbracket">}</span>
 </pre>
 </div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_pnew">
+<a href="#duk_pnew"><span class="hidechar">.</span>duk_pnew()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag apitagprotected" href="#taglist-protected">protected</a>
+<a class="apitag" href="#taglist-object">object</a>
+<a class="apitag" href="#taglist-call">call</a>
+ <a class="sectionlink" href="#duk_pnew">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_pnew.1">Prototype <a class="sectionlink" href="#duk_pnew.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_pnew(duk_context *ctx, int nargs);"><span class="usertype">duk_ret_t</span><span class="normal"> </span><span class="function">duk_pnew</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> nargs</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_pnew.2">Stack <a class="sectionlink" href="#duk_pnew.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">constructor</span> <span class="elem active">arg1</span> <span class="elem active ellipsis">. . .</span> <span class="elem active">argN</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">retval</span> <span class="cap">]</span> </span> <span class="stack-comment">(if success, return value == 0)</span> </div>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">constructor</span> <span class="elem active">arg1</span> <span class="elem active ellipsis">. . .</span> <span class="elem active">argN</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">err</span> <span class="cap">]</span> </span> <span class="stack-comment">(if failure, return value != 0)</span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_pnew.3">Summary <a class="sectionlink" href="#duk_pnew.3">§</a></h2>
+<p>Like <code><a href="#duk_new">duk_new()</a></code> but catches errors.
+A zero return value indicates success and the constructor result is left on
+the stack top.  A non-zero return value indicates an error, and the error
+is left on the stack top.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_pnew.4">Example <a class="sectionlink" href="#duk_pnew.4">§</a></h2>
+<pre class="c-code"><span class="usertype">duk_ret_t</span><span class="normal"> rc</span><span class="symbol">;</span>
+
+<span class="comment">/* Protected call to: new MyConstructor("foo", 123) */</span>
+<span class="function">duk_eval_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"MyConstructor"</span><span class="symbol">);</span>
+<span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"foo"</span><span class="symbol">);</span>
+<span class="function">duk_push_int</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">123</span><span class="symbol">);</span>
+<span class="normal">rc </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_pnew</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">2</span><span class="symbol">);</span><span class="normal">  </span><span class="comment">/* [ ... func "foo" 123 ] -&gt; [ ... res ] */</span>
+<span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">rc </span><span class="symbol">!=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"failed: %s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">duk_safe_to_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
+<span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"success</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
+<span class="cbracket">}</span>
+<span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_pnew.5">See also <a class="sectionlink" href="#duk_pnew.5">§</a></h2>
+<ul>
+<li><a href="#duk_new">duk_new</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_pop">
 <a href="#duk_pop"><span class="hidechar">.</span>duk_pop()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
@@ -6915,6 +7261,82 @@ manually if necessary.
 <ul>
 <li><a href="#duk_push_fixed_buffer">duk_push_fixed_buffer</a></li>
 <li><a href="#duk_push_dynamic_buffer">duk_push_dynamic_buffer</a></li>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_push_buffer_object">
+<a href="#duk_push_buffer_object"><span class="hidechar">.</span>duk_push_buffer_object()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-bufferobject">bufferobject</a>
+ <a class="sectionlink" href="#duk_push_buffer_object">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_push_buffer_object.1">Prototype <a class="sectionlink" href="#duk_push_buffer_object.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void duk_push_buffer_object(duk_context *ctx, int idx_buffer, size_t byte_offset, size_t byte_length, unsigned int flags);"><span class="type">void</span><span class="normal"> </span><span class="function">duk_push_buffer_object</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> idx_buffer</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_size_t</span><span class="normal"> byte_offset</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_size_t</span><span class="normal"> byte_length</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_uint_t</span><span class="normal"> flags</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_push_buffer_object.2">Stack <a class="sectionlink" href="#duk_push_buffer_object.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">buffer</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">buffer</span> <span class="elem ellipsis">. . .</span> <span class="elem active">bufobj</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_push_buffer_object.3">Summary <a class="sectionlink" href="#duk_push_buffer_object.3">§</a></h2>
+<p>Push a new buffer object or a buffer view object.  An underlying plain
+buffer is provided at index <code>idx_buffer</code>.  The type of the buffer
+or view is given in <code>flags</code> (e.g. <code>DUK_BUFOBJ_UINT16ARRAY</code>).
+The active range or "slice" used from the underlying buffer is indicated by
+<code>byte_offset</code> and <code>byte_length</code>.</p>
+<p>The available buffer types are:</p>
+<table>
+<tr><th>Define</th><th>Buffer/view type</th></tr>
+<tr><td>DUK_BUFOBJ_DUKTAPE_BUFFER</td><td>Duktape.Buffer</td></tr>
+<tr><td>DUK_BUFOBJ_NODEJS_BUFFER</td><td>Buffer (Node.js)</td></tr>
+<tr><td>DUK_BUFOBJ_ARRAYBUFFER</td><td>ArrayBuffer</td></tr>
+<tr><td>DUK_BUFOBJ_DATAVIEW</td><td>DataView</td></tr>
+<tr><td>DUK_BUFOBJ_INT8ARRAY</td><td>Int8Array</td></tr>
+<tr><td>DUK_BUFOBJ_UINT8ARRAY</td><td>Uint8Array</td></tr>
+<tr><td>DUK_BUFOBJ_UINT8CLAMPEDARRAY</td><td>Uint8ClampedArray</td></tr>
+<tr><td>DUK_BUFOBJ_INT16ARRAY</td><td>Int16Array</td></tr>
+<tr><td>DUK_BUFOBJ_UINT16ARRAY</td><td>Uint16Array</td></tr>
+<tr><td>DUK_BUFOBJ_INT32ARRAY</td><td>Int32Array</td></tr>
+<tr><td>DUK_BUFOBJ_UINT32ARRAY</td><td>Uint32Array</td></tr>
+<tr><td>DUK_BUFOBJ_FLOAT32ARRAY</td><td>Float32Array</td></tr>
+<tr><td>DUK_BUFOBJ_FLOAT64ARRAY</td><td>Float64Array</td></tr>
+</table>
+<p>When <code>DataView</code> or any of the typed array views
+(<code>Uint8Array</code>, etc) is pushed, an <code>ArrayBuffer</code>
+backing the view is automatically created.  It is accessible through
+the <code>buffer</code> property of the view object.</p>
+<p>The underlying plain buffer should normally cover the range indicated by
+the <code>byte_offset</code> and <code>byte_length</code> arguments, but
+memory safety is guaranteed even if that is not the case.  For example, an
+attempt to read values outside the underlying buffer will return zero.  The
+underlying buffer size is intentionally not checked when creating a buffer
+object: even if the buffer fully covered the byte range during creation, it
+might be resized later.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_push_buffer_object.4">Example <a class="sectionlink" href="#duk_push_buffer_object.4">§</a></h2>
+<pre class="c-code"><span class="comment">/* Map byte range [100,150[ of plain buffer at idx_plain_buf into a</span>
+<span class="comment"> * Uint16Array object which will have the following properties:</span>
+<span class="comment"> *</span>
+<span class="comment"> *   - length: 25             (length in Uint16 elements)</span>
+<span class="comment"> *   - byteLength: 50         (length in bytes)</span>
+<span class="comment"> *   - byteOffset: 100        (byte offset to start of slice)</span>
+<span class="comment"> *   - BYTES_PER_ELEMENT: 2   (Uint16)</span>
+<span class="comment"> */</span>
+
+<span class="function">duk_push_buffer_object</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> idx_plain_buf</span><span class="symbol">,</span><span class="normal"> </span><span class="number">100</span><span class="symbol">,</span><span class="normal"> </span><span class="number">50</span><span class="symbol">,</span><span class="normal"> DUK_BUFOBJ_UINT16ARRAY</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_push_buffer_object.5">See also <a class="sectionlink" href="#duk_push_buffer_object.5">§</a></h2>
+<ul>
+<li><a href="#duk_push_buffer">duk_push_buffer</a></li>
+<li><a href="#duk_push_fixed_buffer">duk_push_fixed_buffer</a></li>
+<li><a href="#duk_push_dynamic_buffer">duk_push_dynamic_buffer</a></li>
+<li><a href="#duk_push_external_buffer">duk_push_external_buffer</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_push_c_function">
@@ -7001,7 +7423,6 @@ function manually.
 <a class="apitag" href="#taglist-stack">stack</a>
 <a class="apitag" href="#taglist-lightfunc">lightfunc</a>
 <a class="apitag" href="#taglist-function">function</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
  <a class="sectionlink" href="#duk_push_c_lightfunc">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_push_c_lightfunc.1">Prototype <a class="sectionlink" href="#duk_push_c_lightfunc.1">§</a></h2>
@@ -7279,6 +7700,66 @@ codes is [1,16777215].</p>
 <h2 class="api-seealso sectiontitle" id="duk_push_error_object_va.5">See also <a class="sectionlink" href="#duk_push_error_object_va.5">§</a></h2>
 <ul>
 <li><a href="#duk_push_error_object">duk_push_error_object</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_push_external_buffer">
+<a href="#duk_push_external_buffer"><span class="hidechar">.</span>duk_push_external_buffer()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-buffer">buffer</a>
+ <a class="sectionlink" href="#duk_push_external_buffer">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_push_external_buffer.1">Prototype <a class="sectionlink" href="#duk_push_external_buffer.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void duk_push_external_buffer(duk_context *ctx);"><span class="type">void</span><span class="normal"> </span><span class="function">duk_push_external_buffer</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_push_external_buffer.2">Stack <a class="sectionlink" href="#duk_push_external_buffer.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">buf</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_push_external_buffer.3">Summary <a class="sectionlink" href="#duk_push_external_buffer.3">§</a></h2>
+<p>Allocate an external buffer and push it to the value stack.  An external
+buffer refers to a user allocated external buffer which is not memory
+managed by Duktape.  The initial external buffer pointer is NULL and size
+is zero.  You can use
+<code><a href="#duk_config_buffer">duk_config_buffer()</a></code>
+to update the external buffer pointer and size.</p>
+<p>External buffers are useful to allow Ecmascript code access externally
+allocated data structures.  You can use it to e.g. write bytes to an
+externally allocated frame buffer.  The external buffer has no alignment
+requirements (Duktape makes no alignment assumptions when accessing it).</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_push_external_buffer.4">Example <a class="sectionlink" href="#duk_push_external_buffer.4">§</a></h2>
+<pre class="c-code"><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">p</span><span class="symbol">;</span>
+<span class="usertype">duk_size_t</span><span class="normal"> len</span><span class="symbol">;</span>
+
+<span class="comment">/* Allocate a frame buffer from a hypothetical graphics library.</span>
+<span class="comment"> * The frame buffer is allocated outside of Duktape.</span>
+<span class="comment"> */</span>
+<span class="normal">p </span><span class="symbol">=</span><span class="normal"> </span><span class="function">allocate_frame_buffer</span><span class="symbol">(</span><span class="number">1920</span><span class="normal"> </span><span class="comment">/*width*/</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1080</span><span class="normal"> </span><span class="comment">/*height*/</span><span class="symbol">);</span>
+<span class="normal">len </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1920</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">1080</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">4</span><span class="symbol">;</span>
+
+<span class="comment">/* Create an external buffer pointing to the frame buffer. */</span>
+<span class="function">duk_push_external_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+<span class="function">duk_config_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> p</span><span class="symbol">,</span><span class="normal"> len</span><span class="symbol">);</span>
+
+<span class="comment">/* Ecmascript code with access to the buffer object could now do</span>
+<span class="comment"> * something like:</span>
+<span class="comment"> *</span>
+<span class="comment"> *    buf[100] = 123;</span>
+<span class="comment"> *</span>
+<span class="comment"> * Calling code must make sure Ecmascript never reads/writes an</span>
+<span class="comment"> * external buffer whose backing buffer is no longer valid.</span>
+<span class="comment"> */</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_push_external_buffer.5">See also <a class="sectionlink" href="#duk_push_external_buffer.5">§</a></h2>
+<ul>
+<li><a href="#duk_config_buffer">duk_config_buffer</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_push_false">
@@ -7910,7 +8391,7 @@ a context pointer for API calls.</p>
  <a class="sectionlink" href="#duk_push_thread_stash">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_push_thread_stash.1">Prototype <a class="sectionlink" href="#duk_push_thread_stash.1">§</a></h2>
-<pre class="c-code" title="C99/C++11 (32-bit): void duk_push_thread_stash(duk_context *ctx, duk_context *target_ctx) {"><span class="type">void</span><span class="normal"> </span><span class="function">duk_push_thread_stash</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">target_ctx</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<pre class="c-code" title="C99/C++11 (32-bit): void duk_push_thread_stash(duk_context *ctx, duk_context *target_ctx);"><span class="type">void</span><span class="normal"> </span><span class="function">duk_push_thread_stash</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">target_ctx</span><span class="symbol">);</span>
 </pre>
 </div>
 <div class="api-part">
@@ -8565,8 +9046,8 @@ or if the index is invalid.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_require_buffer.3">Summary <a class="sectionlink" href="#duk_require_buffer.3">§</a></h2>
 <p>Like <code><a href="#duk_get_buffer">duk_get_buffer()</a></code>,
-but throws an error if the value at <code>index</code> is not a buffer
-or if the index is invalid.</p>
+but throws an error if the value at <code>index</code> is not a (plain)
+buffer or if the index is invalid.</p>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_require_buffer.4">Example <a class="sectionlink" href="#duk_require_buffer.4">§</a></h2>
@@ -8576,6 +9057,54 @@ or if the index is invalid.</p>
 <span class="normal">ptr </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_require_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal">sz</span><span class="symbol">);</span>
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"buf=%p, size=%lu</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> ptr</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">unsigned</span><span class="normal"> </span><span class="type">long</span><span class="symbol">)</span><span class="normal"> sz</span><span class="symbol">);</span>
 </pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_require_buffer.5">See also <a class="sectionlink" href="#duk_require_buffer.5">§</a></h2>
+<ul>
+<li><a href="#duk_get_buffer">duk_get_buffer</a></li>
+<li><a href="#duk_require_buffer_data">duk_require_buffer_data</a></li>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_require_buffer_data">
+<a href="#duk_require_buffer_data"><span class="hidechar">.</span>duk_require_buffer_data()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-bufferobject">bufferobject</a>
+<a class="apitag" href="#taglist-buffer">buffer</a>
+ <a class="sectionlink" href="#duk_require_buffer_data">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_require_buffer_data.1">Prototype <a class="sectionlink" href="#duk_require_buffer_data.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void *duk_require_buffer_data(duk_context *ctx, int index, size_t *out_size);"><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="function">duk_require_buffer_data</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> index</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_size_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">out_size</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_require_buffer_data.2">Stack <a class="sectionlink" href="#duk_require_buffer_data.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_require_buffer_data.3">Summary <a class="sectionlink" href="#duk_require_buffer_data.3">§</a></h2>
+<p>Like <code><a href="#duk_get_buffer_data">duk_get_buffer_data()</a></code>,
+but throws an error if the value at <code>index</code> is not a plain buffer
+or a buffer object or if the index is invalid.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_require_buffer_data.4">Example <a class="sectionlink" href="#duk_require_buffer_data.4">§</a></h2>
+<pre class="c-code"><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">;</span>
+<span class="usertype">duk_size_t</span><span class="normal"> sz</span><span class="symbol">;</span>
+
+<span class="normal">ptr </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_require_buffer_data</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal">sz</span><span class="symbol">);</span>
+<span class="function">printf</span><span class="symbol">(</span><span class="string">"buf=%p, size=%lu</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> ptr</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">unsigned</span><span class="normal"> </span><span class="type">long</span><span class="symbol">)</span><span class="normal"> sz</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_require_buffer_data.5">See also <a class="sectionlink" href="#duk_require_buffer_data.5">§</a></h2>
+<ul>
+<li><a href="#duk_get_buffer_data">duk_get_buffer_data</a></li>
+<li><a href="#duk_require_buffer">duk_require_buffer</a></li>
+<li><a href="#duk_get_buffer">duk_get_buffer</a></li>
+</ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_require_c_function">
 <a href="#duk_require_c_function"><span class="hidechar">.</span>duk_require_c_function()</a>
@@ -9425,7 +9954,7 @@ contexts, even those that have up to this point shared the same global
 environment.  To inherit the change to other contexts, replace the global
 object first before calling <code>duk_push_thread()</code>.</p>
 <p>See the test case
-<a href="https://github.com/svaarala/duktape/blob/master/api-testcases/test-set-global-object.c">test-set-global-object.c</a>
+<a href="https://github.com/svaarala/duktape/blob/master/tests/api/test-set-global-object.c">test-set-global-object.c</a>
 for discussion of detailed behavior after the change.</p>
 <div class="note">
 This API call is experimental at present, and some of the semantics may
@@ -9555,6 +10084,75 @@ decrease the stack top by one.</p>
 <span class="function">duk_set_top</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3</span><span class="symbol">);</span><span class="normal">     </span><span class="comment">/* -&gt; top=3, stack: [ 123 undefined undefined ] */</span>
 <span class="function">duk_set_top</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">);</span><span class="normal">    </span><span class="comment">/* -&gt; top=2, stack: [ 123 undefined ] */</span>
 <span class="function">duk_set_top</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">);</span><span class="normal">     </span><span class="comment">/* -&gt; top=0, stack: [ ] */</span>
+</pre>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_steal_buffer">
+<a href="#duk_steal_buffer"><span class="hidechar">.</span>duk_steal_buffer()</a>
+<a class="apitag" href="#taglist-1.3.0">1.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+<a class="apitag" href="#taglist-buffer">buffer</a>
+ <a class="sectionlink" href="#duk_steal_buffer">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_steal_buffer.1">Prototype <a class="sectionlink" href="#duk_steal_buffer.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void *duk_steal_buffer(duk_context *ctx, int index, size_t *out_size);"><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="function">duk_steal_buffer</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> index</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_size_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">out_size</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_steal_buffer.2">Stack <a class="sectionlink" href="#duk_steal_buffer.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_steal_buffer.3">Summary <a class="sectionlink" href="#duk_steal_buffer.3">§</a></h2>
+<p>Steal the current allocation of the dynamic buffer at <code>index</code>.
+In concrete terms, Duktape forgets the previous allocation and resets the
+buffer to zero size (and NULL data pointer).  Pointer to the previous
+allocation is returned and previous allocation length is written to
+<code>out_size</code> if non-NULL.  The dynamic buffer itself remains on the
+value stack and can be reused.  The caller becomes responsible for freeing the
+previous allocation using <code><a href="#duk_free">duk_free()</a></code>,
+otherwise a memory leak happens.  Duktape won't free the previous allocation
+through garbage collection or even when the Duktape heap is destroyed.</p>
+<p>This API call is useful when a dynamic buffer is used as a safe temporary
+in a buffer manipulation algorithm (it's automatically memory managed in case
+an error occurs).  At the end of such an algorithm, the caller may want to
+steal the buffer so that it won't be freed by Duktape garbage collection even
+when the dynamic buffer itself is freed.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_steal_buffer.4">Example <a class="sectionlink" href="#duk_steal_buffer.4">§</a></h2>
+<pre class="c-code"><span class="usertype">duk_size_t</span><span class="normal"> sz</span><span class="symbol">;</span>
+<span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">;</span>
+
+<span class="normal">ptr </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_push_dynamic_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">256</span><span class="symbol">);</span><span class="normal">  </span><span class="comment">/* initial size */</span>
+<span class="keyword">for</span><span class="normal"> </span><span class="symbol">(;;)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="comment">/* Error prone algorithm, resizes and appends to buffer.  If an error</span>
+<span class="comment">     * occurs, the dynamic buffer is automatically freed.</span>
+<span class="comment">     */</span>
+
+<span class="normal">    </span><span class="comment">/* ... */</span>
+<span class="normal">    </span><span class="function">duk_resize_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> new_size</span><span class="symbol">);</span>
+<span class="cbracket">}</span>
+
+<span class="comment">/* Algorithm is done, we want to own the buffer.  The duk_steal_buffer()</span>
+<span class="comment"> * API call returns the final data pointer (in case it has been changed</span>
+<span class="comment"> * by resizes etc).</span>
+<span class="comment"> */</span>
+<span class="normal">ptr </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_steal_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal">sz</span><span class="symbol">);</span>
+
+<span class="comment">/* At this point the dynamic buffer is still on the value stack.</span>
+<span class="comment"> * Its size is zero and the current allocation is empty.  Here we</span>
+<span class="comment"> * just pop it as unneeded.</span>
+<span class="comment"> */</span>
+<span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+
+<span class="comment">/* ... */</span>
+
+<span class="comment">/* Eventually, when done with the buffer, you must free it yourself,</span>
+<span class="comment"> * otherwise memory will be leaked.  Duktape won't free the allocation</span>
+<span class="comment"> * automatically, even at Duktape heap destruction.</span>
+<span class="comment"> */</span>
+<span class="function">duk_free</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> ptr</span><span class="symbol">);</span>
 </pre>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_strict_equals">
@@ -9786,7 +10384,7 @@ and writes the size of the buffer into <code>*out_size</code> (if <code>out_size
 is non-<code>NULL</code>).  If <code>index</code> is invalid, throws an error.</p>
 <p>Coercion rules:</p>
 <ul>
-<li>Buffer: no change, dynamic/fixed nature not changed</li>
+<li>Buffer: no change, dynamic/fixed/external nature not changed</li>
 <li>String: coerces into a fixed size buffer, byte-for-byte</li>
 <li>Other types: first apply Ecmascript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.8">ToString()</a>,
@@ -9866,7 +10464,7 @@ calling code.
 <h2 class="api-summary sectiontitle" id="duk_to_dynamic_buffer.3">Summary <a class="sectionlink" href="#duk_to_dynamic_buffer.3">§</a></h2>
 <p>Like <code><a href="#duk_to_buffer">duk_to_buffer()</a></code> but the
 result is always a dynamic buffer (unless an error is thrown).  If the value
-is a fixed buffer, convert it to a dynamic buffer.</p>
+is a fixed or an external buffer, convert it to a dynamic buffer.</p>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_to_dynamic_buffer.4">Example <a class="sectionlink" href="#duk_to_dynamic_buffer.4">§</a></h2>
@@ -9892,8 +10490,8 @@ is a fixed buffer, convert it to a dynamic buffer.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_fixed_buffer.3">Summary <a class="sectionlink" href="#duk_to_fixed_buffer.3">§</a></h2>
 <p>Like <code><a href="#duk_to_buffer">duk_to_buffer()</a></code> but if
-the value is a dynamic buffer, convert it to a fixed buffer.  The result
-is thus always a fixed buffer (unless an error is thrown).</p>
+the value is a dynamic or an external buffer, convert it to a fixed buffer.
+The result is thus always a fixed buffer (unless an error is thrown).</p>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_to_fixed_buffer.4">Example <a class="sectionlink" href="#duk_to_fixed_buffer.4">§</a></h2>

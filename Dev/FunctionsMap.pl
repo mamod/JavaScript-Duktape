@@ -1,5 +1,8 @@
 
 #This File auto generated
+use strict;
+use warnings;
+
 =over
 
 =cut
@@ -144,6 +147,13 @@ see L<http://duktape.org/api.html#duk_concat>
 =cut
 *concat = \&aperl_duk_concat;
 
+=item C<config_buffer>
+
+see L<http://duktape.org/api.html#duk_config_buffer>
+
+=cut
+*config_buffer = \&aperl_duk_config_buffer;
+
 =item C<copy>
 
 see L<http://duktape.org/api.html#duk_copy>
@@ -206,6 +216,13 @@ see L<http://duktape.org/api.html#duk_dump_context_stdout>
 
 =cut
 *dump_context_stdout = \&aperl_duk_dump_context_stdout;
+
+=item C<dump_function>
+
+see L<http://duktape.org/api.html#duk_dump_function>
+
+=cut
+*dump_function = \&aperl_duk_dump_function;
 
 =item C<dup>
 
@@ -339,6 +356,13 @@ see L<http://duktape.org/api.html#duk_get_buffer>
 
 =cut
 *get_buffer = \&aperl_duk_get_buffer;
+
+=item C<get_buffer_data>
+
+see L<http://duktape.org/api.html#duk_get_buffer_data>
+
+=cut
+*get_buffer_data = \&aperl_duk_get_buffer_data;
 
 =item C<get_c_function>
 
@@ -550,6 +574,13 @@ see L<http://duktape.org/api.html#duk_insert>
 =cut
 *insert = \&aperl_duk_insert;
 
+=item C<instanceof>
+
+see L<http://duktape.org/api.html#duk_instanceof>
+
+=cut
+*instanceof = \&aperl_duk_instanceof;
+
 =item C<is_array>
 
 see L<http://duktape.org/api.html#duk_is_array>
@@ -753,6 +784,13 @@ see L<http://duktape.org/api.html#duk_json_encode>
 =cut
 *json_encode = \&aperl_duk_json_encode;
 
+=item C<load_function>
+
+see L<http://duktape.org/api.html#duk_load_function>
+
+=cut
+*load_function = \&aperl_duk_load_function;
+
 =item C<log_va>
 
 see L<http://duktape.org/api.html#duk_log_va>
@@ -907,6 +945,13 @@ see L<http://duktape.org/api.html#duk_peval_string_noresult>
 =cut
 *peval_string_noresult = \&aperl_duk_peval_string_noresult;
 
+=item C<pnew>
+
+see L<http://duktape.org/api.html#duk_pnew>
+
+=cut
+*pnew = \&aperl_duk_pnew;
+
 =item C<pop>
 
 see L<http://duktape.org/api.html#duk_pop>
@@ -956,6 +1001,13 @@ see L<http://duktape.org/api.html#duk_push_buffer>
 =cut
 *push_buffer = \&aperl_duk_push_buffer;
 
+=item C<push_buffer_object>
+
+see L<http://duktape.org/api.html#duk_push_buffer_object>
+
+=cut
+*push_buffer_object = \&aperl_duk_push_buffer_object;
+
 =item C<push_c_function>
 
 see L<http://duktape.org/api.html#duk_push_c_function>
@@ -1004,6 +1056,13 @@ see L<http://duktape.org/api.html#duk_push_error_object_va>
 
 =cut
 *push_error_object_va = \&aperl_duk_push_error_object_va;
+
+=item C<push_external_buffer>
+
+see L<http://duktape.org/api.html#duk_push_external_buffer>
+
+=cut
+*push_external_buffer = \&aperl_duk_push_external_buffer;
 
 =item C<push_false>
 
@@ -1250,6 +1309,13 @@ see L<http://duktape.org/api.html#duk_require_buffer>
 =cut
 *require_buffer = \&aperl_duk_require_buffer;
 
+=item C<require_buffer_data>
+
+see L<http://duktape.org/api.html#duk_require_buffer_data>
+
+=cut
+*require_buffer_data = \&aperl_duk_require_buffer_data;
+
 =item C<require_c_function>
 
 see L<http://duktape.org/api.html#duk_require_c_function>
@@ -1438,6 +1504,13 @@ see L<http://duktape.org/api.html#duk_set_top>
 
 =cut
 *set_top = \&aperl_duk_set_top;
+
+=item C<steal_buffer>
+
+see L<http://duktape.org/api.html#duk_steal_buffer>
+
+=cut
+*steal_buffer = \&aperl_duk_steal_buffer;
 
 =item C<strict_equals>
 
