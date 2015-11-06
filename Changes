@@ -1,5 +1,10 @@
 Revision history for Perl module JavaScript::Duktape
 
+0.3.0 2015 2015-11-07
+	- adding utf8 string api "get_utf8_string"
+	- update perl functions to use get_utf8_string by default
+	- utf8 tests
+
 0.2.1 2015 2015-11-03
 	- Fix deep recursion circular objects
 	- deep recursion test

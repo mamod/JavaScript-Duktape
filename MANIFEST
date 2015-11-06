@@ -52,3 +52,4 @@ t/safe-call.t
 t/trycatch.t
 t/uncaught.t
 t/use.t
+t/utf8.t
