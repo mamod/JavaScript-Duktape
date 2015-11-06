@@ -5,7 +5,7 @@ use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
 
-our $VERSION = '0.2.1';
+our $VERSION = '0.3.0';
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -295,7 +295,7 @@ sub to_perl {
     my $type = $self->get_type($index);
 
     if ($type == JavaScript::Duktape::DUK_TYPE_STRING){
-        $ret = $self->get_string($index);
+        $ret = $self->get_utf8_string($index);
     }
 
     elsif ($type == JavaScript::Duktape::DUK_TYPE_NUMBER){
@@ -457,6 +457,11 @@ sub safe_call {
     }
     return 0;
 }
+
+##############################################
+# custom functions
+##############################################
+*get_utf8_string = \&perl_duk_get_utf8_string;
 
 ##############################################
 # overridden functions

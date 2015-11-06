@@ -186,6 +186,14 @@ SV *perl_duk_require_context(duk_context *ctx, duk_idx_t index) {
     return obj_ref;
 }
 
+SV *perl_duk_get_utf8_string(duk_context *ctx, duk_idx_t index) {
+    STRLEN slen;
+    const char *str = duk_get_lstring(ctx, index, &slen);
+    SV *src = newSVpv(str, slen);
+    SvPV(src, slen);
+    SvUTF8_on(src);
+    return src;
+}
 
 /**
   * open c shared library
