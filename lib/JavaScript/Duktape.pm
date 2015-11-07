@@ -4,8 +4,9 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
+our $VERSION = '1.0.0';
 
-our $VERSION = '0.3.0';
+my $GlobalRef = {};
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -57,6 +58,7 @@ our @EXPORT = qw (
     null
     true
     false
+    _
 );
 
 ##constants
@@ -117,14 +119,33 @@ use constant {
 sub new {
     my $class= shift;
     my $self = bless {}, $class;
-    $self->{duk} = JavaScript::Duktape::Vm->new();
+    my $duk = $self->{duk} = JavaScript::Duktape::Vm->new();
     $self->{pid} = $$;
+
+    # Initialize global stash 'PerlGlobalStash'
+    # this will be used to store some perl refs
+    $duk->push_global_stash();
+    $duk->push_object();
+    $duk->put_prop_string(-2, "PerlGlobalStash");
+    $duk->pop();
+
+    $self->{finalizer} = sub {
+        my $ref = $duk->get_string(0);
+        delete $GlobalRef->{$ref};
+        return 1;
+    };
+    
+    $duk->perl_push_function($self->{finalizer}, -1);
+    $duk->put_global_string('perlFinalizer');
+
     return $self;
 }
 
+my $NOARGS = bless [], "NOARGS";
 sub null  { $JavaScript::Duktape::NULL::null; }
 sub true  { $JavaScript::Duktape::Bool::true; }
 sub false { $JavaScript::Duktape::Bool::false }
+sub JavaScript::Duktape::_   { $NOARGS }
 
 sub set {
     my $self = shift;
@@ -143,7 +164,7 @@ sub set {
         
         my $type = $duk->get_type(-1);
         if ($type != DUK_TYPE_OBJECT){
-            die $others . " isn't an object";
+            croak $others . " isn't an object";
         }
 
         $duk->push_string($last);
@@ -163,12 +184,9 @@ sub get {
     my $name = shift;
     my $duk = $self->vm;
     $duk->push_string($name);
-    my $err = $duk->peval();
-    if ($err){
-        my $error = $duk->safe_to_string(-1);
-        croak $error;
+    if ($duk->peval() != 0) {
+        croak $duk->safe_to_string(-1);
     }
-
     my $ret = $duk->to_perl(-1);
     $duk->pop();
     return $ret;
@@ -208,6 +226,7 @@ use Scalar::Util 'looks_like_number';
 use Data::Dumper;
 use Config;
 use JavaScript::Duktape::C::libPath;
+use Carp;
 
 my $Duklib;
 
@@ -227,9 +246,6 @@ use Inline C => config =>
     # LIBS => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
 
 use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
-
-
-my $Functions = {};
 
 sub push_perl {
     my $self = shift;
@@ -270,6 +286,8 @@ sub push_perl {
                 $self->push_perl($ret);
                 return 1;
             });
+        } elsif ($ref eq 'JavaScript::Duktape::Object'){
+            $self->push_heapptr($val->{heapptr});
         } elsif ($ref eq 'JavaScript::Duktape::Pointer'){
             $self->push_pointer($$val);
         } elsif ($ref eq 'JavaScript::Duktape::Buffer'){
@@ -284,6 +302,17 @@ sub push_perl {
             $self->push_string($val);
         }
     }
+}
+
+sub to_perl_object {
+    my $self = shift;
+    my $index = shift;
+    my $heapptr = $self->require_heapptr($index);
+    
+    return JavaScript::Duktape::Object->init({
+        duk => $self,
+        heapptr => $heapptr
+    });
 }
 
 sub to_perl {
@@ -394,15 +423,16 @@ sub to_perl {
 ##############################################
 sub delete_function {
     my $sub = shift;
-    delete $Functions->{"$sub"};
+    delete $GlobalRef->{"$sub"};
 }
 
 sub push_function {
     my $self = shift;
     my $sub = shift;
     my $nargs = shift;
+
     if (!defined $nargs){ $nargs = -1 }
-    $Functions->{"$sub"} = sub {
+    $GlobalRef->{"$sub"} = sub {
         my $top = $self->get_top();
         my $ret = 1;
         $self->perl_duk_safe_call(sub {
@@ -414,14 +444,18 @@ sub push_function {
                 } else {
                     $error =~ s/\n//g;
                     $error =~ s/\\/\\\\/g;
-                    $self->eval_string("throw new Error('$error')");
+                    print STDERR $error . "\n";
+                    $self->eval_string_noresult("throw new Error('$error')");
                 }
             }
             return $ret;
         }, $top, 1);
         return $ret;
     };
-    $self->perl_push_function($Functions->{"$sub"}, $nargs);
+
+    $self->perl_push_function($GlobalRef->{"$sub"}, $nargs);
+    $self->eval_string("(function(){perlFinalizer('$sub')})");
+    $self->set_finalizer(-2);
 }
 
 *push_c_function = \&push_function;
@@ -526,6 +560,167 @@ package JavaScript::Duktape::NULL; {
     }
 
     sub null  { $null }
+}
+
+package JavaScript::Duktape::Object; {
+    use warnings;
+    use strict;
+    use Carp;
+    use Data::Dumper;
+    my $CONSTRUCTORS = {};
+    use Scalar::Util 'weaken';
+    use overload
+        '&{}' => sub {
+            my $self = shift;
+            my $duk = $self->{duk};
+            my $heapptr = $self->{heapptr};
+            return sub {
+                my $len = @_ + 0;
+                $duk->push_heapptr($heapptr);
+                $duk->push_heapptr($self->{constructor} || 0);
+                foreach my $val (@_){
+                    $duk->push_perl($val);
+                }
+                if ($duk->pcall_method($len) != 0){
+                    croak $duk->safe_to_string(-1);
+                }
+                my $val = undef;
+                my $type = $duk->get_type(-1);
+                if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT){
+                    $val = $duk->to_perl_object(-1);
+                } else {
+                    $val = $duk->to_perl(-1);
+                }
+                $duk->pop();
+                return $val;
+            };
+        },
+        fallback => 1;
+
+    sub init {
+        my $class = shift;
+        my $options = shift;
+
+        my $duk = $options->{duk};
+        my $heapptr = $options->{heapptr};
+        
+        ##TODO: Move these to C
+        # to prevent duktape garbage collecting this object
+        # while it's still used in perl land we need to store
+        # it in perl global stash, this will be freed once the
+        # destroy method called of "JavaScript::Duktape::Object"
+        $duk->push_global_stash();
+        $duk->get_prop_string(-1, "PerlGlobalStash");
+        $duk->push_number($heapptr);
+        $duk->push_heapptr($heapptr);
+        $duk->put_prop(-3); #PerlGlobalStash[heapptr] = object
+        $duk->pop_2();
+
+        my $self = bless {
+            duk => $duk,
+            heapptr => $heapptr
+        }, $class;
+
+        return $self;
+    }
+
+    sub inspect {
+        my $self = shift;
+        my $heapptr = $self->{heapptr};
+        my $duk = $self->{duk};
+        $duk->push_heapptr($heapptr);
+        my $ret = $duk->to_perl(-1);
+        $duk->pop();
+        return $ret;
+    }
+
+    our $AUTOLOAD;
+    sub AUTOLOAD {
+        my $self = shift;
+        my $heapptr = $self->{heapptr};
+        my $duk = $self->{duk};
+        my ($method) = ($AUTOLOAD =~ /([^:']+$)/);
+        $self->DESTROY() if $method eq 'DESTROY';
+        $duk->push_heapptr($heapptr);
+        if ($method eq 'new'){
+            my $len = @_ + 0;
+            foreach my $val (@_){
+                $duk->push_perl($val);
+            }
+            if ($duk->pnew($len) != 0){
+                croak $duk->safe_to_string(-1);
+            }
+            my $val = $duk->to_perl_object(-1);
+            $duk->pop();
+            return $val;
+        }
+
+        my $val = undef;
+        $duk->get_prop_string(-1, $method);
+        
+        my $type = $duk->get_type(-1);
+        if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT){
+            if ($duk->is_function(-1) && @_){
+                my $len = @_ + 0;
+                $duk->push_heapptr($heapptr);
+                foreach my $val (@_){
+                    if (ref $val eq 'NOARGS') {
+                        --$len; next;
+                    }
+
+                    if (ref $val eq 'CODE'){
+                        my $sub = sub {
+                            my $top = $duk->get_top();
+                            my @args = (bless {sub=>1, duk=>$duk, heapptr=>$heapptr }, __PACKAGE__);
+                            for (my $i = 0; $i < $top; $i++){
+                                push @args, $duk->to_perl($i);
+                            }
+                            my $ret = $val->(@args);
+                            $duk->push_perl($ret);
+                            return 1;
+                        };
+                        $duk->push_function($sub, -1);
+                    } else {
+                        $duk->push_perl($val);
+                    }
+                }
+                
+                if ($duk->pcall_method($len) != 0){
+                    croak $duk->safe_to_string(-1);
+                }
+
+                my $type = $duk->get_type(-1);
+                if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT){
+                    $val = $duk->to_perl_object(-1);
+                } else {
+                    $val = $duk->to_perl(-1);
+                }
+            } else {
+                $val = $duk->to_perl_object(-1);
+                $val->{constructor} = $self->{heapptr};
+            }
+        } else {
+            $val = $duk->to_perl(-1);
+        }
+        $duk->pop_2();
+        return $val;
+    }
+
+    DESTROY {
+        my $self = shift;
+        my $duk = $self->{duk};
+        my $heapptr = $self->{heapptr};
+
+        #don't free if this coming from sub
+        return if $self->{sub};
+
+        ##TODO: Move these to C
+        $duk->push_global_stash();
+        $duk->get_prop_string(-1, "PerlGlobalStash");
+        $duk->push_number($heapptr);
+        $duk->del_prop(-2);
+        $duk->pop_2();
+    }
 }
 
 package JavaScript::Duktape::Buffer; {
