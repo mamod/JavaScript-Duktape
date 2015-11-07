@@ -4,7 +4,9 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
-our $VERSION = '0.2.1';
+our $VERSION = '1.0.0';
+
+my $GlobalRef = {};
 
 use base qw/Exporter/;
 our @EXPORT = qw (
@@ -128,11 +130,8 @@ sub new {
     $duk->pop();
 
     $self->{finalizer} = sub {
-        $duk->push_current_function();
-        $duk->get_prop_string(-1, "_my_perl_sub_ref");
-        my $ref = $duk->get_string(-1);
-        JavaScript::Duktape::Vm::delete_function($ref);
-        $duk->pop_2();
+        my $ref = $duk->get_string(0);
+        delete $GlobalRef->{$ref};
         return 1;
     };
     
@@ -247,9 +246,6 @@ use Inline C => config =>
     # LIBS => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
 
 use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
-
-
-my $Functions = {};
 
 sub push_perl {
     my $self = shift;
@@ -427,7 +423,7 @@ sub to_perl {
 ##############################################
 sub delete_function {
     my $sub = shift;
-    delete $Functions->{"$sub"};
+    delete $GlobalRef->{"$sub"};
 }
 
 sub push_function {
@@ -436,7 +432,7 @@ sub push_function {
     my $nargs = shift;
 
     if (!defined $nargs){ $nargs = -1 }
-    $Functions->{"$sub"} = sub {
+    $GlobalRef->{"$sub"} = sub {
         my $top = $self->get_top();
         my $ret = 1;
         $self->perl_duk_safe_call(sub {
@@ -457,12 +453,8 @@ sub push_function {
         return $ret;
     };
 
-    my $t = "$sub";
-    $self->perl_push_function($Functions->{"$sub"}, $nargs);
-
-    $self->eval_string("perlFinalizer");
-    $self->push_string("$sub");
-    $self->put_prop_string(-2, "_my_perl_sub_ref");
+    $self->perl_push_function($GlobalRef->{"$sub"}, $nargs);
+    $self->eval_string("(function(){perlFinalizer('$sub')})");
     $self->set_finalizer(-2);
 }
 
@@ -571,7 +563,7 @@ package JavaScript::Duktape::Object; {
     use Carp;
     use Data::Dumper;
     my $CONSTRUCTORS = {};
-
+    use Scalar::Util 'weaken';
     use overload
         '&{}' => sub {
             my $self = shift;
@@ -606,7 +598,8 @@ package JavaScript::Duktape::Object; {
 
         my $duk = $options->{duk};
         my $heapptr = $options->{heapptr};
-
+        
+        ##TODO: Move these to C
         # to prevent duktape garbage collecting this object
         # while it's still used in perl land we need to store
         # it in perl global stash, this will be freed once the
@@ -670,7 +663,21 @@ package JavaScript::Duktape::Object; {
                         --$len; next;
                     }
 
-                    $duk->push_perl($val);
+                    if (ref $val eq 'CODE'){
+                        my $sub = sub {
+                            my $top = $duk->get_top();
+                            my @args = (bless {sub=>1, duk=>$duk, heapptr=>$heapptr }, __PACKAGE__);
+                            for (my $i = 0; $i < $top; $i++){
+                                push @args, $duk->to_perl($i);
+                            }
+                            my $ret = $val->(@args);
+                            $duk->push_perl($ret);
+                            return 1;
+                        };
+                        $duk->push_function($sub, -1);
+                    } else {
+                        $duk->push_perl($val);
+                    }
                 }
                 
                 if ($duk->pcall_method($len) != 0){
@@ -698,7 +705,11 @@ package JavaScript::Duktape::Object; {
         my $self = shift;
         my $duk = $self->{duk};
         my $heapptr = $self->{heapptr};
-        
+
+        #don't free if this coming from sub
+        return if $self->{sub};
+
+        ##TODO: Move these to C
         $duk->push_global_stash();
         $duk->get_prop_string(-1, "PerlGlobalStash");
         $duk->push_number($heapptr);
