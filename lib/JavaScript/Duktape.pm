@@ -586,7 +586,8 @@ package JavaScript::Duktape::Object; {
                 }
                 my $val = undef;
                 my $type = $duk->get_type(-1);
-                if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT){
+                if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT ||
+                     $type == JavaScript::Duktape::DUK_TYPE_BUFFER){
                     $val = $duk->to_perl_object(-1);
                 } else {
                     $val = $duk->to_perl(-1);
@@ -670,8 +671,13 @@ package JavaScript::Duktape::Object; {
 
                     if (ref $val eq 'CODE'){
                         my $sub = sub {
+                            ##TODO: why sometimes push_this pushes 0
+                            ##instead of real heapptr!!?
+                            $duk->push_this();
+                            my $h = $duk->get_heapptr(-1) || $heapptr;
+                            $duk->pop();
                             my $top = $duk->get_top();
-                            my @args = (bless {sub=>1, duk=>$duk, heapptr=>$heapptr }, __PACKAGE__);
+                            my @args = (bless {sub=>1, duk=>$duk, heapptr=>$h }, __PACKAGE__);
                             for (my $i = 0; $i < $top; $i++){
                                 push @args, $duk->to_perl($i);
                             }
@@ -690,7 +696,8 @@ package JavaScript::Duktape::Object; {
                 }
 
                 my $type = $duk->get_type(-1);
-                if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT){
+                if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT ||
+                     $type == JavaScript::Duktape::DUK_TYPE_BUFFER){
                     $val = $duk->to_perl_object(-1);
                 } else {
                     $val = $duk->to_perl(-1);
