@@ -17,7 +17,7 @@ sub func {
     printf("this binding: type=%ld, value='%s'\n", $t, $self->to_string(-1));
 }
 
-$duk->push_function(\&func, 0);
+$duk->push_c_function(\&func, 0);
 $duk->push_undefined();
 $duk->push_null();
 $duk->push_true();

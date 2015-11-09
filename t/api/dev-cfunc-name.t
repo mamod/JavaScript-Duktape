@@ -23,7 +23,7 @@ sub my_func {
 }
 
 sub test_without_name {
-	$duk->push_function(\&my_func, 0);
+	$duk->push_c_function(\&my_func, 0);
 	$duk->put_global_string("MyFunc");
 
 	$duk->eval_string_noresult(

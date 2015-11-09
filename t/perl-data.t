@@ -17,7 +17,6 @@ $duk->put_global_string("perlok");
 my $data = {
 	num => 9,
 	func => sub {
-		my $self = shift;
 		is(1, $_[0]);
 		is("Hi", $_[1]);
 		is($_[2], true); #true
@@ -32,7 +31,6 @@ my $data = {
 
 		##fifth argument passed as javascript function
 		$_[5]->(sub {
-			my $self = shift;
 			my $d = shift;
 			is($d, "Hi again");
 			return [1, 2, 3];

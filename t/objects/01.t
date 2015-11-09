@@ -11,6 +11,7 @@ my $duk = $js->duk;
 $duk->eval_string(qq~
     var tt = {};
     tt.all = test;
+    var test_test = test;
     function test (fn){
         this.name       = 'Mamod';
         this.lastname   = "Foo";
@@ -24,17 +25,16 @@ $duk->eval_string(qq~
     test.prototype.setLast = function(fn){
         this.lastname = fn;
         this.fullname = this.name + " " + fn('Mehy');
-    }
-    test;
+    };
 ~);
 
-my $obj = $duk->to_perl_object(-1);
+
+my $obj = $js->get_object('test_test');
 $duk->pop();
 
 for (0 .. 100){
     my $t = $obj->new(sub{});
     $t->setLast( sub {
-        my $this = shift;
         my $last = shift . "ar";
         return $last;
     });
@@ -43,18 +43,15 @@ for (0 .. 100){
 }
 
 my $t = $obj->new(sub {
-    my $this = shift;
     ok(1);
 });
 
 $t->setLast( sub {
-    my $this = shift;
     my $last = shift . "ar";
-    $this->test("");
+    this->test("");
     return $last;
 });
 is $t->lastname('Mehy2'), "Mehy2ar";
 is $t->fullname, "Mamod Mehyar";
-is $t->counter, 2;
-
-done_testing(207);
+is $t->counter, 1;
+done_testing(206);

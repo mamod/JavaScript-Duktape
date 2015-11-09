@@ -22,14 +22,12 @@ my $evalstr = <<'//JSEND';
     toPerl( uc("abc αβγ ß") ) // ascii: abc,  greek:alpha beta gamma, german:sharp-s
 //JSEND
 
-$js->set(is => sub { 
-    shift; 
+$js->set(is => sub {
     is(shift, shift); 
 });
 
 $js->set(toPerl =>
     sub {
-        my $duk = shift;
         my $string = shift;
         is length $string, 10;
         

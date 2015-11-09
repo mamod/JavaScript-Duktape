@@ -17,7 +17,6 @@ my $duk = $js->duk;
 
         my $total = 0;
         $arr->forEach(sub {
-            my $this = shift;
             my ($value, $index, $ar) = @_;
             is $value, $index;
             $total += $value;
@@ -32,7 +31,6 @@ my $duk = $js->duk;
 
         my $total = 0;
         $arr->forEach(sub {
-            my $this = shift;
             my ($value, $index, $ar) = @_;
             is (($value-1), $index);
             $total += $value;
@@ -56,7 +54,6 @@ my $duk = $js->duk;
     my $numbers = $js->get_object('numbers');
 
     $numbers->sort(sub {
-        my $self = shift;
         my ($a, $b) = @_;
         return $a - $b;
     });
