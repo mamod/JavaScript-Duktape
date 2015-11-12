@@ -7,7 +7,8 @@ use Scalar::Util 'looks_like_number';
 our $VERSION = '1.0.0_5';
 
 my $GlobalRef = {};
-my $THIS   = { heapptr => 0 };
+my $THIS;
+my $DUKTAPE;
 my $isNew  = bless [], "NEW";
 my $HEAP   = bless [], "HEAP";
 my $DUK    = bless [],  "DUK";
@@ -135,42 +136,47 @@ sub new {
     $duk->put_prop_string(-2, "PerlGlobalStash");
     $duk->pop();
 
+    $THIS = bless { sub => 1, duk => $duk, heapptr => 0 }, "JavaScript::Duktape::Object";
+
+    ##global methods
+
+    ##finalizer method
     $self->{finalizer} = sub {
         my $ref = $duk->get_string(0);
         delete $GlobalRef->{$ref};
         return 1;
     };
     
-    $duk->perl_push_function($self->{finalizer}, -1);
+    $duk->perl_push_function($self->{finalizer}, 1);
     $duk->put_global_string('perlFinalizer');
 
-    $self->set('perlCall', sub {
-        my $name    = shift;
-        this()->{args} =  $GlobalRef->{$name}->{args};
-        return $GlobalRef->{$name}->{sub}->(@_);
-    });
+    ##calling cached functions
+    $self->{call} = sub {
+        my $heapptr = $duk->get_heapptr(0);
+        my $name    = $duk->get_string(1);
+        my $top     = $duk->get_top();
 
-    # $self->{call} = sub {
-    #     print Dumper $duk->is_constructor_call
-    #     my $h = $duk->push_this();
-    #     $h = $duk->get_heapptr(-1);
-    #     $duk->pop();
+        shift if ref $_[0] eq 'JavaScript::Duktape::Cache';
+        
+        $THIS->{heapptr} = $heapptr;
+        $THIS->{duk}     = $duk;
 
-    #     print Dumper $h;
-    #     # my $self = shift;
-    #     # # my $duk = shift;
-    #     # eval {
-    #     # my $sub = $self->{sub};
-    #     # };
-    #     # print Dumper $@;
-    #     # # my $heapptr = duk;
-    #     $duk->dump();
-    #     print Dumper \@_;
-    #     return 1;
-    # };
+        my @args;
+        if (!@_){
+            for (my $i = 2; $i < $top; $i++){
+                push @args, $duk->to_perl($i);
+            }
+        } else {
+            @args = @_;
+        }
+
+        my $ret = $GlobalRef->{$name}->{sub}->(@args);
+        $duk->push_perl($ret);
+        return 1;
+    };
     
-    # $duk->perl_push_function($self->{call}, -1);
-    # $duk->put_global_string('perlCall');
+    $duk->push_perl_function($self->{call}, -1);
+    $duk->put_global_string('perlCall');
 
     return $self;
 }
@@ -240,6 +246,7 @@ sub get_object {
     return $ret;
 }
 
+##FIXME : should pop here?
 sub eval {
     my $self = shift;
     my $string = shift;
@@ -255,7 +262,7 @@ sub eval {
     return $duk->to_perl(-1);
 }
 
-sub vm { shift->{duk}; }
+sub vm  { shift->{duk}; }
 sub duk { shift->{duk}; }
 
 sub DESTROY {
@@ -296,115 +303,54 @@ use Inline C => config =>
 use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
 use Carp;
 
-my %PUSH_MAP = (
-    'JavaScript::Duktape::NULL' => sub {
-        my ($self, $val) = (shift, shift);
-        $self->push_null();
-    },
-
-    'JavaScript::Duktape::Bool' => sub {
-        my ($self, $val) = (shift, shift);
-        if ($val){
-            $self->push_true();
-        } else {
-            $self->push_false();
-        }
-    },
-
-    'ARRAY' => sub {
-        my ($self, $val) = (shift, shift);
-        my $arr_idx = $self->push_array();
-        my $len = scalar @{$val};
-        for (my $idx = 0; $idx < $len; $idx++) {
-            $self->push_perl($val->[$idx]);
-            $self->put_prop_index($arr_idx, $idx);
-        }
-    },
-
-    'HASH' => sub {
-        my ($self, $val) = (shift, shift);
-        $self->push_object();
-        while (my ($k, $v) = each %{$val}) {
-            $self->push_string($k);
-            $self->push_perl($v);
-            $self->put_prop(-3);
-        }
-    },
-
-    'CODE' => sub {
-        my ($self, $val) = (shift, shift);
-        $self->push_function($val);
-    },
-
-    'JavaScript::Duktape::Object' => sub {
-        my ($self, $val) = (shift, shift);
-        $self->push_heapptr($val->{heapptr});
-    },
-
-    'JavaScript::Duktape::Function' => sub {
-        my ($self, $val) = (shift, shift);
-        $self->push_heapptr($val->($HEAP));
-    },
-
-    'JavaScript::Duktape::Pointer' => sub {
-        my ($self, $val) = (shift, shift);
-        $self->push_pointer($$val);
-    }
-);
-
 sub push_perl {
     my $self = shift;
     my $val = shift;
-
-    my $ref = ref $val;
-    if (my $push = $PUSH_MAP{$ref}){
-        $push->($self, $val);
-    } else {
-        if (!defined $val){
-            $self->push_undefined();
-        } elsif (looks_like_number( $val )){
-            $self->push_number($val);
-        } else {
-            $self->push_string($val);
-        }
-    }
-}
-
-sub push_perl2 {
-    my $self = shift;
-    my $val = shift;
-
-    my $ref = ref $val;
-    if ($ref){
+    
+    if (my $ref = ref $val){
         if ($ref eq 'JavaScript::Duktape::NULL'){
             $self->push_null();
-        } elsif ($ref eq 'JavaScript::Duktape::Bool'){
+        }
+
+        elsif ($ref eq 'JavaScript::Duktape::Bool'){
             if ($val){
                 $self->push_true();
             } else {
                 $self->push_false();
             }
-        } elsif ($ref eq 'ARRAY'){
+        }
+
+        elsif ($ref eq 'ARRAY'){
             my $arr_idx = $self->push_array();
             my $len = scalar @{$val};
             for (my $idx = 0; $idx < $len; $idx++) {
                 $self->push_perl($val->[$idx]);
                 $self->put_prop_index($arr_idx, $idx);
             }
-        } elsif ($ref eq 'HASH'){
+        }
+
+        elsif ($ref eq 'HASH'){
             $self->push_object();
             while (my ($k, $v) = each %{$val}) {
                 $self->push_string($k);
                 $self->push_perl($v);
                 $self->put_prop(-3);
             }
-        } elsif ($ref eq 'CODE') {
+        }
+
+        elsif ($ref eq 'CODE') {
             $self->push_function($val);
-        } elsif ($ref eq 'JavaScript::Duktape::Object'){
+        }
+
+        elsif ($ref eq 'JavaScript::Duktape::Object'){
             $self->push_heapptr($val->{heapptr});
-        } elsif ($ref eq 'JavaScript::Duktape::Function'){
+        }
+
+        elsif ($ref eq 'JavaScript::Duktape::Function'){
             $self->push_heapptr($val->($HEAP));
-        } elsif ($ref eq 'JavaScript::Duktape::Pointer'){
+        }
+
+        elsif ($ref eq 'JavaScript::Duktape::Pointer'){
             $self->push_pointer($$val);
         }
     } else {
@@ -437,12 +383,16 @@ sub to_perl {
 
     my $type = $self->get_type($index);
 
-    if ($type == JavaScript::Duktape::DUK_TYPE_STRING){
+    if ($type == JavaScript::Duktape::DUK_TYPE_UNDEFINED){
+        return;
+    }
+
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_STRING){
         $ret = $self->get_utf8_string($index);
     }
 
     elsif ($type == JavaScript::Duktape::DUK_TYPE_NUMBER){
-        $ret = $self->get_number($index) + 0;
+        $ret = $self->get_number($index);
     }
 
     elsif ($type == JavaScript::Duktape::DUK_TYPE_OBJECT ||
@@ -452,11 +402,12 @@ sub to_perl {
             my $ptr = $self->get_heapptr($index);
             return sub {
                 $self->push_heapptr($ptr);
+                $self->push_this();
                 my $len = 0+@_;
                 for (my $i = 0; $i < $len; $i++){
                     $self->push_perl($_[$i]);
                 }
-                $self->call($len);
+                $self->call_method($len);
                 my $ret = $self->to_perl(-1);
                 $self->pop();
                 return $ret;
@@ -517,10 +468,6 @@ sub to_perl {
         my $p = $self->get_pointer($index);
         $ret = bless \$p, 'JavaScript::Duktape::Pointer';
     }
-
-    else {
-        $ret = undef;
-    }
     
     return $ret;
 }
@@ -528,54 +475,48 @@ sub to_perl {
 ##############################################
 # push functions
 ##############################################
-sub delete_function {
-    my $sub = shift;
-    delete $GlobalRef->{"$sub"};
-}
-
 sub push_function {
-    my $self = shift;
-    my $sub = shift;
-    my $nargs = shift;
-    my $heapptr = shift;
+    my $self  = shift;
+    my $sub   = shift;
+    my $nargs = shift || -1;
 
-    if (!defined $nargs){ $nargs = -1 }
-    $GlobalRef->{"$sub"} = sub {
-        # print Dumper \@_;
-        # my @caller = caller();
-        # print Dumper \@caller;
-
+    $self->push_c_function(sub {
         my @args;
         my $top = $self->get_top();
         for (my $i = 0; $i < $top; $i++){
             push @args, $self->to_perl($i);
         }
 
+        $self->push_this();
+        my $heap = $self->get_heapptr(-1);
+        $self->pop();
+
+        if (!$heap){
+            $self->push_global_object();
+            $heap = $self->get_heapptr(-1);
+            $self->pop();
+        }
+
+        $THIS->{heapptr} = $heap;
+        $THIS->{duk}     = $self;
+
+        my $ret = $sub->(@args);
+        $self->push_perl($ret);
+        return 1;
+    }, $nargs);
+}
+
+sub push_c_function {
+    my $self  = shift;
+    my $sub   = shift;
+    my $nargs = shift || -1;
+
+    $GlobalRef->{"$sub"} = sub {
+        my @args = @_;
+        my $top = $self->get_top();
         my $ret = 1;
-        $self->perl_duk_safe_call( sub {
-            my $oldTHIS = $THIS;
-            $ret = eval {
-                
-                $self->push_this();
-                my $h = $self->get_heapptr(-1) || $heapptr;
-                $self->pop();
-
-                if ($h){
-                    $THIS = bless {sub=>1, duk=>$self, heapptr=>$h }, "JavaScript::Duktape::Object";
-                } else {
-                    $self->push_global_object();
-                    my $h = $self->get_heapptr(-1);
-                    $self->pop();
-                    $THIS = bless {sub=>1, duk=>$self, heapptr=> $h }, "JavaScript::Duktape::Object";
-                }
-
-                my $ret = $sub->(@args);
-                $self->push_perl($ret);
-                return 1;
-            };
-            
-            $THIS = $oldTHIS;
-            
+        $self->perl_duk_safe_call(sub {
+            eval { $ret = $sub->(@args) };
             my $error = $@;
             if ($error){
                 if ($error =~ /^Duk::Error/){
@@ -595,35 +536,6 @@ sub push_function {
     $self->eval_string("(function(){perlFinalizer('$sub')})");
     $self->set_finalizer(-2);
 }
-
-sub push_c_function {
-    my $self = shift;
-    my $sub = shift;
-    my $nargs = shift;
-    if (!defined $nargs){ $nargs = -1 }
-    $GlobalRef->{"$sub"} = sub {
-        my $top = $self->get_top();
-        my $ret = 1;
-        $self->perl_duk_safe_call(sub {
-            eval { $ret = $sub->($self) };
-            my $error = $@;
-            if ($error){
-                if ($error =~ /^Duk::Error/){
-                    die $@;
-                } else {
-                    $error =~ s/\n//g;
-                    $error =~ s/\\/\\\\/g;
-                    $self->eval_string("throw new Error('$error')");
-                }
-            }
-            return $ret;
-        }, $top, 1);
-        return $ret;
-    };
-    $self->perl_push_function($GlobalRef->{"$sub"}, $nargs);
-}
-
-*push_perl_function = \&push_c_function;
 
 sub cache {
     my $self = shift;
@@ -679,12 +591,13 @@ sub safe_call {
 # custom functions
 ##############################################
 *get_utf8_string = \&perl_duk_get_utf8_string;
+*push_perl_function = \&push_c_function;
+*push_light_function = \&perl_push_function;
 
 ##############################################
 # overridden functions
 ##############################################
 *require_context = \&perl_duk_require_context;
-
 
 ##############################################
 # helper functions
@@ -775,8 +688,8 @@ package JavaScript::Duktape::Object; {
         my $heapptr = $self->{heapptr};
         my $duk = $self->{duk};
         my ($method) = ($AUTOLOAD =~ /([^:']+$)/);
-        $self->DESTROY() if $method eq 'DESTROY';
-        return JavaScript::Duktape::Util::autoload($self,$method, $duk, $heapptr, @_);
+        return if $method eq 'DESTROY';
+        return JavaScript::Duktape::Util::autoload($self, $method, $duk, $heapptr, @_);
     }
 
     DESTROY {
@@ -813,7 +726,7 @@ package JavaScript::Duktape::Function; {
         my $duk     = $self->($DUK);
 
         my ($method) = ($AUTOLOAD =~ /([^:']+$)/);
-        $self->DESTROY() if $method eq 'DESTROY';
+        return if $method eq 'DESTROY';
         return JavaScript::Duktape::Util::autoload($self, $method, $duk, $heapptr, @_);
     }
 
@@ -882,7 +795,6 @@ package JavaScript::Duktape::Util; {
             # check first value, if it a ref of NEW
             # then this is a constructor call, other wise
             # it's just a normal call
-            
             my $isNew;
             my $ref = ref $_[0];
             if ($ref eq "NEW"){
@@ -902,10 +814,10 @@ package JavaScript::Duktape::Util; {
                 } elsif (ref $val eq 'JavaScript::Duktape::Cache') {
                     my $name = $val->{name};
                     $duk->eval_string(qq~
-                        var t = function (a,b,c){
-                            return perlCall.call(this, "$name", a, b, c);
-                        };
-                        t;
+                        (function (a, b, c, d){
+                            var name = "$name";
+                            return perlCall(this, name, a, b, c, d);
+                        });
                     ~);
                 } else {
                     $duk->push_perl($val);
