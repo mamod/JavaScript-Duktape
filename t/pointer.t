@@ -9,14 +9,13 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 $duk->push_function( sub {
-    my $i = shift->require_pointer(0);
+    my $i = $duk->require_pointer(0);
     is $i, 999;
     return 1;
 }, 1);
 $duk->put_global_string('_sendbackpointer');
 
 $js->set('_sendbackpointer2', sub {
-    my $self = shift;
     my $p = shift;
     is (ref $p, 'JavaScript::Duktape::Pointer');
     is ($$p, 999);

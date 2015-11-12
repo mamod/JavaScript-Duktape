@@ -35,7 +35,6 @@ $duk->dump();
 $js->set('process', {});
 $js->set('process.test', {});
 $js->set('process.test.perl', sub {
-    my $duk = shift;
     my $obj = shift;
     is_deeply $obj, $object;
 });

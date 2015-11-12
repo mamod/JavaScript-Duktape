@@ -11,13 +11,12 @@ my $duk = $js->duk;
 
 sub func {
 	eval{};
-    my $self = shift;
-    $self->push_this();
-    my $t = $self->get_type(-1);
-    printf("this binding: type=%ld, value='%s'\n", $t, $self->to_string(-1));
+    $duk->push_this();
+    my $t = $duk->get_type(-1);
+    printf("this binding: type=%ld, value='%s'\n", $t, $duk->to_string(-1));
 }
 
-$duk->push_function(\&func, 0);
+$duk->push_c_function(\&func, 0);
 $duk->push_undefined();
 $duk->push_null();
 $duk->push_true();
