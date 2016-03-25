@@ -5,6 +5,31 @@ use JavaScript::Duktape;
 use Test::More;
 use Test::Fatal;
 
+use Try::Tiny;
+
+subtest 'try-tiny interaction' => sub {
+    sub eval_js {
+        my $code = shift;
+
+        my $js = JavaScript::Duktape->new;
+
+        try {
+            $js->eval( $code );
+        } catch {
+            my $err = $_;
+            warn "CAUGHT ERR: $err";
+            die "JS ERR: $err";
+        };
+    }
+
+    eval {
+        eval_js(q{
+            throw new Error('oh boy!');
+        });
+    };
+    isnt $@, '', 'error message comes through';
+};
+
 subtest 'simple nested thrown exception' => sub{
     my $js = JavaScript::Duktape->new();
     $js->set( each => sub{

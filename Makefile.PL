@@ -24,5 +24,6 @@ WriteMakefile(
     },
     TEST_REQUIRES     => {
         'Test::Fatal'   => '0.014',
+        'Try::Tiny'     => '0.24',
     }
 );
