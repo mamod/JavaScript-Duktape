@@ -10,11 +10,11 @@ my @map;
 my @code;
 
 while (<$file>){
-    
+
     if ($_ =~ /^DUK_EXTERNAL_DECL/){
         $_ =~ s/^DUK_EXTERNAL_DECL(\s+?)//;
         $_ =~ s/;(\n)?$//;
-        
+
         if ($_ !~ /duk_context \*ctx/g){
             next;
         }
@@ -73,7 +73,7 @@ while (<$file>){
         # $perl_function =~s/duk_context \*ctx/SV \*Obj/;
         $perl_function = 'aperl_' . $perl_function;
 
-        
+
         $code .= $code_type . "$perl_function {\n";
         $code .= "\tduk_size_t sz;\n" if $lstring;
 

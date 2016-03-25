@@ -16,19 +16,19 @@ my $duk = $js->duk;
 sub test_1 {
 	$duk->eval_string("(function (x) { print(Duktape.enc('jx', x)); })");
 	$duk->push_object();
-	
+
 	#Ordinary property */
 	$duk->push_int(1);
 	$duk->put_prop_string(-2, "foo"); # obj.foo = 1 */
-	
+
 	# /* Internal property \xFF\xFFabc, technically enumerable (based on
 	# * property attributes) but because of internal property special
 	# * behavior, does not enumerate.
 	# */
-	
+
 	$duk->push_int(2);
 	$duk->put_prop_string(-2, "\xff\xff" . "abc"); # obj[\xff\xffabc] = 2, internal property */
-	
+
 	# /* Another property with invalid UTF-8 data but doesn't begin with
 	# * \xFF => gets enumerated and JX prints out an approximate key.
 	# */

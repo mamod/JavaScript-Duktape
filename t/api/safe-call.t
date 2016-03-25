@@ -18,7 +18,7 @@ sub test_1 {
 	my $a = $duk->get_number(-3);
 	my $b = $duk->get_number(-2);
 	my $c = $duk->get_number(-1);
-	
+
 	$duk->push_number($a + $b);
 
 	# just one return value
@@ -46,7 +46,7 @@ sub test {
 	$duk->push_int(12);
 
 	$rc = $duk->safe_call(\&test_1, 3 , 2 );
-	
+
 	if ($rc == 0) {
 		printf("1st return value: %s\n", $duk->to_string(-2));  # 21
 		printf("2nd return value: %s\n", $duk->to_string(-1));  # undefined
