@@ -407,7 +407,9 @@ sub to_perl {
                 for (my $i = 0; $i < $len; $i++){
                     $self->push_perl($_[$i]);
                 }
-                $self->call_method($len);
+                if ($self->pcall_method($len) == 1) {
+                    croak $self->safe_to_string(-1);
+                }
                 my $ret = $self->to_perl(-1);
                 $self->pop();
                 return $ret;
@@ -510,11 +512,11 @@ sub push_c_function {
     my $self  = shift;
     my $sub   = shift;
     my $nargs = shift || -1;
-
     $GlobalRef->{"$sub"} = sub {
         my @args = @_;
         my $top = $self->get_top();
         my $ret = 1;
+        my $died;
         $self->perl_duk_safe_call(sub {
             eval { $ret = $sub->(@args) };
             my $error = $@;
@@ -522,13 +524,24 @@ sub push_c_function {
                 if ($error =~ /^Duk::Error/){
                     croak $@;
                 } else {
-                    $self->eval_string('(function (e){ throw new Error(e) })');
+                    ## don't throw error inside perl sub safe call
+                    ## just tell our sub that there is an error and
+                    ## let it exit this calling stack then throw
+                    ## Fixes issue #6
+                    $died = $error;
+                    $self->eval_string('(function (e){ return new Error(e) })');
                     $self->push_string($error);
                     $self->call(1);
                 }
             }
             return $ret;
         }, $top, 1);
+
+        if ($died){
+            $self->push_error_object(100, $died);
+            croak $died;
+        }
+
         return $ret;
     };
 
