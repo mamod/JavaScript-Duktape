@@ -11,7 +11,7 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 {#array forEach
-    { 
+    {
         $js->set('arr', [0,1,2,3]);
         my $arr = $js->get_object('arr');
 

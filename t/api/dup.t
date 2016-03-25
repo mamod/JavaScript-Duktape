@@ -16,9 +16,9 @@ my $duk = $js->duk;
 sub test_1 {
 
 	$duk->set_top(0);
-	
+
 	$duk->push_int(123);
-	 
+
 	$duk->push_int(234);
 	$duk->dup(-2);  #-> [ 123 234 123 ] */
 	$duk->dup_top();  # -> [ 123 234 123 123 ] */

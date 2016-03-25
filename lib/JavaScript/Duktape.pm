@@ -101,7 +101,7 @@ use constant {
     DUK_ENUM_SORT_ARRAY_INDICES    => (1 << 4),
     DUK_ENUM_NO_PROXY_BEHAVIOR     => (1 << 5),
 
-    DUK_COMPILE_EVAL               => (1 << 0),   
+    DUK_COMPILE_EVAL               => (1 << 0),
     DUK_COMPILE_FUNCTION           => (1 << 1),
     DUK_COMPILE_STRICT             => (1 << 2),
     DUK_COMPILE_SAFE               => (1 << 3),
@@ -146,7 +146,7 @@ sub new {
         delete $GlobalRef->{$ref};
         return 1;
     };
-    
+
     $duk->perl_push_function($self->{finalizer}, 1);
     $duk->put_global_string('perlFinalizer');
 
@@ -157,7 +157,7 @@ sub new {
         my $top     = $duk->get_top();
 
         shift if ref $_[0] eq 'JavaScript::Duktape::Cache';
-        
+
         $THIS->{heapptr} = $heapptr;
         $THIS->{duk}     = $duk;
 
@@ -174,7 +174,7 @@ sub new {
         $duk->push_perl($ret);
         return 1;
     };
-    
+
     $duk->push_perl_function($self->{call}, -1);
     $duk->put_global_string('perlCall');
 
@@ -253,7 +253,7 @@ sub eval {
     my $duk = $self->duk;
 
     my $err = $duk->peval_string($string);
-    
+
     if ($err){
         my $error_string = $duk->safe_to_string(-1);
         croak $error_string;
@@ -306,7 +306,7 @@ use Carp;
 sub push_perl {
     my $self = shift;
     my $val = shift;
-    
+
     if (my $ref = ref $val){
         if ($ref eq 'JavaScript::Duktape::NULL'){
             $self->push_null();
@@ -368,7 +368,7 @@ sub to_perl_object {
     my $self = shift;
     my $index = shift;
     my $heapptr = $self->require_heapptr($index);
-    
+
     return JavaScript::Duktape::Util::jsObject({
         duk => $self,
         heapptr => $heapptr
@@ -424,7 +424,7 @@ sub to_perl {
             #I'm not sure why I need to
             #substract 4 from stack top!!
             my $top = $self->get_top() - 4;
-            
+
             $key = $self->to_perl(-2);
             my $found = 0;
             while ($top--){
@@ -463,12 +463,12 @@ sub to_perl {
     elsif ($type == JavaScript::Duktape::DUK_TYPE_NULL){
         $ret = JavaScript::Duktape::NULL::null();
     }
-    
+
     elsif ($type == JavaScript::Duktape::DUK_TYPE_POINTER){
         my $p = $self->get_pointer($index);
         $ret = bless \$p, 'JavaScript::Duktape::Pointer';
     }
-    
+
     return $ret;
 }
 
@@ -540,7 +540,7 @@ sub push_c_function {
 sub cache {
     my $self = shift;
     my $sub = shift;
-    
+
     my @caller = caller;
     my $code_cache_name = $caller[0] . $caller[2];
 
@@ -761,14 +761,14 @@ package JavaScript::Duktape::Util; {
 
         my $val = undef;
         $duk->get_prop_string(-1, $method);
-        
+
         my $type = $duk->get_type(-1);
         if ($type == JavaScript::Duktape::DUK_TYPE_OBJECT ||
              $type == JavaScript::Duktape::DUK_TYPE_BUFFER){
-            
+
             if ($duk->is_function(-1)){
                 my $function_heap = $duk->get_heapptr(-1);
-                
+
                 if (@_){
                     #called with special no arg _
                     shift if (ref $_[0] eq 'NOARGS');
@@ -868,7 +868,7 @@ package JavaScript::Duktape::Util; {
         $duk->push_heapptr($heapptr);
         $duk->put_prop(-3); #PerlGlobalStash[heapptr] = object
         $duk->pop_2();
-        
+
         my $type = $duk->get_type(-1);
 
         ##if this is a function return sub immediately
@@ -895,7 +895,7 @@ JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
 <a href="https://travis-ci.org/mamod/JavaScript-Duktape"><img src="https://travis-ci.org/mamod/JavaScript-Duktape.svg?branch=master"></a>
 
 =head1 SYNOPSIS
-    
+
     use JavaScript::Duktape;
 
     ##create new js context
@@ -917,7 +917,7 @@ JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
 
 =head1 DESCRIPTION
 
-JavaScript::Duktape implements almost all duktape javascript engine api, the c code is just 
+JavaScript::Duktape implements almost all duktape javascript engine api, the c code is just
 a thin layer that maps duktape api to perl, and all other functions implemented in perl
 it self, so maintaing and contributing to the base code should be easy.
 
@@ -947,7 +947,7 @@ To access vm create new context then call C<vm>
     my $js = JavaScript::Duktape->new();
     my $duk = $js->vm;
 
-    #now you can call Duktape API from perl 
+    #now you can call Duktape API from perl
 
     $duk->push_string('print');
     $duk->eval();
@@ -965,7 +965,7 @@ above but with using C<dump> function to get a glance of stack top
     #push "print" string
     $duk->push_string('print');
     $duk->dump(); #-> [ Duktape (top=1): print ]
-    
+
     #since print is a native function we need to evaluate it
     $duk->eval();
     $duk->dump(); #-> [ Duktape (top=1): function print() {/* native */} ]
@@ -973,7 +973,7 @@ above but with using C<dump> function to get a glance of stack top
     #push one argument to print function
     $duk->push_string('hi');
     $duk->dump(); #-> [ Duktape (top=2): function print() {/* native */} hi ]
-    
+
     #now call print function and pass "hi" as one argument
     $duk->call(1);
 
@@ -988,7 +988,7 @@ above but with using C<dump> function to get a glance of stack top
 
 =head1 VM methods
 
-As a general rule all duktape api supported, but I haven't had the chance to test them all, 
+As a general rule all duktape api supported, but I haven't had the chance to test them all,
 so please report any missing or failure api call and I'll try to fix
 
 For the list of duktape engine API please see L<http://duktape.org/api.html>, and here is how
@@ -1006,8 +1006,8 @@ you can translate duktape api to perl
     # duk_pop(ctx);
 
     #and here is how we can implement it in JavaScript::Duktape
-    
-    $duk->push_c_function(sub { 
+
+    $duk->push_c_function(sub {
         my $duk = shift;
         my $num1 = $duk->get_int(0);
         my $num2 = $duk->get_int(1);
@@ -1026,12 +1026,12 @@ you can translate duktape api to perl
 As you can see all you need to do is replacing C<duk_> with C<$duk->> and remove C<ctx> from the function call,
 this may sounds crazy but api tests have been generated by copying duktape tests and using search and replace tool :)
 
-Besides duktape api, C<JavaScript::Duktape::Vm> implements the following methods 
+Besides duktape api, C<JavaScript::Duktape::Vm> implements the following methods
 
 =over 4
- 
+
 =item push_function ( code_ref, num_of_args );
- 
+
 an alias to push_c_function
 
 =item push_perl( ... );
@@ -1049,7 +1049,7 @@ resets duktape stack top
 =back
 
 =head1 AUTHOR
- 
+
 Mamod Mehyar C<< <mamod.mehyar@gmail.com> >>
 
 =head1 LICENSE

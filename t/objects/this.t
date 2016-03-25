@@ -67,7 +67,7 @@ sub test {
     print Dumper $t->name;
     # $t->setLast->($duk->cache(\&test));
     # $t->setLast(\&test);
-    
+
     $t->setLast->(  $duk->cache(\&test) );
 
     print Dumper $t->lastname('Mehyar2');

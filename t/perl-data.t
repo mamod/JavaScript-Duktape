@@ -21,7 +21,7 @@ my $data = {
 		is("Hi", $_[1]);
 		is($_[2], true); #true
 		ok($_[2]); #true
-		
+
 		is($_[3], false); #false
 		ok(!$_[3]); #false
 
@@ -35,7 +35,7 @@ my $data = {
 			is($d, "Hi again");
 			return [1, 2, 3];
 		});
-		
+
 		return { h => 9999 };
 	},
 	str => 'Hello',

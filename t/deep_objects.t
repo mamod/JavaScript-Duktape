@@ -14,11 +14,11 @@ my $object = {
                     hi => [
                         {
                             final => [
-                                { 
+                                {
                                     num => 1,
                                     string => 'string',
                                     obj => {},
-                                    arr => [] 
+                                    arr => []
                                 }
                             ]
                         }

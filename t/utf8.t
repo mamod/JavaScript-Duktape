@@ -23,14 +23,14 @@ my $evalstr = <<'//JSEND';
 //JSEND
 
 $js->set(is => sub {
-    is(shift, shift); 
+    is(shift, shift);
 });
 
 $js->set(toPerl =>
     sub {
         my $string = shift;
         is length $string, 10;
-        
+
         use bytes;
         is length $string, 13;
         no bytes;

@@ -22,7 +22,7 @@ jQuery('.api-call .api-part:first .c-code')->each(sub {
     if ($text =~ s/\{(\s?)$/;/){
         print $text;
     }
-    
+
     $text .= "\n";
     ##disable debug methods
     if ($text !~ /duk_debug/){
