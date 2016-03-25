@@ -2,9 +2,48 @@ use lib './lib';
 use strict;
 use warnings;
 use JavaScript::Duktape;
-use Data::Dumper;
 use Test::More;
 use Test::Fatal;
+
+subtest 'simple nested thrown exception' => sub{
+    my $js = JavaScript::Duktape->new();
+    $js->set( each => sub{
+        my $arr = shift;
+        my $cb = shift;
+        for(@$arr) {
+            $cb->($_);
+        }
+    });
+    like exception { $js->eval(q{
+        var x=0; each([11,22], function(i){
+            throw new Error('foo error!');
+        });
+    }) }, qr/foo error/;
+};
+
+subtest 'try-catch caught nested thrown exception' => sub{
+    my $js = JavaScript::Duktape->new();
+    $js->set( each => sub{
+        my $arr = shift;
+        my $cb = shift;
+        for(@$arr) {
+            $cb->($_);
+        }
+    });
+    my $ret;
+    ok !exception { $ret =$js->eval(q{
+        var x=0;
+        try {
+            each([11,22], function(i){
+                x+=i;
+                throw new Error('foo error!');
+            });
+        } catch(e) {
+        }
+        x;
+    }) };
+    is $ret, 11;
+};
 
 subtest 'rewrap func with nested call' => sub{
     my $js = JavaScript::Duktape->new();
@@ -34,10 +73,50 @@ subtest 'trap callback error' => sub{
     }) }, qr/foo here/;
 };
 
+subtest 'exception javascript' => sub{
+    my $js = JavaScript::Duktape->new();
+    $js->set( each => sub{
+        my $arr = shift;
+        my $cb = shift;
+        for(@$arr) {
+            $cb->($_);
+        }
+    });
+    like exception { $js->eval(q{
+        var x=0; var foo={};
+        each([11,22], function(i){ foo.bar() });
+    }) }, qr/not callable/;
+};
+
+subtest 'exception in perl' => sub{
+    my $js = JavaScript::Duktape->new();
+    $js->set( each => sub{
+        die('no good');
+    });
+    like exception { $js->eval(q{
+        var x=0; var foo={};
+        each([11,22], function(i){ return 33 });
+    }) }, qr/no good/;
+};
+
+subtest 'exception in callback function' => sub{
+    my $js = JavaScript::Duktape->new();
+    $js->set( each => sub{
+        my $arr = shift;
+        my $cb = shift;
+        for(@$arr) {
+            $cb->($_);
+        }
+    });
+    like exception { $js->eval(q{
+        var x=0; each([11,22], function(i){ not_a_function() });
+    }) }, qr/not_a_function.*undefined/;
+};
+
 subtest 'trap rewrap func error within nested call' => sub{
     my $js = JavaScript::Duktape->new();
     $js->set( inc => sub{
-        die "bar here";
+        die "error bar here";
     });
     $js->set( each => sub{
         my $arr = shift;
@@ -48,7 +127,7 @@ subtest 'trap rewrap func error within nested call' => sub{
     });
     like exception { $js->eval(q{
         var x=0; each([11,22], function(i){ x+=i; x=inc(x); });
-    }) }, qr/bar here/;
+    }) }, qr/error bar here/;
 };
 
 done_testing;
