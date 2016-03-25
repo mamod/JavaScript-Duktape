@@ -1,4 +1,4 @@
-package 
+package
         JavaScript::Duktape::C::libPath;
 use File::Spec;
 my $file = File::Spec->rel2abs(__FILE__);

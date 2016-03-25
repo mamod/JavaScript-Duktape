@@ -63,7 +63,7 @@ $duk->reset_top();
 		};
 
 		$duk->throw();
-		
+
 		die;
 
 		fail "should never reach here after we died";

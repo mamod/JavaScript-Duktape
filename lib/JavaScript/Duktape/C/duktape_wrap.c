@@ -70,7 +70,7 @@ void perl_duk_reset_top(duk_context *ctx){
 /**
   * duk_safe_call hack
   * ===================
-  * 
+  *
   *
 ******************************************************************************/
 static SV * gCallback = (SV*)NULL;
@@ -105,7 +105,7 @@ int call_safe_perl_sub(duk_context *ctx) {
 }
 
 duk_int_t perl_duk_safe_call(duk_context *ctx, SV *func, duk_idx_t nargs, duk_idx_t nrets) {
-    
+
     duk_int_t ret = 0;
     if (gCallback == (SV*)NULL) {
         gCallback = newSVsv(func);
@@ -119,7 +119,7 @@ duk_int_t perl_duk_safe_call(duk_context *ctx, SV *func, duk_idx_t nargs, duk_id
         PL_top_env = old_perl_top;
         croak("Duk::Error");
     }
-    
+
     return ret;
 }
 
@@ -132,7 +132,7 @@ int call_perl_function(duk_context *ctx) {
 
     char *error = NULL;
     STRLEN error_len;
-    
+
     dSP;
     SV    *sv;
     int count;
@@ -233,7 +233,7 @@ void DESTROY(duk_context *ctx) {
     //Safefree(ctx);
 }
 
-/* 
+/*
     Auto Generated C Code by parser.pl
     parser.pl reads duktape.h file and create both
     perl & C map code to Duktape API
