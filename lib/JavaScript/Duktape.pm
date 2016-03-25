@@ -175,7 +175,7 @@ sub new {
         return 1;
     };
 
-    $duk->push_perl_function($self->{call}, -1);
+    $duk->push_perl_function($self->{call}, -1, 1);
     $duk->put_global_string('perlCall');
 
     return $self;
@@ -512,6 +512,8 @@ sub push_c_function {
     my $self  = shift;
     my $sub   = shift;
     my $nargs = shift || -1;
+    my $nofinalizer = shift;
+
     $GlobalRef->{"$sub"} = sub {
         my @args = @_;
         my $top = $self->get_top();
@@ -546,6 +548,8 @@ sub push_c_function {
     };
 
     $self->perl_push_function($GlobalRef->{"$sub"}, $nargs);
+
+    return if $nofinalizer;
     $self->eval_string("(function(){perlFinalizer('$sub')})");
     $self->set_finalizer(-2);
 }
