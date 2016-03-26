@@ -540,7 +540,6 @@ sub push_c_function {
         }, $top, 1);
 
         if ($died){
-            $self->push_error_object(100, $died);
             croak $died;
         }
 
