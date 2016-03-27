@@ -175,9 +175,8 @@ sub new {
         return 1;
     };
 
-    $duk->push_perl_function($self->{call}, -1, 1);
+    $duk->push_perl_function($self->{call}, -1);
     $duk->put_global_string('perlCall');
-
     return $self;
 }
 
@@ -265,11 +264,20 @@ sub eval {
 sub vm  { shift->{duk}; }
 sub duk { shift->{duk}; }
 
+sub destroy {
+    my $self = shift;
+    return if !$self->{duk};
+    local $@; #duk_desatroy_heap mess with $@!!
+    $self->{duk}->gc(0);
+    $self->{duk}->destroy_heap();
+    delete $self->{duk};
+}
+
 sub DESTROY {
     my $self = shift;
     my $duk = $self->duk;
     if ($self->{pid} == $$){
-        $duk->destroy_heap();
+        $self->destroy();
     }
 }
 
@@ -512,7 +520,6 @@ sub push_c_function {
     my $self  = shift;
     my $sub   = shift;
     my $nargs = shift || -1;
-    my $nofinalizer = shift;
 
     $GlobalRef->{"$sub"} = sub {
         my @args = @_;
@@ -540,7 +547,6 @@ sub push_c_function {
         }, $top, 1);
 
         if ($died){
-            $self->push_error_object(100, $died);
             croak $died;
         }
 
@@ -548,8 +554,6 @@ sub push_c_function {
     };
 
     $self->perl_push_function($GlobalRef->{"$sub"}, $nargs);
-
-    return if $nofinalizer;
     $self->eval_string("(function(){perlFinalizer('$sub')})");
     $self->set_finalizer(-2);
 }

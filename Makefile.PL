@@ -21,5 +21,9 @@ WriteMakefile(
     PREREQ_PM         => {
         'Inline'      => '0.80',
         'Inline::C'   => '0.75',
+    },
+    TEST_REQUIRES     => {
+        'Test::Fatal'   => '0.014',
+        'Try::Tiny'     => '0.24',
     }
 );
