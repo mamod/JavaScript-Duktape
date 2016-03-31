@@ -716,12 +716,13 @@ package JavaScript::Duktape::Object; {
     DESTROY {
         my $self = shift;
         my $duk = $self->{duk};
-        my $heapptr = $self->{heapptr};
 
         #don't free if this coming from sub
         return if $self->{sub};
 
         ##TODO: Move these to C
+        my $heapptr = delete $self->{heapptr};
+        return if (!$heapptr);
         $duk->push_global_stash();
         $duk->get_prop_string(-1, "PerlGlobalStash");
         $duk->push_number($heapptr);
