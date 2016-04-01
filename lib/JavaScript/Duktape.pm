@@ -375,8 +375,8 @@ sub push_perl {
 sub to_perl_object {
     my $self = shift;
     my $index = shift;
-    my $heapptr = $self->require_heapptr($index);
-
+    my $heapptr = $self->get_heapptr($index);
+    if (!$heapptr){ croak "value at stack $index is not an object" }
     return JavaScript::Duktape::Util::jsObject({
         duk => $self,
         heapptr => $heapptr
