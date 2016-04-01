@@ -1,5 +1,19 @@
 Revision history for Perl module JavaScript::Duktape
 
+1.0.0 2016 2016-04-01
+	- stable api release
+	- adding (this) method
+	- deprecate passing duk instance as first argument to functions
+	- new methods (to_object, to_perl_object, get_object)
+	- new class JavaScript::Duktape::Object
+	- fix nested perl sub call when throw an error (Rodrigo de Oliveira)
+	- fix preserving error value by localizing $@ on destruction (Rodrigo de Oliveira)
+	- adding objects tests
+	- adding nested perl sub call with exceptions (Rodrigo de Oliveira)
+	- adding typescript test (Rodrigo de Oliveira)
+	- update Duktape to v1.3.2 (Rodrigo de Oliveira)
+	- adding examples
+
 0.3.0 2015 2015-11-07
 	- adding utf8 string api "get_utf8_string"
 	- update perl functions to use get_utf8_string by default
