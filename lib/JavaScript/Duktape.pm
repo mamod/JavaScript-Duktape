@@ -266,16 +266,16 @@ sub duk { shift->{duk}; }
 
 sub destroy {
     my $self = shift;
-    return if !$self->{duk};
+    my $duk  = delete $self->{duk};
     local $@; #duk_desatroy_heap mess with $@!!
-    $self->{duk}->gc(0);
-    $self->{duk}->destroy_heap();
+    return if !$duk;
     delete $self->{duk};
+    $duk->gc(0);
+    $duk->destroy_heap();
 }
 
 sub DESTROY {
     my $self = shift;
-    my $duk = $self->duk;
     if ($self->{pid} == $$){
         $self->destroy();
     }
