@@ -327,6 +327,18 @@ this to indicate that we are calling the function with no arguments
 
 Mamod Mehyar C<< <mamod.mehyar@gmail.com> >>
 
+=head1 CONTRIBUTORS
+
+Big thanks for the much appreciated contributors
+
+=over 4
+
+=item * Rodrigo de Oliveira L<@rodrigolive|https://github.com/rodrigolive>
+
+=item * jomo666 L<@jomo666|https://github.com/jomo666>
+
+=back
+
 =head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.

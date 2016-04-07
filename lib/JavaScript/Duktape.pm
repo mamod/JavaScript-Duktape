@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
-our $VERSION = '1.0.0';
+our $VERSION = '1.0.1';
 
 my $GlobalRef = {};
 my $THIS;
@@ -1237,6 +1237,18 @@ this to indicate that we are calling the function with no arguments
 =head1 AUTHOR
 
 Mamod Mehyar C<< <mamod.mehyar@gmail.com> >>
+
+=head1 CONTRIBUTORS
+
+Big thanks for the much appreciated contributors
+
+=over 4
+
+=item * Rodrigo de Oliveira L<@rodrigolive|https://github.com/rodrigolive>
+
+=item * jomo666 L<@jomo666|https://github.com/jomo666>
+
+=back
 
 =head1 LICENSE
 
