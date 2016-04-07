@@ -392,7 +392,7 @@ sub to_perl {
     my $type = $self->get_type($index);
 
     if ($type == JavaScript::Duktape::DUK_TYPE_UNDEFINED){
-        return;
+        $ret = undef;
     }
 
     elsif ($type == JavaScript::Duktape::DUK_TYPE_STRING){
