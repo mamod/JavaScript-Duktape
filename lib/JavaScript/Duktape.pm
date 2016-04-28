@@ -287,7 +287,7 @@ use warnings;
 no warnings 'redefine';
 use Scalar::Util 'looks_like_number';
 use Data::Dumper;
-use Config;
+use Config qw( %Config );
 use JavaScript::Duktape::C::libPath;
 use Carp;
 
@@ -310,6 +310,21 @@ use Inline C => config =>
 
 use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
 use Carp;
+
+use Inline C => q{
+    void poke_buffer(IV to, IV from, IV sz) {
+        memcpy( to, from, sz );
+    }
+};
+my $ptr_format = do {
+    my $ptr_size = $Config{ptrsize};
+    $ptr_size == 4 ?
+        "L" : $ptr_size == 8 ?
+        "Q" :
+        die("Unrecognized pointer size");
+};
+sub peek { unpack 'P'.$_[1], pack $ptr_format, $_[0] }
+sub pv_address { unpack($ptr_format, pack("p", $_[0])) }
 
 sub push_perl {
     my $self = shift;
@@ -361,6 +376,12 @@ sub push_perl {
         elsif ($ref eq 'JavaScript::Duktape::Pointer'){
             $self->push_pointer($$val);
         }
+
+        elsif ($ref eq 'JavaScript::Duktape::Buffer'){
+            my $len = defined $$val ? length($$val) : 0;
+            my $ptr = $self->push_fixed_buffer( $len );
+            poke_buffer( $ptr, pv_address( $$val ), $len );
+        }
     } else {
         if (!defined $val){
             $self->push_undefined();
@@ -403,8 +424,12 @@ sub to_perl {
         $ret = $self->get_number($index);
     }
 
-    elsif ($type == JavaScript::Duktape::DUK_TYPE_OBJECT ||
-            $type == JavaScript::Duktape::DUK_TYPE_BUFFER){
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_BUFFER ) {
+        my $ptr = $self->get_buffer_data($index, my $sz );
+        $ret = peek( $ptr, $sz );
+    }
+
+    elsif ($type == JavaScript::Duktape::DUK_TYPE_OBJECT ) {
 
         if ($self->is_function($index)){
             my $ptr = $self->get_heapptr($index);
