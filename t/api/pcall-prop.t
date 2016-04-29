@@ -189,16 +189,16 @@ rc=0, result='21'
 rc=1, result='Error: my error'
 ==> rc=0, result='undefined'
 *** test_5 (duk_safe_call)
-rc=1, result='TypeError: invalid base value'
+rc=1, result='TypeError: cannot read property 'foo' of undefined'
 ==> rc=0, result='undefined'
 *** test_6 (duk_safe_call)
 rc=1, result='RangeError: getter error'
 ==> rc=0, result='undefined'
 *** test_7 (duk_safe_call)
-rc=1, result='Error: invalid index'
+rc=1, result='Error: invalid stack index -6'
 ==> rc=0, result='undefined'
 *** test_8 (duk_safe_call)
-rc=1, result='TypeError: not callable'
+rc=1, result='TypeError: undefined not callable'
 ==> rc=0, result='undefined'
 *** test_9 (duk_safe_call)
 ==> rc=1, result='Error: invalid call args'

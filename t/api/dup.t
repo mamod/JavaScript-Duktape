@@ -59,7 +59,7 @@ sub test_2c {
 
 	$duk->push_int(123);
 	$duk->push_int(234);
-	$duk->dup(99); #invalid index
+	$duk->dup(-2147483648); #invalid index
 
 	printf("final top: %ld\n", $duk->get_top());
 	return 0;
@@ -91,10 +91,10 @@ __DATA__
 final top: 4
 ==> rc=0, result='undefined'
 *** test_2a (duk_safe_call)
-==> rc=1, result='Error: invalid index'
+==> rc=1, result='Error: invalid stack index -3'
 *** test_2b (duk_safe_call)
-==> rc=1, result='Error: invalid index'
+==> rc=1, result='Error: invalid stack index 2'
 *** test_2c (duk_safe_call)
-==> rc=1, result='Error: invalid index'
+==> rc=1, result='Error: invalid stack index -2147483648'
 *** test_3a (duk_safe_call)
-==> rc=1, result='Error: invalid index'
+==> rc=1, result='Error: invalid stack index -1'

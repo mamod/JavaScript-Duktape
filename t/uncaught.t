@@ -119,7 +119,7 @@ $duk->put_global_string("perlFn");
 	ok (!$@);
 
 	my $str = $duk->to_string(0);
-	is($str, "TypeError: not string");
+	is($str, "TypeError: string required, found none (stack index 99)");
 }
 
 done_testing(15);

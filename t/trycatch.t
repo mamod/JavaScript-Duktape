@@ -78,7 +78,7 @@ $duk->put_global_string("perlok");
 			ret = new perlFn(9);
 		} catch (e){
 			var error = e.toString();
-			if (/^TypeError: not pointer/.test(error)){
+			if (/^TypeError: pointer required/.test(error)){
 				perlok();
 			}
 			perlok();
