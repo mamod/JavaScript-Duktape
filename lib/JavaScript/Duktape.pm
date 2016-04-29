@@ -954,7 +954,6 @@ JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
 
     #set function to be used from javascript land
     $js->set('write' => sub {
-        my $duk = shift;
         print $_[0], "\n";
     });
 
@@ -1107,7 +1106,6 @@ you can translate duktape api to perl
     #and here is how we can implement it in JavaScript::Duktape
 
     $duk->push_c_function(sub {
-        my $duk = shift;
         my $num1 = $duk->get_int(0);
         my $num2 = $duk->get_int(1);
 
