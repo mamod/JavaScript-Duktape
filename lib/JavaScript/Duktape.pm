@@ -136,7 +136,7 @@ sub new {
     $duk->put_prop_string(-2, "PerlGlobalStash");
     $duk->pop();
 
-    $THIS = bless { sub => 1, duk => $duk, heapptr => 0 }, "JavaScript::Duktape::Object";
+    $THIS = bless { duk => $duk, heapptr => 0 }, "JavaScript::Duktape::Object";
 
     ##global methods
 
@@ -742,15 +742,11 @@ package JavaScript::Duktape::Object; {
         my $self = shift;
         my $duk = $self->{duk};
 
-        #don't free if this coming from sub
-        return if $self->{sub};
-
-        ##TODO: Move these to C
-        my $heapptr = delete $self->{heapptr};
-        return if (!$heapptr);
+        my $refcount = delete $self->{refcount};
+        return if (!$refcount);
         $duk->push_global_stash();
         $duk->get_prop_string(-1, "PerlGlobalStash");
-        $duk->push_number($heapptr);
+        $duk->push_number($refcount);
         $duk->del_prop(-2);
         $duk->pop_2();
     }
@@ -819,9 +815,9 @@ package JavaScript::Duktape::Util; {
                 if (@_){
                     #called with special no arg _
                     shift if (ref $_[0] eq 'NOARGS');
-                    $val = jsFunction($duk, $function_heap, $heapptr, 'call', @_);
+                    $val = jsFunction($method, $duk, $function_heap, $heapptr, 'call', @_);
                 } else {
-                    $val = jsFunction($duk, $function_heap, $heapptr);
+                    $val = jsFunction($method, $duk, $function_heap, $heapptr);
                 }
             } else {
                 $val = $duk->to_perl_object(-1);
@@ -834,6 +830,7 @@ package JavaScript::Duktape::Util; {
     }
 
     sub jsFunction {
+        my $methodname = shift;
         my $duk = shift;
         my $heapptr = shift;
         my $constructor = shift || $heapptr;
@@ -898,33 +895,40 @@ package JavaScript::Duktape::Util; {
         return bless $sub, "JavaScript::Duktape::Function";
     }
 
+    my $REFCOUNT = 0;
     sub jsObject {
         my $options = shift;
 
         my $duk         = $options->{duk};
         my $heapptr     = $options->{heapptr};
         my $constructor = $options->{constructor} || $heapptr;
-        ##TODO: Move these to C
-        # to prevent duktape garbage collecting this object
-        # while it's still used in perl land we need to store
-        # it in perl global stash, this will be freed once the
-        # destroy method called of "JavaScript::Duktape::Object"
+
+        #We may push same heapptr on the global stack more
+        #than once, this results in segmentation fault when
+        #we destroy the object and delete heapptr from the
+        #global stash then trying to use it again
+        #TODO : this is really a poor man solution
+        #for this problem, we use a refcounter to create
+        #a unique id for each heapptr, a better solution
+        #would be making sure same heapptr pushed once and not to
+        #be free unless all gone
+        my $refcount = (++$REFCOUNT) + (rand(3));
+
         $duk->push_global_stash();
         $duk->get_prop_string(-1, "PerlGlobalStash");
-        $duk->push_number($heapptr);
+        $duk->push_number($refcount);
         $duk->push_heapptr($heapptr);
         $duk->put_prop(-3); #PerlGlobalStash[heapptr] = object
         $duk->pop_2();
 
         my $type = $duk->get_type(-1);
 
-        ##if this is a function return sub immediately
-        ##other wise return blessed package
         if ($duk->is_function(-1)){
-            return JavaScript::Duktape::Util::jsFunction($duk, $heapptr, $constructor);
+            return JavaScript::Duktape::Util::jsFunction('anon', $duk, $heapptr, $constructor);
         }
 
         return bless {
+            refcount => $refcount,
             duk => $duk,
             heapptr => $heapptr
         }, "JavaScript::Duktape::Object";
