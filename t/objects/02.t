@@ -38,7 +38,7 @@ my $t = $obj->new(sub{
 });
 
 $t->setLast( sub {
-    my $last = shift . "ar";
+    my $last = shift() . "ar";
     return $last;
 });
 

@@ -35,7 +35,7 @@ $duk->pop();
 for (0 .. 100){
     my $t = $obj->new(sub{});
     $t->setLast( sub {
-        my $last = shift . "ar";
+        my $last = shift() . "ar";
         return $last;
     });
     is $t->lastname('Mehy'), "Mehyar";
@@ -47,7 +47,7 @@ my $t = $obj->new(sub {
 });
 
 $t->setLast( sub {
-    my $last = shift . "ar";
+    my $last = shift() . "ar";
     this->test("");
     return $last;
 });
