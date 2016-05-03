@@ -101,13 +101,13 @@ use constant {
     DUK_ENUM_SORT_ARRAY_INDICES    => (1 << 4),
     DUK_ENUM_NO_PROXY_BEHAVIOR     => (1 << 5),
 
-    DUK_COMPILE_EVAL               => (1 << 0),
-    DUK_COMPILE_FUNCTION           => (1 << 1),
-    DUK_COMPILE_STRICT             => (1 << 2),
-    DUK_COMPILE_SAFE               => (1 << 3),
-    DUK_COMPILE_NORESULT           => (1 << 4),
-    DUK_COMPILE_NOSOURCE           => (1 << 5),
-    DUK_COMPILE_STRLEN             => (1 << 6),
+    DUK_COMPILE_EVAL               => (1 << 3),
+    DUK_COMPILE_FUNCTION           => (1 << 4),
+    DUK_COMPILE_STRICT             => (1 << 5),
+    DUK_COMPILE_SAFE               => (1 << 6),
+    DUK_COMPILE_NORESULT           => (1 << 7),
+    DUK_COMPILE_NOSOURCE           => (1 << 8),
+    DUK_COMPILE_STRLEN             => (1 << 9),
 
     #Flags for duk_def_prop() and its variants
     DUK_DEFPROP_WRITABLE           => (1 << 0),
