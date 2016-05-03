@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
-our $VERSION = '1.0.1';
+our $VERSION = '1.0.2';
 
 my $GlobalRef = {};
 my $THIS;

@@ -2,6 +2,7 @@ Changes
 examples/advanced-array.pl
 examples/array.pl
 examples/autoload.pl
+examples/buffer.pl
 examples/date.pl
 examples/this.pl
 lib/JavaScript/Duktape.pm
@@ -12,6 +13,7 @@ lib/JavaScript/Duktape/C/duktape.h
 lib/JavaScript/Duktape/C/duktape_wrap.c
 lib/JavaScript/Duktape/C/FunctionsMap.pl
 lib/JavaScript/Duktape/C/libPath.pm
+lib/JavaScript/Duktape/C/metadata.json
 lib/JavaScript/Duktape/C/ppport.h
 lib/JavaScript/Duktape/C/typemap
 LICENSE
@@ -55,6 +57,8 @@ t/nested.t
 t/objects/01.t
 t/objects/02.t
 t/objects/03.t
+t/objects/buffer.t
+t/objects/string.t
 t/objects/this.t
 t/perl-data.t
 t/pointer.t
