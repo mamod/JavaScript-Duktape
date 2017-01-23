@@ -11,10 +11,10 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 sub safe_fn {
-	my $self = shift;
+	my $arg = shift;
 
 	eval {};
-	eval {die "Hi This is Some Fake Error";};
+	eval {die "$arg This is Some Fake Error";};
 	ok($@ =~ /^Hi This is Some Fake Error/);
 
 	my $top = $duk->get_top;
@@ -37,7 +37,7 @@ is($top,1);
 
 ##error thrown from perl, must be an error object
 my $errcode = $duk->get_error_code(0);
-is($errcode, 100);
+is($errcode, 1);
 
 my $errorstr = $duk->to_string(0);
 ok($errorstr =~ /Error: From Perl at (.*?)safe-call\.t line 26\./, $errorstr);

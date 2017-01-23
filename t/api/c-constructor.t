@@ -9,6 +9,7 @@ require './t/helper.pl';
 my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
+SET_PRINT_METHOD($duk);
 
 sub my_constructor {
 	return 0;
@@ -25,6 +26,7 @@ sub test1 {
 	$duk->pop();
 
 	$duk->eval_string("var obj = new MyConstructor(); print(obj.inherited);");
+	# $duk->dump();
 	$duk->pop();
 
 	printf("top at end: %ld\n", $duk->get_top());

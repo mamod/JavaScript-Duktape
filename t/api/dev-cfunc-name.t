@@ -11,7 +11,7 @@ my $NONEXISTENT_FILE = '/this/file/doesnt/exist';
 
 my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
-
+SET_PRINT_METHOD($duk);
 sub my_func {
 	# die;
 	$duk->push_current_function();
@@ -19,7 +19,7 @@ sub my_func {
 	printf("my name is: '%s'\n", $duk->safe_to_string(-1));
 	$duk->pop_2();
 
-	return -106;
+	return -7;
 }
 
 sub test_without_name {
@@ -39,8 +39,9 @@ sub test_without_name {
 
 sub test_with_name {
 	$duk->get_global_string("MyFunc");
+	$duk->push_string("name");
 	$duk->push_string("my_func");
-	$duk->put_prop_string(-2, "name");
+	$duk->def_prop(-3, DUK_DEFPROP_HAVE_VALUE);
 	$duk->pop();
 
 	$duk->eval_string_noresult(
@@ -69,14 +70,14 @@ test_stdout();
 __DATA__
 *** test_without_name (duk_safe_call)
 my name is: ''
-URIError: uri error (rc -106)
+URIError: error (rc -7)
     at [anon] () native strict preventsyield
     at forEach () native strict preventsyield
     at eval XXX preventsyield
 ==> rc=0, result='undefined'
 *** test_with_name (duk_safe_call)
 my name is: 'my_func'
-URIError: uri error (rc -106)
+URIError: error (rc -7)
     at my_func () native strict preventsyield
     at forEach () native strict preventsyield
     at eval XXX preventsyield

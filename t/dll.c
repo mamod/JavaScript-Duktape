@@ -1,4 +1,4 @@
-#include "como.h"
+#include "duk_perl.h"
 #include <stdio.h>
 
 static int add_number(duk_context *ctx) {

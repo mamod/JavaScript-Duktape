@@ -48,7 +48,7 @@ my $data = {
 $js->set('perl', $data);
 
 $duk->peval_string(qq~
-	print(JSON.stringify(perl));
+	//print(JSON.stringify(perl));
 	if (perl.str === 'Hello') perlok();
 	if (typeof perl.un === 'undefined') perlok();
 	if (perl.n === null) perlok();

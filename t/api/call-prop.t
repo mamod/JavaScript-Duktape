@@ -6,10 +6,10 @@ use Data::Dumper;
 
 require './t/helper.pl';
 
-my $js = JavaScript::Duktape->new();
+my $js  = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
-
+SET_PRINT_METHOD($duk);
 
 sub test_1 {
     my $duk = shift;
@@ -34,7 +34,7 @@ sub test_2 {
     my $duk = shift;
     # $duk->require_string(-2);
     $duk->set_top(0);
-    $duk->eval_string("({ myfunc: function(x,y,z) { print(this); throw new Error('my error'); } })");
+    $duk->eval_string("({ myfunc: function(x,y,z) { print(this); throw(new Error('my error')); } })");
     $duk->push_string("myfunc");
     $duk->push_int(10);
     $duk->push_int(11);

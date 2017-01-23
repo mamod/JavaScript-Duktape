@@ -47,7 +47,6 @@ $duk->peval_string(qq~
 		perlfail();
 	} catch (e){
 		perlok();
-		print('got error');
 		throw(e);
 	}
 	perlfail();
@@ -56,7 +55,6 @@ $duk->peval_string(qq~
 
 my $top = $duk->get_top();
 is($top, 2);
-
 my $string = $duk->get_string(-1);
 is($string, "Error String", $string);
 

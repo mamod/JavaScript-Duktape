@@ -6,12 +6,10 @@ use Data::Dumper;
 
 require './t/helper.pl';
 
-
-my $NONEXISTENT_FILE = '/this/file/doesnt/exist';
-
 my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
+SET_PRINT_METHOD($duk);
 
 sub test_1 {
 	$duk->eval_string("(function (x) { print(Duktape.enc('jx', x)); })");

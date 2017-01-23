@@ -2,6 +2,21 @@ use Data::Dumper;
 use Carp;
 use Test::More;
 
+sub SET_PRINT_METHOD {
+	my $duk = shift;
+	$duk->push_perl(sub {
+		my $top = $duk->get_top();
+		my @str = ();
+		for (my $i = 0; $i < $top; $i++){
+			push @str, $duk->safe_to_string($i);
+		}
+		my $str = join " ", @str;
+	    print $str;
+	    print "\n";
+	});
+	$duk->put_global_string('print');
+}
+
 sub TEST_SAFE_CALL {
 	my $duk = shift;
     my $sub = shift;

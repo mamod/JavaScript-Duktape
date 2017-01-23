@@ -30,4 +30,4 @@ $duk->eval_string(qq~
 my $t = $duk->to_perl(-1);
 is $t->{test}->{hi}->{abc}, 'Hello';
 is $t->{circular}->{abc}, 'Hello';
-done_testing();
+done_testing(2);

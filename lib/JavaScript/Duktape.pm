@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
-our $VERSION = '1.0.2';
+our $VERSION = '2.0.0';
 
 my $GlobalRef = {};
 my $THIS;
@@ -27,6 +27,9 @@ our @EXPORT = qw (
     DUK_TYPE_POINTER
     DUK_TYPE_LIGHTFUNC
     DUK_ENUM_INCLUDE_NONENUMERABLE
+    DUK_ENUM_INCLUDE_HIDDEN
+    DUK_ENUM_INCLUDE_SYMBOLS
+    DUK_ENUM_EXCLUDE_STRINGS
     DUK_ENUM_INCLUDE_INTERNAL
     DUK_ENUM_OWN_PROPERTIES_ONLY
     DUK_ENUM_ARRAY_INDICES_ONLY
@@ -95,11 +98,13 @@ use constant {
 
     # Enumeration flags for duk_enum()
     DUK_ENUM_INCLUDE_NONENUMERABLE => (1 << 0),
-    DUK_ENUM_INCLUDE_INTERNAL      => (1 << 1),
-    DUK_ENUM_OWN_PROPERTIES_ONLY   => (1 << 2),
-    DUK_ENUM_ARRAY_INDICES_ONLY    => (1 << 3),
-    DUK_ENUM_SORT_ARRAY_INDICES    => (1 << 4),
-    DUK_ENUM_NO_PROXY_BEHAVIOR     => (1 << 5),
+    DUK_ENUM_INCLUDE_HIDDEN        => (1 << 1),
+    DUK_ENUM_INCLUDE_SYMBOLS       => (1 << 2),
+    DUK_ENUM_EXCLUDE_STRINGS       => (1 << 3),
+    DUK_ENUM_OWN_PROPERTIES_ONLY   => (1 << 4),
+    DUK_ENUM_ARRAY_INDICES_ONLY    => (1 << 5),
+    DUK_ENUM_SORT_ARRAY_INDICES    => (1 << 6),
+    DUK_ENUM_NO_PROXY_BEHAVIOR     => (1 << 7),
 
     DUK_COMPILE_EVAL               => (1 << 3),
     DUK_COMPILE_FUNCTION           => (1 << 4),
@@ -304,18 +309,18 @@ BEGIN {
 
 use Inline C => config =>
     typemaps => JavaScript::Duktape::C::libPath::getPath('typemap'),
-    INC => '-I' . JavaScript::Duktape::C::libPath::getPath('../C');
+    INC      => '-I' . JavaScript::Duktape::C::libPath::getPath('../C');
     # myextlib => $Duklib,
-    # LIBS => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
+    # LIBS     => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
 
-use Inline C => JavaScript::Duktape::C::libPath::getPath('duktape_wrap.c');
-use Carp;
+use Inline C => JavaScript::Duktape::C::libPath::getPath('duk_perl.c');
 
 use Inline C => q{
     void poke_buffer(IV to, IV from, IV sz) {
         memcpy( to, from, sz );
     }
 };
+
 my $ptr_format = do {
     my $ptr_size = $Config{ptrsize};
     $ptr_size == 4 ?
@@ -323,6 +328,7 @@ my $ptr_format = do {
         "Q" :
         die("Unrecognized pointer size");
 };
+
 sub peek { unpack 'P'.$_[1], pack $ptr_format, $_[0] }
 sub pv_address { unpack($ptr_format, pack("p", $_[0])) }
 
@@ -393,6 +399,7 @@ sub push_perl {
     }
 }
 
+
 sub to_perl_object {
     my $self = shift;
     my $index = shift;
@@ -403,6 +410,7 @@ sub to_perl_object {
         heapptr => $heapptr
     });
 }
+
 
 sub to_perl {
     my $self = shift;
@@ -507,6 +515,7 @@ sub to_perl {
     return $ret;
 }
 
+
 ##############################################
 # push functions
 ##############################################
@@ -540,6 +549,7 @@ sub push_function {
         return 1;
     }, $nargs);
 }
+
 
 sub push_c_function {
     my $self  = shift;
@@ -583,6 +593,7 @@ sub push_c_function {
     $self->set_finalizer(-2);
 }
 
+
 sub cache {
     my $self = shift;
     my $sub = shift;
@@ -600,6 +611,7 @@ sub cache {
     $GlobalRef->{$code_cache_name}->{args} = \@_;
     return $GlobalRef->{$code_cache_name};
 }
+
 
 #####################################################################
 # safe call
@@ -624,14 +636,18 @@ sub safe_call {
             if ($newtop > $oldtop){
                 $self->pop_n($newtop - $oldtop);
             }
-            $error =~ s/\n//g;
-            $error =~ s/\\/\\\\/g;
-            $self->eval_string("var t = new Error('$error'); t;");
+
+            $self->eval_string('(function (e){ return new Error(e) })');
+            $self->push_string($error);
+            $self->call(1);
         }
         return 1;
     }
+
+    #safe_call success returns 0
     return 0;
 }
+
 
 ##############################################
 # custom functions
@@ -640,20 +656,23 @@ sub safe_call {
 *push_perl_function = \&push_c_function;
 *push_light_function = \&perl_push_function;
 
+
 ##############################################
 # overridden functions
 ##############################################
 *require_context = \&perl_duk_require_context;
+
 
 ##############################################
 # helper functions
 ##############################################
 *reset_top = \&perl_duk_reset_top;
 
+
 sub dump {
     my $self = shift;
     my $name = shift || "Duktape";
-    my $fh  = shift || \*STDOUT;
+    my $fh   = shift || \*STDOUT;
     my $n = $self->get_top();
     printf $fh "%s (top=%ld):", $name, $n;
     for (my $i = 0; $i < $n; $i++) {
@@ -665,7 +684,9 @@ sub dump {
     printf $fh "\n";
 }
 
+
 sub DESTROY {}
+
 
 package JavaScript::Duktape::Bool; {
     use warnings;

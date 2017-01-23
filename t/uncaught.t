@@ -45,9 +45,6 @@ $duk->put_global_string("perlFn");
 	};
 	ok ($@, $@);
 	is($count, 1, "called once");
-
-	my $top = $duk->get_top();
-	is($top, 0, "Error on Top");
 }
 
 {  #peval with try/catch
@@ -66,11 +63,9 @@ $duk->put_global_string("perlFn");
 	};
 
 
-	ok (!$@, $@);
+	ok (!$@, 'Eval Error');
 	is($count, 1, "called once");
-
-	my $top = $duk->get_top();
-	is($top, 1, "Error is on top");
+	ok($duk->is_error(-1), "Error is on top");
 	$duk->pop();
 }
 
@@ -88,9 +83,8 @@ $duk->put_global_string("perlFn");
 	ok (!$@, $@);
 	is($count, 1, "called once");
 
-	my $top = $duk->get_top();
-	is($top, 1, "Error is on top");
-	my $err_str = $duk->to_string(0);
+	ok($duk->is_error(-1), "Error is on top");
+	my $err_str = $duk->to_string(-1);
 	ok($err_str =~ /^Error: Died at/, $err_str);
 }
 
@@ -110,7 +104,7 @@ $duk->put_global_string("perlFn");
 		$duk->call(0);
 	};
 
-	ok ($@ =~ /^duktape uncaught error/, $@);
+	ok ($@ =~ /^uncaught/, $@);
 
 	$duk->eval_string("perlFn");
 	eval {
@@ -118,8 +112,8 @@ $duk->put_global_string("perlFn");
 	};
 	ok (!$@);
 
-	my $str = $duk->to_string(0);
+	my $str = $duk->to_string(-1);
 	is($str, "TypeError: string required, found none (stack index 99)");
 }
 
-done_testing(15);
+done_testing(14);

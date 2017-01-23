@@ -9,6 +9,7 @@ require './t/helper.pl';
 my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
+SET_PRINT_METHOD($duk);
 
 sub test_1 {
 	$duk->set_top(0);
