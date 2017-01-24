@@ -43,4 +43,4 @@ $duk->eval_string('process.test.perl');
 $duk->push_perl($object);
 $duk->call(1);
 
-done_testing();
+done_testing(1);

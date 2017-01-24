@@ -10,7 +10,7 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 sub func {
-	eval{};
+    eval{};
     $duk->push_this();
     my $t = $duk->get_type(-1);
     printf("this binding: type=%ld, value='%s'\n", $t, $duk->to_string(-1));
@@ -50,5 +50,5 @@ this binding: type=4, value='123.456'
 this binding: type=5, value='foo'
 this binding: type=6, value='[object Object]'
 this binding: type=6, value=''
-this binding: type=7, value=''
+this binding: type=7, value='[object Uint8Array]'
 #skip - this binding: type=8, value='DEADBEEF'

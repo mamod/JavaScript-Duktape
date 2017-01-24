@@ -11,6 +11,12 @@ my $duk = $js->duk;
 
 my @refs;
 
+$js->set( print => sub {
+    my $str = shift;
+    print $str || "undefined", "\n";
+});
+
+
 $duk->eval_string(qq~
     var tt = {};
     tt.all = test;
@@ -33,7 +39,6 @@ $duk->eval_string(qq~
     });
     print(obj.lastname('Mehyar2'));
     print(obj.fullname);
-
     test;
 ~);
 

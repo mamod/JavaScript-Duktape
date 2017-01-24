@@ -9,90 +9,91 @@ require './t/helper.pl';
 my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
+SET_PRINT_METHOD($duk);
 
 sub test_string {
-	my $rc;
+    my $rc;
 
-	$duk->eval_string("print('Hello world!'); 123;");
-	printf("return value is: %lf\n", $duk->get_number(-1));
-	$duk->pop();
+    $duk->eval_string("print('Hello world!'); 123;");
+    printf("return value is: %lf\n", $duk->get_number(-1));
+    $duk->pop();
 
-	$duk->eval_string("'testString'.toUpperCase()");
-	printf("result is: '%s'\n", $duk->get_string(-1));
-	$duk->pop();
+    $duk->eval_string("'testString'.toUpperCase()");
+    printf("result is: '%s'\n", $duk->get_string(-1));
+    $duk->pop();
 
-	$rc = $duk->peval_string("print('Hello world!'); 123;");
-	printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
-	$duk->pop();
+    $rc = $duk->peval_string("print('Hello world!'); 123;");
+    printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
+    $duk->pop();
 
-	$rc = $duk->peval_string("throw new Error('eval error');");
-	printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
-	$duk->pop();
+    $rc = $duk->peval_string("throw new Error('eval error');");
+    printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
+    $duk->pop();
 
-	$rc = $duk->peval_string("throw new Error('eval error'); obj = {");
-	printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
-	$duk->pop();
+    $rc = $duk->peval_string("throw new Error('eval error'); obj = {");
+    printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
+    $duk->pop();
 
-	#noresult variants */
+    #noresult variants */
 
-	printf("top=%ld\n", $duk->get_top());
-	$duk->eval_string_noresult("print('Hello world!'); 123;");
+    printf("top=%ld\n", $duk->get_top());
+    $duk->eval_string_noresult("print('Hello world!'); 123;");
 
-	printf("top=%ld\n", $duk->get_top());
-	$rc = $duk->peval_string_noresult("print('Hello world!'); 123;");
-	printf("no result, rc=%ld\n", $rc);
+    printf("top=%ld\n", $duk->get_top());
+    $rc = $duk->peval_string_noresult("print('Hello world!'); 123;");
+    printf("no result, rc=%ld\n", $rc);
 
-	printf("top=%ld\n", $duk->get_top());
-	$rc = $duk->peval_string_noresult("print('Hello world!'); obj = {");
-	printf("no result, rc=%ld\n", $rc);
+    printf("top=%ld\n", $duk->get_top());
+    $rc = $duk->peval_string_noresult("print('Hello world!'); obj = {");
+    printf("no result, rc=%ld\n", $rc);
 
-	printf("top: %ld\n", $duk->get_top());
-	return 0;
+    printf("top: %ld\n", $duk->get_top());
+    return 0;
 }
 
 sub test_lstring {
-	my $rc;
-	my $src1 = "print('Hello world!'); 123;@";
-	my $src2 = "'testString'.toUpperCase()@";
-	my $src3 = "throw new Error('eval error');@";
-	my $src4 = "throw new Error('eval error'); obj = {@";
-	my $src5 = "print('Hello world!'); obj = {@";
+    my $rc;
+    my $src1 = "print('Hello world!'); 123;@";
+    my $src2 = "'testString'.toUpperCase()@";
+    my $src3 = "throw new Error('eval error');@";
+    my $src4 = "throw new Error('eval error'); obj = {@";
+    my $src5 = "print('Hello world!'); obj = {@";
 
-	$duk->eval_lstring($src1, length($src1) - 1);
-	printf("return value is: %lf\n", $duk->get_number(-1));
-	$duk->pop();
+    $duk->eval_lstring($src1, length($src1) - 1);
+    printf("return value is: %lf\n", $duk->get_number(-1));
+    $duk->pop();
 
-	$duk->eval_lstring($src2, length($src2) - 1);
-	printf("result is: '%s'\n", $duk->get_string(-1));
-	$duk->pop();
+    $duk->eval_lstring($src2, length($src2) - 1);
+    printf("result is: '%s'\n", $duk->get_string(-1));
+    $duk->pop();
 
-	$rc = $duk->peval_lstring($src1, length($src1) - 1);
-	printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
-	$duk->pop();
+    $rc = $duk->peval_lstring($src1, length($src1) - 1);
+    printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
+    $duk->pop();
 
-	$rc = $duk->peval_lstring($src3, length($src3) - 1);
-	printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
-	$duk->pop();
+    $rc = $duk->peval_lstring($src3, length($src3) - 1);
+    printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
+    $duk->pop();
 
-	$rc = $duk->peval_lstring($src4, length($src4) - 1);
-	printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
-	$duk->pop();
+    $rc = $duk->peval_lstring($src4, length($src4) - 1);
+    printf("return value is: %s (rc=%ld)\n", $duk->safe_to_string(-1), $rc);
+    $duk->pop();
 
-	#noresult variants */
+    #noresult variants */
 
-	printf("top=%ld\n", $duk->get_top());
-	$duk->eval_lstring_noresult($src1, length($src1) - 1);
+    printf("top=%ld\n", $duk->get_top());
+    $duk->eval_lstring_noresult($src1, length($src1) - 1);
 
-	printf("top=%ld\n", $duk->get_top());
-	$rc = $duk->peval_lstring_noresult($src1, length($src1) - 1);
-	printf("no result, rc=%ld\n", $rc);
+    printf("top=%ld\n", $duk->get_top());
+    $rc = $duk->peval_lstring_noresult($src1, length($src1) - 1);
+    printf("no result, rc=%ld\n", $rc);
 
-	printf("top=%ld\n", $duk->get_top());
-	$rc = $duk->peval_lstring_noresult($src5, length($src5) - 1);
-	printf("no result, rc=%ld\n", $rc);
+    printf("top=%ld\n", $duk->get_top());
+    $rc = $duk->peval_lstring_noresult($src5, length($src5) - 1);
+    printf("no result, rc=%ld\n", $rc);
 
-	printf("top: %ld\n", $duk->get_top());
-	return 0;
+    printf("top: %ld\n", $duk->get_top());
+    return 0;
 }
 
 

@@ -10,73 +10,73 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 sub dump_string {
-	my $p = shift;
-	printf("string:%s%s\n", (length $p == 0 ? "" : " "), $p);
+    my $p = shift;
+    printf("string:%s%s\n", (length $p == 0 ? "" : " "), $p);
 }
 
 sub dump_string_size {
-	my ($p, $sz) = @_;
-	printf("string:%s%s (%ld)\n", (length $p == 0 ? "" : " "), $p, $sz);
+    my ($p, $sz) = @_;
+    printf("string:%s%s (%ld)\n", (length $p == 0 ? "" : " "), $p, $sz);
 }
 
 sub test_1 {
-	my $p;
-	my $sz;
+    my $p;
+    my $sz;
 
-	$duk->set_top(0);
-	$duk->push_lstring("foo\0bar", 7);
-	$duk->push_string("");
+    $duk->set_top(0);
+    $duk->push_lstring("foo\0bar", 7);
+    $duk->push_string("");
 
-	$sz = 0xdeadbeef;
-	$p = $duk->require_lstring(0, $sz);
-	dump_string_size($p, $sz);
+    $sz = 0xdeadbeef;
+    $p = $duk->require_lstring(0, $sz);
+    dump_string_size($p, $sz);
 
-	$sz = 0xdeadbeef;
-	$p = $duk->require_lstring(0, $sz);
-	dump_string($p);
+    $sz = 0xdeadbeef;
+    $p = $duk->require_lstring(0, $sz);
+    dump_string($p);
 
-	$sz = "\0";
-	$p = $duk->require_lstring(1, $sz);
-	dump_string_size($p, $sz);
+    $sz = "\0";
+    $p = $duk->require_lstring(1, $sz);
+    dump_string_size($p, $sz);
 
-	$sz = 'uuu';
-	$p = $duk->require_lstring(1, $sz);
-	dump_string($p);
-	return 0;
+    $sz = 'uuu';
+    $p = $duk->require_lstring(1, $sz);
+    dump_string($p);
+    return 0;
 }
 
 sub test_2 {
-	my $p;
-	my $sz;
+    my $p;
+    my $sz;
 
-	$duk->set_top(0);
-	$duk->push_null();
+    $duk->set_top(0);
+    $duk->push_null();
 
-	$p = $duk->require_lstring(0, $sz);
-	printf("string: %s (%ld)\n", $p, $sz);
-	return 0;
+    $p = $duk->require_lstring(0, $sz);
+    printf("string: %s (%ld)\n", $p, $sz);
+    return 0;
 }
 
 sub test_3 {
-	my $p;
-	my $sz;
+    my $p;
+    my $sz;
 
-	$duk->set_top(0);
+    $duk->set_top(0);
 
-	$p = $duk->require_lstring(0, $sz);
-	printf("string: %s (%ld)\n", $p, $sz);
-	return 0;
+    $p = $duk->require_lstring(0, $sz);
+    printf("string: %s (%ld)\n", $p, $sz);
+    return 0;
 }
 
 sub test_4 {
-	my $p;
-	my $sz;
+    my $p;
+    my $sz;
 
-	$duk->set_top(0);
+    $duk->set_top(0);
 
-	$p = $duk->require_lstring(-2147483648, $sz);
-	printf("string: %s (%ld)\n", $p, $sz);
-	return 0;
+    $p = $duk->require_lstring(-2147483648, $sz);
+    printf("string: %s (%ld)\n", $p, $sz);
+    return 0;
 }
 
 

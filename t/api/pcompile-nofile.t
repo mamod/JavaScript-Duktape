@@ -5,7 +5,7 @@ use JavaScript::Duktape;
 use Data::Dumper;
 
 require './t/helper.pl';
-
+use Test::More skip_all => 'duktape v2.0 does not support file/io functions';
 
 my $NONEXISTENT_FILE = '/this/file/doesnt/exist';
 

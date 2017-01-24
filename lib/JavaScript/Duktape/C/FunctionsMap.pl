@@ -35,6 +35,13 @@ see L<http://duktape.org/api.html#duk_base64_encode>
 =cut
 *base64_encode = \&aperl_duk_base64_encode;
 
+=item C<buffer_to_string>
+
+see L<http://duktape.org/api.html#duk_buffer_to_string>
+
+=cut
+*buffer_to_string = \&aperl_duk_buffer_to_string;
+
 =item C<call>
 
 see L<http://duktape.org/api.html#duk_call>
@@ -105,13 +112,6 @@ see L<http://duktape.org/api.html#duk_compile>
 =cut
 *compile = \&aperl_duk_compile;
 
-=item C<compile_file>
-
-see L<http://duktape.org/api.html#duk_compile_file>
-
-=cut
-*compile_file = \&aperl_duk_compile_file;
-
 =item C<compile_lstring>
 
 see L<http://duktape.org/api.html#duk_compile_lstring>
@@ -139,6 +139,13 @@ see L<http://duktape.org/api.html#duk_compile_string_filename>
 
 =cut
 *compile_string_filename = \&aperl_duk_compile_string_filename;
+
+=item C<components_to_time>
+
+see L<http://duktape.org/api.html#duk_components_to_time>
+
+=cut
+*components_to_time = \&aperl_duk_components_to_time;
 
 =item C<concat>
 
@@ -189,6 +196,13 @@ see L<http://duktape.org/api.html#duk_del_prop_index>
 =cut
 *del_prop_index = \&aperl_duk_del_prop_index;
 
+=item C<del_prop_lstring>
+
+see L<http://duktape.org/api.html#duk_del_prop_lstring>
+
+=cut
+*del_prop_lstring = \&aperl_duk_del_prop_lstring;
+
 =item C<del_prop_string>
 
 see L<http://duktape.org/api.html#duk_del_prop_string>
@@ -202,20 +216,6 @@ see L<http://duktape.org/api.html#duk_destroy_heap>
 
 =cut
 *destroy_heap = \&aperl_duk_destroy_heap;
-
-=item C<dump_context_stderr>
-
-see L<http://duktape.org/api.html#duk_dump_context_stderr>
-
-=cut
-*dump_context_stderr = \&aperl_duk_dump_context_stderr;
-
-=item C<dump_context_stdout>
-
-see L<http://duktape.org/api.html#duk_dump_context_stdout>
-
-=cut
-*dump_context_stdout = \&aperl_duk_dump_context_stdout;
 
 =item C<dump_function>
 
@@ -266,19 +266,12 @@ see L<http://duktape.org/api.html#duk_eval>
 =cut
 *eval = \&aperl_duk_eval;
 
-=item C<eval_file>
+=item C<eval_error_va>
 
-see L<http://duktape.org/api.html#duk_eval_file>
-
-=cut
-*eval_file = \&aperl_duk_eval_file;
-
-=item C<eval_file_noresult>
-
-see L<http://duktape.org/api.html#duk_eval_file_noresult>
+see L<http://duktape.org/api.html#duk_eval_error_va>
 
 =cut
-*eval_file_noresult = \&aperl_duk_eval_file_noresult;
+*eval_error_va = \&aperl_duk_eval_error_va;
 
 =item C<eval_lstring>
 
@@ -343,6 +336,13 @@ see L<http://duktape.org/api.html#duk_gc>
 =cut
 *gc = \&aperl_duk_gc;
 
+=item C<generic_error_va>
+
+see L<http://duktape.org/api.html#duk_generic_error_va>
+
+=cut
+*generic_error_va = \&aperl_duk_generic_error_va;
+
 =item C<get_boolean>
 
 see L<http://duktape.org/api.html#duk_get_boolean>
@@ -399,6 +399,13 @@ see L<http://duktape.org/api.html#duk_get_finalizer>
 =cut
 *get_finalizer = \&aperl_duk_get_finalizer;
 
+=item C<get_global_lstring>
+
+see L<http://duktape.org/api.html#duk_get_global_lstring>
+
+=cut
+*get_global_lstring = \&aperl_duk_get_global_lstring;
+
 =item C<get_global_string>
 
 see L<http://duktape.org/api.html#duk_get_global_string>
@@ -448,6 +455,13 @@ see L<http://duktape.org/api.html#duk_get_memory_functions>
 =cut
 *get_memory_functions = \&aperl_duk_get_memory_functions;
 
+=item C<get_now>
+
+see L<http://duktape.org/api.html#duk_get_now>
+
+=cut
+*get_now = \&aperl_duk_get_now;
+
 =item C<get_number>
 
 see L<http://duktape.org/api.html#duk_get_number>
@@ -469,12 +483,26 @@ see L<http://duktape.org/api.html#duk_get_prop>
 =cut
 *get_prop = \&aperl_duk_get_prop;
 
+=item C<get_prop_desc>
+
+see L<http://duktape.org/api.html#duk_get_prop_desc>
+
+=cut
+*get_prop_desc = \&aperl_duk_get_prop_desc;
+
 =item C<get_prop_index>
 
 see L<http://duktape.org/api.html#duk_get_prop_index>
 
 =cut
 *get_prop_index = \&aperl_duk_get_prop_index;
+
+=item C<get_prop_lstring>
+
+see L<http://duktape.org/api.html#duk_get_prop_lstring>
+
+=cut
+*get_prop_lstring = \&aperl_duk_get_prop_lstring;
 
 =item C<get_prop_string>
 
@@ -546,6 +574,13 @@ see L<http://duktape.org/api.html#duk_has_prop_index>
 =cut
 *has_prop_index = \&aperl_duk_has_prop_index;
 
+=item C<has_prop_lstring>
+
+see L<http://duktape.org/api.html#duk_has_prop_lstring>
+
+=cut
+*has_prop_lstring = \&aperl_duk_has_prop_lstring;
+
 =item C<has_prop_string>
 
 see L<http://duktape.org/api.html#duk_has_prop_string>
@@ -573,6 +608,20 @@ see L<http://duktape.org/api.html#duk_insert>
 
 =cut
 *insert = \&aperl_duk_insert;
+
+=item C<inspect_callstack_entry>
+
+see L<http://duktape.org/api.html#duk_inspect_callstack_entry>
+
+=cut
+*inspect_callstack_entry = \&aperl_duk_inspect_callstack_entry;
+
+=item C<inspect_value>
+
+see L<http://duktape.org/api.html#duk_inspect_value>
+
+=cut
+*inspect_value = \&aperl_duk_inspect_value;
 
 =item C<instanceof>
 
@@ -608,6 +657,13 @@ see L<http://duktape.org/api.html#duk_is_buffer>
 
 =cut
 *is_buffer = \&aperl_duk_is_buffer;
+
+=item C<is_buffer_data>
+
+see L<http://duktape.org/api.html#duk_is_buffer_data>
+
+=cut
+*is_buffer_data = \&aperl_duk_is_buffer_data;
 
 =item C<is_c_function>
 
@@ -650,6 +706,13 @@ see L<http://duktape.org/api.html#duk_is_error>
 
 =cut
 *is_error = \&aperl_duk_is_error;
+
+=item C<is_eval_error>
+
+see L<http://duktape.org/api.html#duk_is_eval_error>
+
+=cut
+*is_eval_error = \&aperl_duk_is_eval_error;
 
 =item C<is_fixed_buffer>
 
@@ -728,6 +791,20 @@ see L<http://duktape.org/api.html#duk_is_primitive>
 =cut
 *is_primitive = \&aperl_duk_is_primitive;
 
+=item C<is_range_error>
+
+see L<http://duktape.org/api.html#duk_is_range_error>
+
+=cut
+*is_range_error = \&aperl_duk_is_range_error;
+
+=item C<is_reference_error>
+
+see L<http://duktape.org/api.html#duk_is_reference_error>
+
+=cut
+*is_reference_error = \&aperl_duk_is_reference_error;
+
 =item C<is_strict_call>
 
 see L<http://duktape.org/api.html#duk_is_strict_call>
@@ -742,6 +819,20 @@ see L<http://duktape.org/api.html#duk_is_string>
 =cut
 *is_string = \&aperl_duk_is_string;
 
+=item C<is_symbol>
+
+see L<http://duktape.org/api.html#duk_is_symbol>
+
+=cut
+*is_symbol = \&aperl_duk_is_symbol;
+
+=item C<is_syntax_error>
+
+see L<http://duktape.org/api.html#duk_is_syntax_error>
+
+=cut
+*is_syntax_error = \&aperl_duk_is_syntax_error;
+
 =item C<is_thread>
 
 see L<http://duktape.org/api.html#duk_is_thread>
@@ -749,12 +840,26 @@ see L<http://duktape.org/api.html#duk_is_thread>
 =cut
 *is_thread = \&aperl_duk_is_thread;
 
+=item C<is_type_error>
+
+see L<http://duktape.org/api.html#duk_is_type_error>
+
+=cut
+*is_type_error = \&aperl_duk_is_type_error;
+
 =item C<is_undefined>
 
 see L<http://duktape.org/api.html#duk_is_undefined>
 
 =cut
 *is_undefined = \&aperl_duk_is_undefined;
+
+=item C<is_uri_error>
+
+see L<http://duktape.org/api.html#duk_is_uri_error>
+
+=cut
+*is_uri_error = \&aperl_duk_is_uri_error;
 
 =item C<is_valid_index>
 
@@ -790,13 +895,6 @@ see L<http://duktape.org/api.html#duk_load_function>
 
 =cut
 *load_function = \&aperl_duk_load_function;
-
-=item C<log_va>
-
-see L<http://duktape.org/api.html#duk_log_va>
-
-=cut
-*log_va = \&aperl_duk_log_va;
 
 =item C<map_string>
 
@@ -854,13 +952,6 @@ see L<http://duktape.org/api.html#duk_pcompile>
 =cut
 *pcompile = \&aperl_duk_pcompile;
 
-=item C<pcompile_file>
-
-see L<http://duktape.org/api.html#duk_pcompile_file>
-
-=cut
-*pcompile_file = \&aperl_duk_pcompile_file;
-
 =item C<pcompile_lstring>
 
 see L<http://duktape.org/api.html#duk_pcompile_lstring>
@@ -895,20 +986,6 @@ see L<http://duktape.org/api.html#duk_peval>
 
 =cut
 *peval = \&aperl_duk_peval;
-
-=item C<peval_file>
-
-see L<http://duktape.org/api.html#duk_peval_file>
-
-=cut
-*peval_file = \&aperl_duk_peval_file;
-
-=item C<peval_file_noresult>
-
-see L<http://duktape.org/api.html#duk_peval_file_noresult>
-
-=cut
-*peval_file_noresult = \&aperl_duk_peval_file_noresult;
 
 =item C<peval_lstring>
 
@@ -986,6 +1063,13 @@ see L<http://duktape.org/api.html#duk_push_array>
 
 =cut
 *push_array = \&aperl_duk_push_array;
+
+=item C<push_bare_object>
+
+see L<http://duktape.org/api.html#duk_push_bare_object>
+
+=cut
+*push_bare_object = \&aperl_duk_push_bare_object;
 
 =item C<push_boolean>
 
@@ -1162,13 +1246,6 @@ see L<http://duktape.org/api.html#duk_push_string>
 =cut
 *push_string = \&aperl_duk_push_string;
 
-=item C<push_string_file>
-
-see L<http://duktape.org/api.html#duk_push_string_file>
-
-=cut
-*push_string_file = \&aperl_duk_push_string_file;
-
 =item C<push_this>
 
 see L<http://duktape.org/api.html#duk_push_this>
@@ -1232,6 +1309,13 @@ see L<http://duktape.org/api.html#duk_put_function_list>
 =cut
 *put_function_list = \&aperl_duk_put_function_list;
 
+=item C<put_global_lstring>
+
+see L<http://duktape.org/api.html#duk_put_global_lstring>
+
+=cut
+*put_global_lstring = \&aperl_duk_put_global_lstring;
+
 =item C<put_global_string>
 
 see L<http://duktape.org/api.html#duk_put_global_string>
@@ -1260,12 +1344,26 @@ see L<http://duktape.org/api.html#duk_put_prop_index>
 =cut
 *put_prop_index = \&aperl_duk_put_prop_index;
 
+=item C<put_prop_lstring>
+
+see L<http://duktape.org/api.html#duk_put_prop_lstring>
+
+=cut
+*put_prop_lstring = \&aperl_duk_put_prop_lstring;
+
 =item C<put_prop_string>
 
 see L<http://duktape.org/api.html#duk_put_prop_string>
 
 =cut
 *put_prop_string = \&aperl_duk_put_prop_string;
+
+=item C<range_error_va>
+
+see L<http://duktape.org/api.html#duk_range_error_va>
+
+=cut
+*range_error_va = \&aperl_duk_range_error_va;
 
 =item C<realloc>
 
@@ -1280,6 +1378,13 @@ see L<http://duktape.org/api.html#duk_realloc_raw>
 
 =cut
 *realloc_raw = \&aperl_duk_realloc_raw;
+
+=item C<reference_error_va>
+
+see L<http://duktape.org/api.html#duk_reference_error_va>
+
+=cut
+*reference_error_va = \&aperl_duk_reference_error_va;
 
 =item C<remove>
 
@@ -1323,12 +1428,26 @@ see L<http://duktape.org/api.html#duk_require_c_function>
 =cut
 *require_c_function = \&aperl_duk_require_c_function;
 
+=item C<require_callable>
+
+see L<http://duktape.org/api.html#duk_require_callable>
+
+=cut
+*require_callable = \&aperl_duk_require_callable;
+
 =item C<require_context>
 
 see L<http://duktape.org/api.html#duk_require_context>
 
 =cut
 *require_context = \&aperl_duk_require_context;
+
+=item C<require_function>
+
+see L<http://duktape.org/api.html#duk_require_function>
+
+=cut
+*require_function = \&aperl_duk_require_function;
 
 =item C<require_heapptr>
 
@@ -1449,6 +1568,13 @@ see L<http://duktape.org/api.html#duk_resize_buffer>
 =cut
 *resize_buffer = \&aperl_duk_resize_buffer;
 
+=item C<resume>
+
+see L<http://duktape.org/api.html#duk_resume>
+
+=cut
+*resume = \&aperl_duk_resume;
+
 =item C<safe_call>
 
 see L<http://duktape.org/api.html#duk_safe_call>
@@ -1470,6 +1596,13 @@ see L<http://duktape.org/api.html#duk_safe_to_string>
 =cut
 *safe_to_string = \&aperl_duk_safe_to_string;
 
+=item C<samevalue>
+
+see L<http://duktape.org/api.html#duk_samevalue>
+
+=cut
+*samevalue = \&aperl_duk_samevalue;
+
 =item C<set_finalizer>
 
 see L<http://duktape.org/api.html#duk_set_finalizer>
@@ -1483,6 +1616,13 @@ see L<http://duktape.org/api.html#duk_set_global_object>
 
 =cut
 *set_global_object = \&aperl_duk_set_global_object;
+
+=item C<set_length>
+
+see L<http://duktape.org/api.html#duk_set_length>
+
+=cut
+*set_length = \&aperl_duk_set_length;
 
 =item C<set_magic>
 
@@ -1526,6 +1666,13 @@ see L<http://duktape.org/api.html#duk_substring>
 =cut
 *substring = \&aperl_duk_substring;
 
+=item C<suspend>
+
+see L<http://duktape.org/api.html#duk_suspend>
+
+=cut
+*suspend = \&aperl_duk_suspend;
+
 =item C<swap>
 
 see L<http://duktape.org/api.html#duk_swap>
@@ -1540,12 +1687,26 @@ see L<http://duktape.org/api.html#duk_swap_top>
 =cut
 *swap_top = \&aperl_duk_swap_top;
 
+=item C<syntax_error_va>
+
+see L<http://duktape.org/api.html#duk_syntax_error_va>
+
+=cut
+*syntax_error_va = \&aperl_duk_syntax_error_va;
+
 =item C<throw>
 
 see L<http://duktape.org/api.html#duk_throw>
 
 =cut
 *throw = \&aperl_duk_throw;
+
+=item C<time_to_components>
+
+see L<http://duktape.org/api.html#duk_time_to_components>
+
+=cut
+*time_to_components = \&aperl_duk_time_to_components;
 
 =item C<to_boolean>
 
@@ -1560,13 +1721,6 @@ see L<http://duktape.org/api.html#duk_to_buffer>
 
 =cut
 *to_buffer = \&aperl_duk_to_buffer;
-
-=item C<to_defaultvalue>
-
-see L<http://duktape.org/api.html#duk_to_defaultvalue>
-
-=cut
-*to_defaultvalue = \&aperl_duk_to_defaultvalue;
 
 =item C<to_dynamic_buffer>
 
@@ -1679,6 +1833,20 @@ see L<http://duktape.org/api.html#duk_trim>
 
 =cut
 *trim = \&aperl_duk_trim;
+
+=item C<type_error_va>
+
+see L<http://duktape.org/api.html#duk_type_error_va>
+
+=cut
+*type_error_va = \&aperl_duk_type_error_va;
+
+=item C<uri_error_va>
+
+see L<http://duktape.org/api.html#duk_uri_error_va>
+
+=cut
+*uri_error_va = \&aperl_duk_uri_error_va;
 
 
 =back

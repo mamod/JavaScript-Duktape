@@ -11,21 +11,21 @@ my $res;
 sub NULL { "\0" }
 
 sub PRINTTOP {
-	my $clen = 0;
-	if ($duk->is_string(-1)) {
-		$clen = $duk->get_length(-1);
-	}
+    my $clen = 0;
+    if ($duk->is_string(-1)) {
+        $clen = $duk->get_length(-1);
+    }
 
-	printf("top=%ld type=%ld bool=%d num=%.6lf clen=%ld str='%s' str-is-NULL=%d ptr-is-NULL=%d\n",
-		$duk->get_top(), $duk->get_type(-1), $duk->get_boolean(-1),
-		$duk->get_number(-1), $clen, $duk->get_string(-1),
-		($duk->get_string(-1) ? 0 : 1),
-		($duk->get_pointer(-1) ? 0 : 1));
+    printf("top=%ld type=%ld bool=%d num=%.6lf clen=%ld str='%s' str-is-NULL=%d ptr-is-NULL=%d\n",
+        $duk->get_top(), $duk->get_type(-1), $duk->get_boolean(-1),
+        $duk->get_number(-1), $clen, $duk->get_string(-1),
+        ($duk->get_string(-1) ? 0 : 1),
+        ($duk->get_pointer(-1) ? 0 : 1));
 }
 
 sub PRINTRESTOP {
-	printf("-> res is %s\n", ((defined $res) ? "non-NULL" : "NULL"));
-	PRINTTOP();
+    printf("-> res is %s\n", ((defined $res) ? "non-NULL" : "NULL"));
+    PRINTTOP();
 }
 
 $duk->push_undefined(); PRINTTOP();

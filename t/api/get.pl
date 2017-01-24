@@ -14,7 +14,7 @@ my $perl = $js->get('perl');
 print Dumper $perl;
 
 if ($perl->{falseVal}){
-	die $perl->{falseVal};
+    die $perl->{falseVal};
 }
 
 my $ret = $perl->{func}->(9);

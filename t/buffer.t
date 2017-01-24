@@ -14,7 +14,7 @@ subtest 'incoming buffer with raw data' => sub {
     my $str = 'как дела';
     my $bytes = Encode::encode('UTF-8', $str );
 
-    $js->set( load=>sub{
+    $js->set( load => sub {
         return bless( \$bytes => 'JavaScript::Duktape::Buffer' );
     } );
 
@@ -30,7 +30,7 @@ subtest 'return buffer with raw data' => sub {
 
     my $bytes = "\0\1\2";
 
-    $js->set( load=>sub{
+    $js->set( load => sub{
         return bless( \$bytes => 'JavaScript::Duktape::Buffer' );
     } );
 
@@ -65,9 +65,9 @@ subtest 'return buffer with utf8 data' => sub {
     my $str = 'как дела';
     my $bytes = Encode::encode('UTF-8', $str );
 
-    $js->set( load=>sub{
+    $js->set( load => sub{
         return bless( \$bytes => 'JavaScript::Duktape::Buffer' );
-    } );
+    });
 
     my $ret = $js->eval( q{
         var buf = load();
@@ -81,10 +81,10 @@ subtest 'return buffer with utf8 data' => sub {
 subtest 'return undef buffer' => sub {
     my $js = JavaScript::Duktape->new;
 
-    $js->set( load=>sub{
+    $js->set( load => sub{
         my $var;
         return bless( \$var => 'JavaScript::Duktape::Buffer' );
-    } );
+    });
 
     my $ret = $js->eval( q{
         var buf = load();
@@ -97,10 +97,10 @@ subtest 'return undef buffer' => sub {
 subtest 'return buffer with a zero' => sub {
     my $js = JavaScript::Duktape->new;
 
-    $js->set( load=>sub{
+    $js->set( load => sub{
         my $var = '0';
         return bless( \$var => 'JavaScript::Duktape::Buffer' );
-    } );
+    });
 
     my $ret = $js->eval( q{
         var buf = load();
@@ -109,8 +109,5 @@ subtest 'return buffer with a zero' => sub {
 
     is $ret, '0';
 };
-
-
-
 
 done_testing;

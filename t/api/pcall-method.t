@@ -9,6 +9,7 @@ require './t/helper.pl';
 my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
+SET_PRINT_METHOD($duk);
 
 #basic success case, non-strict target function (this gets coerced) */
 $duk->eval_string("(function (x,y) { print(typeof this, this); return x+y; })");

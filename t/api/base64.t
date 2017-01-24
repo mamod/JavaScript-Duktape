@@ -23,7 +23,7 @@ sub test_decode {
     $duk->push_string("dGVzdCBzdHJpbmc=");
     $duk->push_int(321);  # dummy */
     $duk->base64_decode(-2);  # buffer */
-    printf("base64 decode: %s\n", $duk->to_string(-2));
+    printf("base64 decode: %s\n", $duk->buffer_to_string(-2));
     printf("top after: %ld\n", $duk->get_top());  # value + dummy */
     $duk->set_top(0);
     return 0;
