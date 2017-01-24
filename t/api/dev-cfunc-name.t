@@ -13,53 +13,53 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 SET_PRINT_METHOD($duk);
 sub my_func {
-	# die;
-	$duk->push_current_function();
-	$duk->get_prop_string(-1, "name");
-	printf("my name is: '%s'\n", $duk->safe_to_string(-1));
-	$duk->pop_2();
+    # die;
+    $duk->push_current_function();
+    $duk->get_prop_string(-1, "name");
+    printf("my name is: '%s'\n", $duk->safe_to_string(-1));
+    $duk->pop_2();
 
-	return -7;
+    return -7;
 }
 
 sub test_without_name {
-	$duk->push_c_function(\&my_func, 0);
-	$duk->put_global_string("MyFunc");
+    $duk->push_c_function(\&my_func, 0);
+    $duk->put_global_string("MyFunc");
 
-	$duk->eval_string_noresult(
-		"try {\n"
-		. "    [1].forEach(MyFunc);\n"
-		. "} catch (e) {\n"
-		. "    print(sanitize(e.stack || e));\n"
-		. "}\n"
-	);
+    $duk->eval_string_noresult(
+        "try {\n"
+        . "    [1].forEach(MyFunc);\n"
+        . "} catch (e) {\n"
+        . "    print(sanitize(e.stack || e));\n"
+        . "}\n"
+    );
 
-	return 0;
+    return 0;
 }
 
 sub test_with_name {
-	$duk->get_global_string("MyFunc");
-	$duk->push_string("name");
-	$duk->push_string("my_func");
-	$duk->def_prop(-3, DUK_DEFPROP_HAVE_VALUE);
-	$duk->pop();
+    $duk->get_global_string("MyFunc");
+    $duk->push_string("name");
+    $duk->push_string("my_func");
+    $duk->def_prop(-3, DUK_DEFPROP_HAVE_VALUE);
+    $duk->pop();
 
-	$duk->eval_string_noresult(
-		"try {\n"
-		. "    [1].forEach(MyFunc);\n"
-		. "} catch (e) {\n"
-		. "    print(sanitize(e.stack || e));\n"
-		. "}\n"
-	);
+    $duk->eval_string_noresult(
+        "try {\n"
+        . "    [1].forEach(MyFunc);\n"
+        . "} catch (e) {\n"
+        . "    print(sanitize(e.stack || e));\n"
+        . "}\n"
+    );
 
-	return 0;
+    return 0;
 }
 
 $duk->eval_string_noresult(
-	"var sanitize = function(v) {\n"
-	. "    v = v.replace(/eval \\S+/, 'eval XXX');\n"
-	. "    return v;\n"
-	. "}\n"
+    "var sanitize = function(v) {\n"
+    . "    v = v.replace(/eval \\S+/, 'eval XXX');\n"
+    . "    return v;\n"
+    . "}\n"
 );
 
 TEST_SAFE_CALL($duk, \&test_without_name, 'test_without_name');

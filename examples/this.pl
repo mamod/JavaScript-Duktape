@@ -8,15 +8,15 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 $js->eval(q{
-	function Person (fname, lname) {
-		this.firstName = fname;
-		this.lastName  = lname;
-		this.getName   = getName;
-	}
+    function Person (fname, lname) {
+        this.firstName = fname;
+        this.lastName  = lname;
+        this.getName   = getName;
+    }
 });
 
 $js->set('getName', sub {
-	return this->firstName . ' ' . this->lastName;
+    return this->firstName . ' ' . this->lastName;
 });
 
 

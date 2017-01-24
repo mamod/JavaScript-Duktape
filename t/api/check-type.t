@@ -28,9 +28,9 @@ my $i = 0;
 
 my $n = $duk->get_top();
 for ($i = 0; $i < $n + 1; $i++) {  # end on invalid index on purpose
-	printf("stack[%ld] --> DUK_TYPE_NUMBER=%ld DUK_TYPE_NONE=%ld\n",
-	       $i, $duk->check_type($i, DUK_TYPE_NUMBER),
-	       $duk->check_type($i, DUK_TYPE_NONE));
+    printf("stack[%ld] --> DUK_TYPE_NUMBER=%ld DUK_TYPE_NONE=%ld\n",
+           $i, $duk->check_type($i, DUK_TYPE_NUMBER),
+           $duk->check_type($i, DUK_TYPE_NONE));
 }
 
 test_stdout();

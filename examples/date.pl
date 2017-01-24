@@ -8,10 +8,10 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 $js->eval(q{
-	var today = new Date();
-	print(today.getMinutes());
-	var unixTimestamp = Date.now();
-	print(unixTimestamp);
+    var today = new Date();
+    print(today.getMinutes());
+    var unixTimestamp = Date.now();
+    print(unixTimestamp);
 });
 
 my $date = $js->get_object('Date');

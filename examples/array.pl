@@ -14,8 +14,8 @@ $js->set('numbers', [1, 2, 3, 4, 5]);
 
 # check if it's really set in JavaScript
 $js->eval(q{
-	print(numbers[0]); // => 1
-	print(numbers[4]); // => 5
+    print(numbers[0]); // => 1
+    print(numbers[4]); // => 5
 });
 
 
@@ -34,8 +34,8 @@ $numbers->pop(_); # => [2,3,4]
 # 1 => 3
 # 2 => 4
 $numbers->forEach(sub {
-	my ($value, $index, $ar) = @_;
-	print $index, " => ", $value, "\n";
+    my ($value, $index, $ar) = @_;
+    print $index, " => ", $value, "\n";
 });
 
 print "We ar now reversed \n";
@@ -46,6 +46,6 @@ my $reversed = $numbers->reverse(_);
 # 1 => 3
 # 2 => 2
 $reversed->forEach(sub {
-	my ($value, $index, $ar) = @_;
-	print $index, " => ", $value, "\n";
+    my ($value, $index, $ar) = @_;
+    print $index, " => ", $value, "\n";
 });

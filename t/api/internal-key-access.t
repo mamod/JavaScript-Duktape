@@ -13,12 +13,12 @@ my $js = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 sub test_1 {
-	$duk->eval_string("new Date(123456)");
-	$duk->push_string("\xffValue");
-	$duk->get_prop(-2);
-	printf("Date._Value: %s\n", $duk->safe_to_string(-1));
-	printf("final top: %ld\n", $duk->get_top());
-	return 0;
+    $duk->eval_string("new Date(123456)");
+    $duk->push_string("\xffValue");
+    $duk->get_prop(-2);
+    printf("Date._Value: %s\n", $duk->safe_to_string(-1));
+    printf("final top: %ld\n", $duk->get_top());
+    return 0;
 }
 
 TEST_SAFE_CALL($duk, \&test_1, 'test_1');

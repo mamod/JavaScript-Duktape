@@ -11,9 +11,9 @@ my $duk = $js->duk;
 
 
 sub tt2 {
-	$duk->require_string(0);
-	$duk->dump('2'); #never get here
-	return 0;
+    $duk->require_string(0);
+    $duk->dump('2'); #never get here
+    return 0;
 }
 
 

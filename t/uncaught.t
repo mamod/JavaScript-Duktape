@@ -11,109 +11,109 @@ my $duk = $js->duk;
 my $count = 0;
 
 $duk->push_function(sub {
-	eval {};
-	$count++;
-	$duk->push_string("hi");
-	die;
-	$duk->require_string(99);
-	fail("should never get here");
+    eval {};
+    $count++;
+    $duk->push_string("hi");
+    die;
+    $duk->require_string(99);
+    fail("should never get here");
 });
 
 $duk->put_global_string("perlFn");
 
 
 {  #eval with try
-	eval {
-		$duk->eval_string(qq~
-			try {
-				perlFn();
-			} catch (e){
-				throw(e);
-			};
-		~);
-	};
-	ok ($@, $@);
-	is($count, 1, "called once");
+    eval {
+        $duk->eval_string(qq~
+            try {
+                perlFn();
+            } catch (e){
+                throw(e);
+            };
+        ~);
+    };
+    ok ($@, $@);
+    is($count, 1, "called once");
 }
 
 { #eval without try
-	$count = 0;
-	eval {
-		$duk->eval_string(qq~
-			perlFn();
-		~);
-	};
-	ok ($@, $@);
-	is($count, 1, "called once");
+    $count = 0;
+    eval {
+        $duk->eval_string(qq~
+            perlFn();
+        ~);
+    };
+    ok ($@, $@);
+    is($count, 1, "called once");
 }
 
 {  #peval with try/catch
-	#reset
-	$count = 0;
-	eval {
-		$duk->peval_string(qq~
-			var ret;
-			try {
-				perlFn();
-				perlFn();
-			} catch (e){
-				throw(e);
-			};
-		~);
-	};
+    #reset
+    $count = 0;
+    eval {
+        $duk->peval_string(qq~
+            var ret;
+            try {
+                perlFn();
+                perlFn();
+            } catch (e){
+                throw(e);
+            };
+        ~);
+    };
 
 
-	ok (!$@, 'Eval Error');
-	is($count, 1, "called once");
-	ok($duk->is_error(-1), "Error is on top");
-	$duk->pop();
+    ok (!$@, 'Eval Error');
+    is($count, 1, "called once");
+    ok($duk->is_error(-1), "Error is on top");
+    $duk->pop();
 }
 
 
 {  #peval without try/catch
-	#reset
-	$count = 0;
-	eval {
-		$duk->peval_string(qq~
-			perlFn();
-			perlFn();
-		~);
-	};
+    #reset
+    $count = 0;
+    eval {
+        $duk->peval_string(qq~
+            perlFn();
+            perlFn();
+        ~);
+    };
 
-	ok (!$@, $@);
-	is($count, 1, "called once");
+    ok (!$@, $@);
+    is($count, 1, "called once");
 
-	ok($duk->is_error(-1), "Error is on top");
-	my $err_str = $duk->to_string(-1);
-	ok($err_str =~ /^Error: Died at/, $err_str);
+    ok($duk->is_error(-1), "Error is on top");
+    my $err_str = $duk->to_string(-1);
+    ok($err_str =~ /^Error: Died at/, $err_str);
 }
 
 
 {
-	#overwrite perl function
-	$js->set('perlFn', sub {
-		eval {};
-		$count++;
-		$duk->push_string("hi");
-		$duk->require_string(99);
-		fail("should never get here");
-	});
+    #overwrite perl function
+    $js->set('perlFn', sub {
+        eval {};
+        $count++;
+        $duk->push_string("hi");
+        $duk->require_string(99);
+        fail("should never get here");
+    });
 
-	$duk->peval_string("perlFn");
-	eval {
-		$duk->call(0);
-	};
+    $duk->peval_string("perlFn");
+    eval {
+        $duk->call(0);
+    };
 
-	ok ($@ =~ /^uncaught/, $@);
+    ok ($@ =~ /^uncaught/, $@);
 
-	$duk->eval_string("perlFn");
-	eval {
-		$duk->pcall(0);
-	};
-	ok (!$@);
+    $duk->eval_string("perlFn");
+    eval {
+        $duk->pcall(0);
+    };
+    ok (!$@);
 
-	my $str = $duk->to_string(-1);
-	is($str, "TypeError: string required, found none (stack index 99)");
+    my $str = $duk->to_string(-1);
+    is($str, "TypeError: string required, found none (stack index 99)");
 }
 
 done_testing(14);
