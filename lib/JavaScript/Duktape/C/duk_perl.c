@@ -10,6 +10,8 @@
 #define DUKTAPE_DONT_LOAD_SHARED
 
 #include "./lib/duktape.c"
+#include "./lib/module-duktape/duk_module_duktape.c"
+#include "./lib/print-alert/duk_print_alert.c"
 #include "duk_perl.h"
 
 #ifndef Newx
@@ -51,12 +53,15 @@ void fatal_handler (void *udata, const char *msg) {
 /**
   * new
 ******************************************************************************/
-SV *new(const char * classname) {
+SV *perl_duk_new(const char * classname) {
     duk_context *ctx;
     SV         *obj;
     SV         *obj_ref;
 
     ctx = duk_create_heap(NULL, NULL, NULL, NULL, fatal_handler);
+    duk_module_duktape_init(ctx);
+    duk_print_alert_init(ctx, 0);
+
     obj = newSViv((IV)ctx);
     obj_ref = newRV_noinc(obj);
     sv_bless(obj_ref, gv_stashpv(classname, GV_ADD));

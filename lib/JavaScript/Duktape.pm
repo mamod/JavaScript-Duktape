@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util 'looks_like_number';
-our $VERSION = '2.0.1';
+our $VERSION = '2.1.0';
 
 my $GlobalRef = {};
 my $THIS;
@@ -131,7 +131,7 @@ use constant {
 sub new {
     my $class= shift;
     my $self = bless {}, $class;
-    my $duk = $self->{duk} = JavaScript::Duktape::Vm->new();
+    my $duk = $self->{duk} = JavaScript::Duktape::Vm->perl_duk_new();
     $self->{pid} = $$;
 
     # Initialize global stash 'PerlGlobalStash'
@@ -274,8 +274,6 @@ sub destroy {
     my $duk  = delete $self->{duk};
     local $@; #duk_desatroy_heap mess with $@!!
     return if !$duk;
-    delete $self->{duk};
-    $duk->gc(0);
     $duk->destroy_heap();
 }
 
@@ -299,21 +297,23 @@ use Carp;
 my $Duklib;
 
 BEGIN {
-    my $FunctionsMap = JavaScript::Duktape::C::libPath::getPath("FunctionsMap.pl");
+    my $FunctionsMap = _get_path("FunctionsMap.pl");
     require $FunctionsMap;
 
+    sub _get_path { &JavaScript::Duktape::C::libPath::getPath }
+
     $Duklib = $^O eq 'MSWin32' ?
-                JavaScript::Duktape::C::libPath::getPath('duktape.dll') :
-                JavaScript::Duktape::C::libPath::getPath('duktape.so');
+                _get_path('duktape.dll') :
+                _get_path('duktape.so');
 };
 
 use Inline C => config =>
-    typemaps => JavaScript::Duktape::C::libPath::getPath('typemap'),
-    INC      => '-I' . JavaScript::Duktape::C::libPath::getPath('../C');
+    typemaps => _get_path('typemap'),
+    INC      => '-I' . _get_path('../C') . ' -I' .  _get_path('../C/lib');
     # myextlib => $Duklib,
     # LIBS     => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
 
-use Inline C => JavaScript::Duktape::C::libPath::getPath('duk_perl.c');
+use Inline C => _get_path('duk_perl.c');
 
 use Inline C => q{
     void poke_buffer(IV to, IV from, IV sz) {
