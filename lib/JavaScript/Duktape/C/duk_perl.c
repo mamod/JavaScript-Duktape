@@ -81,7 +81,15 @@ void perl_duk_reset_top(duk_context *ctx){
     duk_pop_n(ctx, top);
 }
 
-
+/**
+  * is number
+******************************************************************************/
+int duk_sv_is_number(SV *sv) {
+    if (SvIOK(sv) || SvNOK(sv)){
+        return 1;
+    }
+    return 0;
+}
 
 /**
   * call_safe_perl_sub

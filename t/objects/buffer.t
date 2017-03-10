@@ -29,13 +29,11 @@ for (0 .. 10){
     $gg->fill('V');
     $gg->fill('V');
     my $t = $buffer->new(17);
-    $t->fill("3");
+    $t->fill(3);
 
     is $t->toString('utf8'), Encode::encode('UTF-8', ("\3" x 17) );
     is $t->byteLength, 17;
 
-    # $t->setx(0, 66);
-    # #
     is $t->get(0), 3;
     $t->set(1, 97);
     is $t->get(1), 97;

@@ -3,8 +3,7 @@ use strict;
 use warnings;
 use Carp;
 use Data::Dumper;
-use Scalar::Util 'looks_like_number';
-our $VERSION = '2.1.0';
+our $VERSION = '2.1.1';
 
 my $GlobalRef = {};
 my $THIS;
@@ -288,7 +287,6 @@ package JavaScript::Duktape::Vm;
 use strict;
 use warnings;
 no warnings 'redefine';
-use Scalar::Util 'looks_like_number';
 use Data::Dumper;
 use Config qw( %Config );
 use JavaScript::Duktape::C::libPath;
@@ -391,7 +389,7 @@ sub push_perl {
     } else {
         if (!defined $val){
             $self->push_undefined();
-        } elsif (looks_like_number( $val )){
+        } elsif (duk_sv_is_number( $val )){
             $self->push_number($val);
         } else {
             $self->push_string($val);

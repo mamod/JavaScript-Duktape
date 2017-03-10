@@ -58,6 +58,7 @@ t/dll.t
 t/eval-function.t
 t/helper.pl
 t/nested.t
+t/number_or_string.t
 t/objects/01.t
 t/objects/02.t
 t/objects/03.t

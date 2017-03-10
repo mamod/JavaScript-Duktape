@@ -1,5 +1,16 @@
 Revision history for Perl module JavaScript::Duktape
 
+2.1.1 2016 2017-03-10
+	- bug fix: perl push any string look like a number as number to duktape
+
+2.1.0 2016 2017-02-23
+	- adding some missing old duktape builtins
+	- rename new method in Vm ( redefine warning )
+	- minor code cleanup
+
+2.0.0 2016 2017-01-24
+	- update duktape to version 2.0.0
+
 1.0.2 2016 2016-05-03
 	- bug fix double free of the same heapptr
 	- adding more objects tests
