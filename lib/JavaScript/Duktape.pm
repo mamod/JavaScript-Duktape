@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Carp;
 use Data::Dumper;
-our $VERSION = '2.1.1';
+our $VERSION = '2.1.2';
 
 my $GlobalRef = {};
 my $THIS;
@@ -229,7 +229,7 @@ sub get {
     my $duk = $self->vm;
     $duk->push_string($name);
     if ($duk->peval() != 0) {
-        croak $duk->safe_to_string(-1);
+        croak $duk->last_error_string();
     }
     my $ret = $duk->to_perl(-1);
     $duk->pop();
@@ -242,7 +242,7 @@ sub get_object {
     my $duk = $self->vm;
     $duk->push_string($name);
     if ($duk->peval() != 0) {
-        croak $duk->safe_to_string(-1);
+        croak $duk->last_error_string();
     }
     my $ret = $duk->to_perl_object(-1);
     $duk->pop();
@@ -255,11 +255,8 @@ sub eval {
     my $string = shift;
     my $duk = $self->duk;
 
-    my $err = $duk->peval_string($string);
-
-    if ($err){
-        my $error_string = $duk->safe_to_string(-1);
-        croak $error_string;
+    if ($duk->peval_string($string) != 0){
+        croak $duk->last_error_string();
     }
 
     return $duk->to_perl(-1);
@@ -269,9 +266,9 @@ sub vm  { shift->{duk}; }
 sub duk { shift->{duk}; }
 
 sub destroy {
+    local $@;
     my $self = shift;
     my $duk  = delete $self->{duk};
-    local $@; #duk_desatroy_heap mess with $@!!
     return if !$duk;
     $duk->destroy_heap();
 }
@@ -447,7 +444,7 @@ sub to_perl {
                     $self->push_perl($_[$i]);
                 }
                 if ($self->pcall_method($len) == 1) {
-                    croak $self->safe_to_string(-1);
+                    croak $self->last_error_string();
                 }
                 my $ret = $self->to_perl(-1);
                 $self->pop();
@@ -549,49 +546,6 @@ sub push_function {
 }
 
 
-sub push_c_function {
-    my $self  = shift;
-    my $sub   = shift;
-    my $nargs = shift || -1;
-
-    $GlobalRef->{"$sub"} = sub {
-        my @args = @_;
-        my $top = $self->get_top();
-        my $ret = 1;
-        my $died;
-        $self->perl_duk_safe_call(sub {
-            eval { $ret = $sub->(@args) };
-            my $error = $@;
-            if ($error){
-                if ($error =~ /^Duk::Error/){
-                    croak $@;
-                } else {
-                    ## don't throw error inside perl sub safe call
-                    ## just tell our sub that there is an error and
-                    ## let it exit this calling stack then throw
-                    ## Fixes issue #6
-                    $died = $error;
-                    $self->eval_string('(function (e){ return new Error(e) })');
-                    $self->push_string($error);
-                    $self->call(1);
-                }
-            }
-            return $ret;
-        }, $top, 1);
-
-        if ($died){
-            croak $died;
-        }
-
-        return $ret;
-    };
-
-    $self->perl_push_function($GlobalRef->{"$sub"}, $nargs);
-    $self->eval_string("(function(){perlFinalizer('$sub')})");
-    $self->set_finalizer(-2);
-}
-
-
 sub cache {
     my $self = shift;
     my $sub = shift;
@@ -614,36 +568,59 @@ sub cache {
 #####################################################################
 # safe call
 #####################################################################
+sub push_c_function {
+    my $self  = shift;
+    my $sub   = shift;
+    my $nargs = shift || -1;
+
+    $GlobalRef->{"$sub"} = sub {
+        my @args = @_;
+        my $top = $self->get_top();
+        my $ret = 1;
+
+        my $err = $self->safe_call( sub {
+            $ret = $sub->(@args);
+            return 1;
+        }, $top, 1);
+
+        if ($err) {
+            croak $self->last_error_string();
+        }
+        return $ret;
+    };
+
+    $self->perl_push_function($GlobalRef->{"$sub"}, $nargs);
+    $self->eval_string("(function(){perlFinalizer('$sub')})");
+    $self->set_finalizer(-2);
+}
+
+
+#####################################################################
+# safe call
+#####################################################################
 sub safe_call {
     my $self = shift;
     my $sub = shift;
+    my $ret;
     my $safe = sub {
-        return $sub->($self);
+        local $@;
+        eval { $ret = $sub->($self) };
+        if ( my $error = $@ ) {
+            if ($error =~ /^Duk::Error/i) {
+                croak $self->last_error_string();
+            }
+            else {
+                $self->eval_string('(function (e){ throw new Error(e) })');
+                $self->push_string($error);
+                $self->call(1);
+            }
+        }
+
+        return defined $ret ? $ret : 1;
     };
 
-    my $oldtop = $self->get_top();
-    eval { $self->perl_duk_safe_call($safe, @_) };
-    my $error = $@;
-    if ($error) {
-        if ($error =~ /^Duk::Error/i) {
-            # error came from duktape do nothing;
-        } else {
-            #error from perl push error object
-            #and clear previous pushed stack
-            my $newtop = $self->get_top();
-            if ($newtop > $oldtop){
-                $self->pop_n($newtop - $oldtop);
-            }
-
-            $self->eval_string('(function (e){ return new Error(e) })');
-            $self->push_string($error);
-            $self->call(1);
-        }
-        return 1;
-    }
-
-    #safe_call success returns 0
-    return 0;
+    eval { $ret = $self->perl_duk_safe_call($safe, @_) };
+    return defined $ret ? $ret : 1;
 }
 
 
@@ -666,6 +643,13 @@ sub safe_call {
 ##############################################
 *reset_top = \&perl_duk_reset_top;
 
+sub last_error_string {
+    my $self = shift;
+    $self->dup(-1);
+    my $error_str =  $self->safe_to_string(-1);
+    $self->pop();
+    return $error_str;
+}
 
 sub dump {
     my $self = shift;
@@ -814,7 +798,7 @@ package JavaScript::Duktape::Util; {
                 $duk->push_perl($val);
             }
             if ($duk->pnew($len) != 0){
-                croak $duk->safe_to_string(-1);
+                croak $duk->last_error_string();
             }
             my $val = $duk->to_perl_object(-1);
             $duk->pop();
@@ -889,11 +873,11 @@ package JavaScript::Duktape::Util; {
 
             if ($isNew){
                 if ($duk->pnew($len) != 0){
-                    croak $duk->safe_to_string(-1);
+                    croak $duk->last_error_string();
                 }
             } else {
                 if ($duk->pcall_method($len) != 0){
-                    croak $duk->safe_to_string(-1);
+                    croak $duk->last_error_string();
                 }
             }
 
