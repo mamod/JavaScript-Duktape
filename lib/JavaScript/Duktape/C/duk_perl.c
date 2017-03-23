@@ -131,11 +131,9 @@ int call_safe_perl_sub(duk_context *ctx, void *udata) {
 duk_int_t perl_duk_safe_call(duk_context *ctx, SV *func, duk_idx_t nargs, duk_idx_t nrets) {
 
     duk_int_t ret = 0;
-    SV *safe_perl_sub = newSVsv(func);
-    SvSetSV(safe_perl_sub, func);
 
     JMPENV *p = PL_top_env;
-    ret = duk_safe_call(ctx, call_safe_perl_sub, (void *)safe_perl_sub, nargs, nrets);
+    ret = duk_safe_call(ctx, call_safe_perl_sub, (void *)func, nargs, nrets);
     if (ret == DUK_EXEC_ERROR){
         PL_top_env = p;
         croak("Duk::Error");

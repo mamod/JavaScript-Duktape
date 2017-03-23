@@ -8,7 +8,9 @@ sub SET_PRINT_METHOD {
         my $top = $duk->get_top();
         my @str = ();
         for (my $i = 0; $i < $top; $i++){
-            push @str, $duk->safe_to_string($i);
+            $duk->dup($i);
+            push @str, $duk->safe_to_string(-1);
+            $duk->pop();
         }
         my $str = join " ", @str;
         print $str;
