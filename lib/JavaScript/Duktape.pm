@@ -3,9 +3,11 @@ use strict;
 use warnings;
 use Carp;
 use Data::Dumper;
+use Scalar::Util qw( weaken );
 our $VERSION = '2.1.2';
 
 my $GlobalRef = {};
+
 my $THIS;
 my $DUKTAPE;
 my $isNew  = bless [], "NEW";
@@ -142,8 +144,6 @@ sub new {
 
     $THIS = bless { duk => $duk, heapptr => 0 }, "JavaScript::Duktape::Object";
 
-    ##global methods
-
     ##finalizer method
     $self->{finalizer} = sub {
         my $ref = $duk->get_string(0);
@@ -151,36 +151,12 @@ sub new {
         return 1;
     };
 
+    weaken $self->{finalizer};
+    weaken $GlobalRef;
+
     $duk->perl_push_function($self->{finalizer}, 1);
     $duk->put_global_string('perlFinalizer');
 
-    ##calling cached functions
-    $self->{call} = sub {
-        my $heapptr = $duk->get_heapptr(0);
-        my $name    = $duk->get_string(1);
-        my $top     = $duk->get_top();
-
-        shift if ref $_[0] eq 'JavaScript::Duktape::Cache';
-
-        $THIS->{heapptr} = $heapptr;
-        $THIS->{duk}     = $duk;
-
-        my @args;
-        if (!@_){
-            for (my $i = 2; $i < $top; $i++){
-                push @args, $duk->to_perl($i);
-            }
-        } else {
-            @args = @_;
-        }
-
-        my $ret = $GlobalRef->{$name}->{sub}->(@args);
-        $duk->push_perl($ret);
-        return 1;
-    };
-
-    $duk->push_perl_function($self->{call}, -1);
-    $duk->put_global_string('perlCall');
     return $self;
 }
 
@@ -545,26 +521,6 @@ sub push_function {
     }, $nargs);
 }
 
-
-sub cache {
-    my $self = shift;
-    my $sub = shift;
-
-    my @caller = caller;
-    my $code_cache_name = $caller[0] . $caller[2];
-
-    if (!$GlobalRef->{$code_cache_name}){
-        $GlobalRef->{$code_cache_name} = bless {
-            duk => $self,
-            sub => $sub,
-            name => $code_cache_name
-        }, "JavaScript::Duktape::Cache";
-    }
-    $GlobalRef->{$code_cache_name}->{args} = \@_;
-    return $GlobalRef->{$code_cache_name};
-}
-
-
 #####################################################################
 # safe call
 #####################################################################
@@ -858,14 +814,6 @@ package JavaScript::Duktape::Util; {
             foreach my $val (@_){
                 if (ref $val eq 'CODE'){
                     $duk->push_function($val);
-                } elsif (ref $val eq 'JavaScript::Duktape::Cache') {
-                    my $name = $val->{name};
-                    $duk->eval_string(qq~
-                        (function (a, b, c, d){
-                            var name = "$name";
-                            return perlCall(this, name, a, b, c, d);
-                        });
-                    ~);
                 } else {
                     $duk->push_perl($val);
                 }

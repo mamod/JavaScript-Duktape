@@ -66,19 +66,6 @@ sub test {
     print Dumper $t->fullname;
 }
 
-{ #cached
-    my $tr = $_;
-    my $t = $obj->new();
-    print Dumper $t->name;
-    # $t->setLast->($duk->cache(\&test));
-    # $t->setLast(\&test);
-
-    $t->setLast->(  $duk->cache(\&test) );
-
-    print Dumper $t->lastname('Mehyar2');
-    print Dumper $t->fullname;
-}
-
 test_stdout();
 
 __DATA__
@@ -87,11 +74,6 @@ undefined
 Mamod
 Mehyar2
 MamodMehyar
-$VAR1 = 'Mamod';
-$VAR1 = undef;
-$VAR1 = 'Mamod';
-$VAR1 = 'Mehyar2';
-$VAR1 = 'MamodMehyar';
 $VAR1 = 'Mamod';
 $VAR1 = undef;
 $VAR1 = 'Mamod';
