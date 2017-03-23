@@ -3,6 +3,8 @@ Revision history for Perl module JavaScript::Duktape
 2.1.2 2017 2017-03-19
 	- update duktape v2.0.2
 	- fix error message without messing with duktape stack
+	- fix strong references issue
+	- remove undocumented cache method
 	- code refactoring
 
 2.1.1 2017 2017-03-10
