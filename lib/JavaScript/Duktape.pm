@@ -151,7 +151,6 @@ sub new {
         return 1;
     };
 
-    weaken $self->{finalizer};
     weaken $GlobalRef;
 
     $duk->perl_push_function($self->{finalizer}, 1);
