@@ -6,11 +6,10 @@ use JavaScript::Duktape;
 use Test::More;
 use Data::Dumper;
 
-my $js = JavaScript::Duktape->new();
+my $js  = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
-
-$duk->eval_string(qq{
+$duk->eval_string(q{
     var ob = { a : {} };
     var a = { kk : {  nn : { hello : 'there' } }, mmm: undefined, xxx: null, x: null, f: {}, hi : function(){} };
     a.a = a;

@@ -5,7 +5,7 @@ use JavaScript::Duktape;
 use Test::More;
 use Data::Dumper;
 
-my $js = JavaScript::Duktape->new();
+my $js  = JavaScript::Duktape->new();
 my $duk = $js->duk;
 
 $js->set( pass => \&Test::More::pass );
@@ -22,7 +22,9 @@ $js->eval(q{
 my $obj = { a => {}, b => 9, num => 9 };
 my $obj2 = { x => $obj };
 $obj->{a}->{x} = $obj2;
-$obj->{b} = { sub => sub {  ok 1; } };
+$obj->{b} = {
+    sub => sub { ok 1; }
+};
 
 my $arr = [$obj];
 $arr->[1] = $arr;
