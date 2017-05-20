@@ -15,10 +15,10 @@ my $object = {
                         {
                             final => [
                                 {
-                                    num => 1,
+                                    num    => 1,
                                     string => 'string',
-                                    obj => {},
-                                    arr => []
+                                    obj    => {},
+                                    arr    => []
                                 }
                             ]
                         }
@@ -29,15 +29,18 @@ my $object = {
     ]
 };
 
-my $js = JavaScript::Duktape->new();
+my $js  = JavaScript::Duktape->new();
 my $duk = $js->duk;
-$duk->dump();
-$js->set('process', {});
-$js->set('process.test', {});
-$js->set('process.test.perl', sub {
-    my $obj = shift;
-    is_deeply $obj, $object;
-});
+
+$js->set( 'process',      {} );
+$js->set( 'process.test', {} );
+$js->set(
+    'process.test.perl',
+    sub {
+        my $obj = shift;
+        is_deeply $obj, $object;
+    }
+);
 
 $duk->eval_string('process.test.perl');
 $duk->push_perl($object);
