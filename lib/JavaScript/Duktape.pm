@@ -341,7 +341,7 @@ sub push_perl {
             $stash->{$val} = $self->get_heapptr(-1);
             while (my ($k, $v) = each %{$val}) {
                 $self->push_string($k);
-                if ( $stash->{$v} ){
+                if ( $v && $stash->{$v} ){
                     $self->push_heapptr( $stash->{$v} );
                 } else {
                     $self->push_perl($v, $stash);
@@ -398,8 +398,8 @@ sub to_perl_object {
 sub to_perl {
     my $self = shift;
     my $index = shift;
-    my $prev = shift;
-    my $ret;
+    my $stash = shift || {};
+    my $ret = shift;
 
     my $type = $self->get_type($index);
 
@@ -441,29 +441,33 @@ sub to_perl {
         }
 
         my $isArray = $self->is_array($index);
-        $ret = $isArray ? [] : {};
+
+        my $heapptr = $self->require_heapptr($index);
+        if ( $stash->{$heapptr} ){
+            $ret = $stash->{$heapptr};
+        } else {
+            $ret = $isArray ? [] : {};
+            $stash->{$heapptr} = $ret;
+        }
+
         $self->enum($index, JavaScript::Duktape::DUK_ENUM_OWN_PROPERTIES_ONLY);
 
         while ($self->next(-1, 1)) {
             my ($key, $val);
 
-            #I'm not sure why I need to
-            #substract 4 from stack top!!
-            my $top = $self->get_top() - 4;
-
             $key = $self->to_perl(-2);
-            my $found = 0;
-            while ($top--){
-                last if $top == -1;
-                if ($self->strict_equals(-1, $top)){
-                    $found = 1;
-                    $val = defined $prev ? $prev : $ret;
-                    last;
+
+            if ( $self->get_type(-1) == JavaScript::Duktape::DUK_TYPE_OBJECT ) {
+                my $heapptr = $self->get_heapptr(-1);
+                if ( $stash->{$heapptr} ){
+                    $val = $stash->{$heapptr};
+                } else {
+                    $val = $self->to_perl(-1, $stash);
                 }
             }
-
-            ##no circular object found
-            $val = $self->to_perl(-1, $ret) if !$found;
+            else {
+                $val = $self->to_perl(-1);
+            }
 
             $self->pop_n(2);
 

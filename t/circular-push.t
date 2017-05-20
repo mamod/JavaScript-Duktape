@@ -40,5 +40,6 @@ my $retObject = $duk->to_perl(-1);
 ok ref $retObject->{b}->{sub} eq 'CODE';
 is $retObject->{num}, 9;
 is $retObject->{arr}->[0], $retObject;
+is $retObject->{arr}, $retObject->{arr}->[1];
 
-done_testing(6);
+done_testing(7);
