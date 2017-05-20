@@ -305,6 +305,7 @@ sub pv_address { unpack($ptr_format, pack("p", $_[0])) }
 sub push_perl {
     my $self = shift;
     my $val = shift;
+    my $stash = shift || {};
 
     if (my $ref = ref $val){
         if ($ref eq 'JavaScript::Duktape::NULL'){
@@ -320,19 +321,31 @@ sub push_perl {
         }
 
         elsif ($ref eq 'ARRAY'){
+            $self->dump();
             my $arr_idx = $self->push_array();
+            $stash->{$val} = $self->get_heapptr(-1);
             my $len = scalar @{$val};
             for (my $idx = 0; $idx < $len; $idx++) {
-                $self->push_perl($val->[$idx]);
+                if ( $stash->{ $val->[$idx] } ){
+                    $self->push_heapptr( $stash->{ $val->[$idx] } );
+                }
+                else {
+                    $self->push_perl($val->[$idx], $stash);
+                }
                 $self->put_prop_index($arr_idx, $idx);
             }
         }
 
         elsif ($ref eq 'HASH'){
             $self->push_object();
+            $stash->{$val} = $self->get_heapptr(-1);
             while (my ($k, $v) = each %{$val}) {
                 $self->push_string($k);
-                $self->push_perl($v);
+                if ( $stash->{$v} ){
+                    $self->push_heapptr( $stash->{$v} );
+                } else {
+                    $self->push_perl($v, $stash);
+                }
                 $self->put_prop(-3);
             }
         }
