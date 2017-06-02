@@ -183,14 +183,14 @@ void fatal_handler (void *udata, const char *msg) {
 /**
   * new
 ******************************************************************************/
-SV *perl_duk_new(const char *classname, size_t max_memory) {
+SV *perl_duk_new(const char *classname, size_t max_memory, int timeout) {
     duk_context *ctx;
     SV          *obj;
     SV          *obj_ref;
 
     perlDuk *duk = malloc(sizeof(*duk));
     duk->ctx = NULL;
-    duk->timeout = 0;
+    duk->timeout = timeout;
     duk->max_memory = max_memory;
     duk->total_allocated = 0;
 

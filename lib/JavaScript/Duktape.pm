@@ -134,15 +134,20 @@ sub new {
     my %options = @_;
 
     my $max_memory = $options{max_memory} || 0;
+    my $timeout    = $options{timeout} || 0;
+
+    if ($timeout){
+        croak "timeout option must be a number" if !JavaScript::Duktape::Vm::duk_sv_is_number( $timeout );
+    }
 
     if ( $max_memory ){
-        croak "max_memory option should be a number" if !JavaScript::Duktape::Vm::duk_sv_is_number( $max_memory );
+        croak "max_memory option must be a number" if !JavaScript::Duktape::Vm::duk_sv_is_number( $max_memory );
         croak "max_memory must be at least 256k (256 * 1024)" if $max_memory < 256 * 1024;
     }
 
     my $self  = bless {}, $class;
 
-    my $duk   = $self->{duk} = JavaScript::Duktape::Vm->perl_duk_new( $max_memory );
+    my $duk   = $self->{duk} = JavaScript::Duktape::Vm->perl_duk_new( $max_memory, $timeout );
 
     $self->{pid} = $$;
     $self->{max_memory} = $max_memory;
