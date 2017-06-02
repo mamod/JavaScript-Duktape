@@ -5,15 +5,13 @@ use JavaScript::Duktape;
 use Data::Dumper;
 use Test::More;
 
-my $js  = JavaScript::Duktape->new();
+my $js  = JavaScript::Duktape->new( timeout => 1 );
 
 my $time = 0;
 $js->set( reset => sub { $time = time() } );
 $js->set( check => sub { if (time - $time > 3) { die "died from perl" } } );
 
 my $duk = $js->duk;
-
-$js->set_timeout(1);
 
 eval {
     $js->eval(q{
