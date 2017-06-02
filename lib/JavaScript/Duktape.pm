@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util qw( weaken );
-our $VERSION = '2.1.5';
+our $VERSION = '2.2.0';
 
 my $GlobalRef = {};
 
@@ -131,9 +131,21 @@ use constant {
 
 sub new {
     my $class = shift;
+    my %options = @_;
+
+    my $max_memory = $options{max_memory} || 0;
+
+    if ( $max_memory ){
+        croak "max_memory option should be a number" if !JavaScript::Duktape::Vm::duk_sv_is_number( $max_memory );
+        croak "max_memory must be at least 256k (256 * 1024)" if $max_memory < 256 * 1024;
+    }
+
     my $self  = bless {}, $class;
-    my $duk   = $self->{duk} = JavaScript::Duktape::Vm->perl_duk_new();
+
+    my $duk   = $self->{duk} = JavaScript::Duktape::Vm->perl_duk_new( $max_memory );
+
     $self->{pid} = $$;
+    $self->{max_memory} = $max_memory;
 
     # Initialize global stash 'PerlGlobalStash'
     # this will be used to store some perl refs
@@ -240,17 +252,28 @@ sub eval {
 sub vm  { shift->{duk}; }
 sub duk { shift->{duk}; }
 
+sub set_timeout {
+    my $self = shift;
+    $self->duk->set_timeout( shift );
+}
+
+sub resize_memory {
+    my $self = shift;
+    $self->duk->resize_memory( shift );
+}
+
 sub destroy {
     local $@;
     my $self = shift;
     my $duk  = delete $self->{duk};
     return if !$duk;
+    $duk->free_perl_duk();
     $duk->destroy_heap();
 }
 
 sub DESTROY {
     my $self = shift;
-    if ( $self->{pid} == $$ ) {
+    if ( $self->{pid} && $self->{pid} == $$ ) {
         $self->destroy();
     }
 }
@@ -278,11 +301,11 @@ BEGIN {
       : _get_path('duktape.so');
 }
 
-use Inline C => config => typemaps => _get_path('typemap'),
-  INC        => '-I' . _get_path('../C') . ' -I' . _get_path('../C/lib');
-
-# myextlib => $Duklib,
-# LIBS     => '-L'. JavaScript::Duktape::C::libPath::getPath('../C') . ' -lduktape';
+use Inline C => config =>
+    typemaps => _get_path('typemap'),
+    INC      => '-I' . _get_path('../C') . ' -I' .  _get_path('../C/lib');
+    # myextlib => $Duklib,
+    # LIBS     => '-L'. _get_path('../C/lib') . ' -lduktape';
 
 use Inline C => _get_path('duk_perl.c');
 
@@ -608,6 +631,24 @@ sub safe_call {
 
     eval { $ret = $self->perl_duk_safe_call( $safe, @_ ) };
     return defined $ret ? $ret : 1;
+}
+
+sub set_timeout {
+    my $self = shift;
+    my $timeout = shift;
+
+    croak "timeout must be a number" if !duk_sv_is_number($timeout);
+    $self->perl_duk_set_timeout($timeout);
+}
+
+sub resize_memory {
+    my $self = shift;
+    my $max_memory = shift || 0;
+
+    croak "max_memory should be a number" if !duk_sv_is_number( $max_memory );
+    croak "max_memory must be at least 256k (256 * 1024)" if $max_memory < 256 * 1024;
+
+    $self->perl_duk_resize_memory($max_memory);
 }
 
 ##############################################
