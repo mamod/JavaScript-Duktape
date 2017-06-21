@@ -350,7 +350,6 @@ sub push_perl {
         }
 
         elsif ( $ref eq 'ARRAY' ) {
-            $self->dump();
             my $arr_idx = $self->push_array();
             $stash->{$val} = $self->get_heapptr(-1);
             my $len = scalar @{$val};
