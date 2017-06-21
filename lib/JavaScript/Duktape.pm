@@ -979,6 +979,8 @@ package JavaScript::Duktape::Util;
 1;
 
 __END__
+=encoding utf-8
+
 =head1 NAME
 
 JavaScript::Duktape - Perl interface to Duktape embeddable javascript engine
@@ -1032,7 +1034,7 @@ setting number below 256k will croak.
     max_memory => 256 * 1024 * 2
 
 You can resize the memory allowed to consume on different executions by calling
-C<resize_memory> method, see L<Sandboxing> section below.
+C<resize_memory> method, see L</Sandboxing> section below.
 
 =item timout
 
@@ -1047,7 +1049,7 @@ You can override this value later on another code evaluation by calling C<set_ti
 
     $js->set_timeout(25);
 
-See L<Sandboxing> section below
+See L</Sandboxing> section below
 
 =back
 
