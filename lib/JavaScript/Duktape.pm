@@ -1364,6 +1364,12 @@ See C<examples/this.pl>
 
 =back
 
+=head1 DEAFULT JAVASCRIPT FUNCTIONS
+
+JavaScript::Duktape has C<alert> and C<print> functions available as global
+functions to javascript, where C<alert> prints to STDERR and C<print> prints
+to STDOUT.
+
 =head1 CAVEATS
 
 =head2 VM methods
