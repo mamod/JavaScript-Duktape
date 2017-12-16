@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util qw( weaken );
-our $VERSION = '2.4.0';
+our $VERSION = '2.4.1';
 
 my $GlobalRef = {};
 
@@ -295,7 +295,7 @@ use Carp;
 my $Duklib;
 
 my $BOOL_PACKAGES = {
-    'Javascript::Duktape::Bool'  => 1,
+    'JavaScript::Duktape::Bool'  => 1,
     'boolean'                    => 1,
     'JSON::PP::Boolean'          => 1,
     'JSON::Tiny::_Bool'          => 1,
