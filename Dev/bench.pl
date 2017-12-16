@@ -75,26 +75,6 @@ my $count = 25000;
         });
         print_results("calling function", $t);
     }
-
-    { #setting functions
-        my $o = $obj->new();
-        my $i = 0;
-
-        $o->setfunc($duk->cache( sub {
-            # print Dumper \@_;
-            # print "cool\n";
-
-            # print "cool\n";
-            return 88;
-        }));
-
-        my $t = timeit($count, sub{
-            # my $n = $o->fn($i++, 7);
-            my $result = $o->testcall(1,3);
-            # print $result, "\n";
-        });
-        print_results("calling cached function", $t);
-    }
 }
 
 my @results;
