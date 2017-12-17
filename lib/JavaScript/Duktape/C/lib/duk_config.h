@@ -3669,6 +3669,16 @@ typedef struct duk_hthread duk_context;
 #error unsupported: byte order detection failed
 #endif  /* defined(DUK_USE_BYTEORDER) */
 
+/* JavaScript::Duktape custom configs */
+
+#if defined(__MINGW32__) || defined(__MINGW64__)
+/* Use __builtin_setjmp, for MinGW gcc, as per */
+/* http://www.agardner.me/golang/windows/cgo/64-bit/setjmp/longjmp/2016/02/29/go-windows-setjmp-x86.html */
+#define DUK_JMPBUF_TYPE       jmp_buf
+#define DUK_SETJMP(jb)        __builtin_setjmp((jb))
+#define DUK_LONGJMP(jb)       __builtin_longjmp((jb), 1)
+#endif
+
 int perl_duk_exec_timeout( void *udata );
 #define DUK_USE_INTERRUPT_COUNTER
 #define DUK_USE_EXEC_TIMEOUT_CHECK perl_duk_exec_timeout

@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util qw( weaken );
-our $VERSION = '2.4.1';
+our $VERSION = '2.4.2';
 
 my $GlobalRef = {};
 
@@ -1473,6 +1473,8 @@ or suggestions
 =item * Viacheslav Tykhanovskyi L<@vti|https://github.com/vti>
 
 =item * Slaven Rezić L<@eserte|https://github.com/eserte>
+
+=item * Max Maischein L<@Corion|https://github.com/Corion>
 
 =back
 
