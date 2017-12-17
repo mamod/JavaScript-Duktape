@@ -1,5 +1,8 @@
 Revision history for Perl module JavaScript::Duktape
 
+2.4.2 2017 2017-12-17
+	- fix MinGW build (Max Maischein)
+
 2.4.1 2017 2017-12-16
 	- patch release: fix package name
 
