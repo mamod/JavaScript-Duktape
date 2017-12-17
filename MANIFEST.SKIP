@@ -15,5 +15,6 @@ Dev
 tests
 README.md
 .travis.yml
+appveyor.yml
 ex/
 _Inline/
