@@ -327,6 +327,13 @@
 /* MinGW.  Also GCC flags (DUK_F_GCC) are enabled now. */
 #if defined(__MINGW32__) || defined(__MINGW64__)
 #define DUK_F_MINGW
+
+/* Use __builtin_setjmp, for MinGW gcc, as per */
+/* http://www.agardner.me/golang/windows/cgo/64-bit/setjmp/longjmp/2016/02/29/go-windows-setjmp-x86.html */
+
+#define DUK_JMPBUF_TYPE       jmp_buf
+#define DUK_SETJMP(jb)        __builtin_setjmp((jb))
+#define DUK_LONGJMP(jb)       __builtin_longjmp((jb), 1)
 #endif
 
 /* MSVC */
