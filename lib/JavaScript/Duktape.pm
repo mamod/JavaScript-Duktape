@@ -1474,6 +1474,8 @@ or suggestions
 
 =item * Slaven Rezić L<@eserte|https://github.com/eserte>
 
+=item * Max Maischein L<@Corion|https://github.com/Corion>
+
 =back
 
 =head1 APPRECIATION
