@@ -9,57 +9,15 @@
 #include <stdlib.h>
 
 #define NEED_newRV_noinc
-#define DUKTAPE_DONT_LOAD_SHARED
+#define PERL_DUKTAPE
 
-
-#include "./lib/duktape.c"
+#include "duk_perl.h"
 #include "./lib/module-duktape/duk_module_duktape.c"
 #include "./lib/print-alert/duk_print_alert.c"
-#include "duk_perl.h"
 
 #ifndef Newx
 #  define Newx(v,n,t) New(0,v,n,t)
 #endif
-
-
-
-typedef struct {
-    /* The double value in the union is there to ensure alignment is
-     * good for IEEE doubles too.  In many 32-bit environments 4 bytes
-     * would be sufficiently aligned and the double value is unnecessary.
-     */
-    union {
-        size_t sz;
-        double d;
-    } u;
-} perlDukMemHdr;
-
-typedef struct {
-    int timeout;
-    size_t max_memory;
-    size_t total_allocated;
-    duk_context *ctx;
-} perlDuk;
-
-
-
-/**
-  * perl_duk_exec_timeout
-******************************************************************************/
-int perl_duk_exec_timeout( void *udata ) {
-    perlDuk *duk = (perlDuk *) udata;
-    int timeout = duk->timeout;
-
-    if (timeout > 0){
-        clock_t uptime = clock();
-        int passed_time = (int)(uptime / CLOCKS_PER_SEC);
-        if (passed_time > timeout){
-            return 1;
-        }
-    }
-    return 0;
-}
-
 
 
 /**

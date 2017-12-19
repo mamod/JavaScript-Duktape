@@ -2694,15 +2694,15 @@ typedef struct duk_hthread duk_context;
 
 #if !defined(DUK_BSWAP32)
 #define DUK_BSWAP32(x) \
-	((((duk_uint32_t) (x)) >> 24) | \
-	 ((((duk_uint32_t) (x)) >> 8) & 0xff00UL) | \
-	 ((((duk_uint32_t) (x)) << 8) & 0xff0000UL) | \
-	 (((duk_uint32_t) (x)) << 24))
+    ((((duk_uint32_t) (x)) >> 24) | \
+     ((((duk_uint32_t) (x)) >> 8) & 0xff00UL) | \
+     ((((duk_uint32_t) (x)) << 8) & 0xff0000UL) | \
+     (((duk_uint32_t) (x)) << 24))
 #endif
 #if !defined(DUK_BSWAP16)
 #define DUK_BSWAP16(x) \
-	((duk_uint16_t) (x) >> 8) | \
-	((duk_uint16_t) (x) << 8)
+    ((duk_uint16_t) (x) >> 8) | \
+    ((duk_uint16_t) (x) << 8)
 #endif
 
 /* DUK_USE_VARIADIC_MACROS: required from compilers, so no fill-in. */
@@ -3061,7 +3061,7 @@ typedef struct duk_hthread duk_context;
 /* External provider already defined. */
 #elif defined(DUK_USE_DATE_FMT_STRFTIME)
 #define DUK_USE_DATE_FORMAT_STRING(ctx,parts,tzoffset,flags) \
-	duk_bi_date_format_parts_strftime((ctx), (parts), (tzoffset), (flags))
+    duk_bi_date_format_parts_strftime((ctx), (parts), (tzoffset), (flags))
 #else
 /* No provider for DUK_USE_DATE_FORMAT_STRING(), fall back to ISO 8601 only. */
 #endif
@@ -3669,18 +3669,25 @@ typedef struct duk_hthread duk_context;
 #error unsupported: byte order detection failed
 #endif  /* defined(DUK_USE_BYTEORDER) */
 
+#endif  /* DUK_CONFIG_H_INCLUDED */
+
+
 /* JavaScript::Duktape custom configs */
+#ifndef PERL_DUKTAPE
+#define PERL_DUKTAPE
+int perl_duk_exec_timeout( void *udata ) {
+    int timeout = *((int*) udata);
 
-#if defined(__MINGW32__) || defined(__MINGW64__)
-/* Use __builtin_setjmp, for MinGW gcc, as per */
-/* http://www.agardner.me/golang/windows/cgo/64-bit/setjmp/longjmp/2016/02/29/go-windows-setjmp-x86.html */
-#define DUK_JMPBUF_TYPE       jmp_buf
-#define DUK_SETJMP(jb)        __builtin_setjmp((jb))
-#define DUK_LONGJMP(jb)       __builtin_longjmp((jb), 1)
-#endif
+    if (timeout > 0){
+        clock_t uptime = clock();
+        int passed_time = (int)(uptime / CLOCKS_PER_SEC);
+        if (passed_time > timeout){
+            return 1;
+        }
+    }
+    return 0;
+}
 
-int perl_duk_exec_timeout( void *udata );
 #define DUK_USE_INTERRUPT_COUNTER
 #define DUK_USE_EXEC_TIMEOUT_CHECK perl_duk_exec_timeout
-
-#endif  /* DUK_CONFIG_H_INCLUDED */
+#endif

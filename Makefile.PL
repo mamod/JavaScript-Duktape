@@ -1,5 +1,13 @@
+use lib './lib';
 use strict;
 use ExtUtils::MakeMaker;
+use Config;
+
+use JavaScript::Duktape::C::libPath;
+sub _get_path { &JavaScript::Duktape::C::libPath::getPath }
+
+my $cc = $Config{cc} || 'gcc';
+system( $cc . ' -c -fPIC ' . _get_path('/lib/duktape.c') . ' -o ' . _get_path('duktape.o')) && die $!;
 
 WriteMakefile(
     NAME           => 'JavaScript::Duktape',

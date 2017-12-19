@@ -292,8 +292,6 @@ use Config qw( %Config );
 use JavaScript::Duktape::C::libPath;
 use Carp;
 
-my $Duklib;
-
 my $BOOL_PACKAGES = {
     'JavaScript::Duktape::Bool'  => 1,
     'boolean'                    => 1,
@@ -307,18 +305,12 @@ BEGIN {
     require $FunctionsMap;
 
     sub _get_path { &JavaScript::Duktape::C::libPath::getPath }
-
-    $Duklib =
-      $^O eq 'MSWin32'
-      ? _get_path('duktape.dll')
-      : _get_path('duktape.so');
 }
 
 use Inline C => config =>
     typemaps => _get_path('typemap'),
-    INC      => '-I' . _get_path('../C') . ' -I' .  _get_path('../C/lib');
-    # myextlib => $Duklib,
-    # LIBS     => '-L'. _get_path('../C/lib') . ' -lduktape';
+    INC      => '-I' . _get_path('../C') . ' -I' .  _get_path('../C/lib'),
+    myextlib => _get_path('duktape.o');
 
 use Inline C => _get_path('duk_perl.c');
 
