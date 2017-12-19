@@ -3675,6 +3675,9 @@ typedef struct duk_hthread duk_context;
 /* JavaScript::Duktape custom configs */
 #ifndef PERL_DUKTAPE
 #define PERL_DUKTAPE
+
+#include <time.h>
+
 int perl_duk_exec_timeout( void *udata ) {
     int timeout = *((int*) udata);
 
