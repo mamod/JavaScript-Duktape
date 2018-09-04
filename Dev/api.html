@@ -114,6 +114,7 @@ WebFontConfig = {
 <li><a href="#duk_del_prop">duk_del_prop</a></li>
 <li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
 <li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
 <li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
 <li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
 <li><a href="#duk_destroy_heap">duk_destroy_heap</a></li>
@@ -152,6 +153,8 @@ WebFontConfig = {
 <li><a href="#duk_get_current_magic">duk_get_current_magic</a></li>
 <li><a href="#duk_get_error_code">duk_get_error_code</a></li>
 <li><a href="#duk_get_finalizer">duk_get_finalizer</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
 <li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
 <li><a href="#duk_get_global_string">duk_get_global_string</a></li>
 <li><a href="#duk_get_heapptr">duk_get_heapptr</a></li>
@@ -172,6 +175,7 @@ WebFontConfig = {
 <li><a href="#duk_get_prop_desc">duk_get_prop_desc</a></li>
 <li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
 <li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
 <li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
 <li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
 <li><a href="#duk_get_prototype">duk_get_prototype</a></li>
@@ -186,6 +190,7 @@ WebFontConfig = {
 <li><a href="#duk_has_prop">duk_has_prop</a></li>
 <li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
 <li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
 <li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
 <li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
 <li><a href="#duk_hex_decode">duk_hex_decode</a></li>
@@ -289,8 +294,10 @@ WebFontConfig = {
 <li><a href="#duk_push_heap_stash">duk_push_heap_stash</a></li>
 <li><a href="#duk_push_heapptr">duk_push_heapptr</a></li>
 <li><a href="#duk_push_int">duk_push_int</a></li>
+<li><a href="#duk_push_literal">duk_push_literal</a></li>
 <li><a href="#duk_push_lstring">duk_push_lstring</a></li>
 <li><a href="#duk_push_nan">duk_push_nan</a></li>
+<li><a href="#duk_push_new_target">duk_push_new_target</a></li>
 <li><a href="#duk_push_null">duk_push_null</a></li>
 <li><a href="#duk_push_number">duk_push_number</a></li>
 <li><a href="#duk_push_object">duk_push_object</a></li>
@@ -307,14 +314,18 @@ WebFontConfig = {
 <li><a href="#duk_push_undefined">duk_push_undefined</a></li>
 <li><a href="#duk_push_vsprintf">duk_push_vsprintf</a></li>
 <li><a href="#duk_put_function_list">duk_put_function_list</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
 <li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
 <li><a href="#duk_put_global_string">duk_put_global_string</a></li>
 <li><a href="#duk_put_number_list">duk_put_number_list</a></li>
 <li><a href="#duk_put_prop">duk_put_prop</a></li>
 <li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
 <li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
 <li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
 <li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
+<li><a href="#duk_random">duk_random</a></li>
 <li><a href="#duk_range_error">duk_range_error</a></li>
 <li><a href="#duk_range_error_va">duk_range_error_va</a></li>
 <li><a href="#duk_realloc">duk_realloc</a></li>
@@ -395,8 +406,8 @@ WebFontConfig = {
 <li><a href="#duk_xcopy_top">duk_xcopy_top</a></li>
 <li><a href="#duk_xmove_top">duk_xmove_top</a></li>
 </ul></div> <!-- site-middle-nav -->
-<div class="content" id="site-middle-content"><div class="main-title"><strong>Duktape API</strong></div><hr/><h1 class="sectiontitle" id="introduction">Introduction <a class="sectionlink" href="#introduction">§</a></h1><p>Version: 2.2.0 (2017-09-23)</p><h2 class="sectiontitle" id="introduction.1">Document scope <a class="sectionlink" href="#introduction.1">§</a></h2><p>The Duktape API (defined in <code>duktape.h</code>) is a set of constants
-and API calls which allows C/C++ programs to interface with Ecmascript
+<div class="content" id="site-middle-content"><div class="main-title"><strong>Duktape API</strong></div><hr/><h1 class="sectiontitle" id="introduction">Introduction <a class="sectionlink" href="#introduction">§</a></h1><p>Version: 2.3.0 (2018-08-04)</p><h2 class="sectiontitle" id="introduction.1">Document scope <a class="sectionlink" href="#introduction.1">§</a></h2><p>The Duktape API (defined in <code>duktape.h</code>) is a set of constants
+and API calls which allows C/C++ programs to interface with ECMAScript
 code and shields them from internal details like value representation.
 </p><p>This document provides a concise reference for the Duktape API and
 its core concepts.  If you're new to Duktape, please read the
@@ -436,7 +447,7 @@ be anywhere in the stack:</p><div class="stack-wrapper"> <span class="stack"> <s
 or symbolic value in parenthesis:</p><div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val(index)</span> <span class="elem active">val(index+1)</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="stack-comment"></span> </div><p>Stack transformation is represented with an arrow and two stacks:</p><div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="elem active">key</span> <span class="elem active">value</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="stack-comment"></span> </div><hr/><h1 class="sectiontitle" id="concepts">Concepts <a class="sectionlink" href="#concepts">§</a></h1><h2 class="sectiontitle" id="concepts.1">Heap <a class="sectionlink" href="#concepts.1">§</a></h2><p>A single region for garbage collection.  Shared by one or more
 contexts.</p><h2 class="sectiontitle" id="concepts.2">Context <a class="sectionlink" href="#concepts.2">§</a></h2><p>A handle used in the Duktape API, associated with a Duktape thread
 (coroutine) and its call and value stacks.</p><h2 class="sectiontitle" id="concepts.3">Call stack (of a context) <a class="sectionlink" href="#concepts.3">§</a></h2><p>Book-keeping of the active function call chain of a context.
-Includes both Ecmascript and Duktape/C function calls.</p><h2 class="sectiontitle" id="concepts.4">Value stack (of a context) <a class="sectionlink" href="#concepts.4">§</a></h2><p>Storage for tagged values belonging to current activations in a
+Includes both ECMAScript and Duktape/C function calls.</p><h2 class="sectiontitle" id="concepts.4">Value stack (of a context) <a class="sectionlink" href="#concepts.4">§</a></h2><p>Storage for tagged values belonging to current activations in a
 context's call stack.</p><p>The values kept in a value stack are traditional tagged <a href="#stack-type">types</a>.
 Stack entries are indexed either from the bottom (&gt;= 0) or from the top
 (&lt; 0) of the most recent function call.
@@ -481,21 +492,21 @@ conveniently:</p><pre class="c-code"><span class="keyword">if</span><span class=
 <span class="normal">                                 DUK_TYPE_MASK_OBJECT</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
 <span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"type is number, string, or object</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
 <span class="cbracket">}</span>
-</pre><h2 class="sectiontitle" id="concepts.8">Array index <a class="sectionlink" href="#concepts.8">§</a></h2><p>Ecmascript object and array keys can only be strings; this includes
+</pre><h2 class="sectiontitle" id="concepts.8">Array index <a class="sectionlink" href="#concepts.8">§</a></h2><p>ECMAScript object and array keys can only be strings; this includes
 array indices (0, 1, 2, ...) which are expressed as canonical string
 representations ("0", "1", "2", ...) of the respective numbers for all
 integers in the range [0, 2**32-1].  Conceptually any key used in a
 property lookup is first coerced to a string, so that <code>obj[123]</code>
 is really just a shorthand for <code>obj["123"]</code>.</p><p>Duktape tries to avoid explicit number-to-string conversions for array
 accesses whenever possible, so it is preferable to use numeric array
-indices in both Ecmascript code and C code using the Duktape API.</p><h2 class="sectiontitle" id="concepts.9">Duktape/C function <a class="sectionlink" href="#concepts.9">§</a></h2><p>A C function with a Duktape/C API signature can be associated with an
-Ecmascript function object or a lightfunc value, and gets called when
-the associated value is called from Ecmascript code.  Example:</p><pre class="c-code"><span class="type">int</span><span class="normal"> </span><span class="function">my_func</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+indices in both ECMAScript code and C code using the Duktape API.</p><h2 class="sectiontitle" id="concepts.9">Duktape/C function <a class="sectionlink" href="#concepts.9">§</a></h2><p>A C function with a Duktape/C API signature can be associated with an
+ECMAScript function object or a lightfunc value, and gets called when
+the associated value is called from ECMAScript code.  Example:</p><pre class="c-code"><span class="type">int</span><span class="normal"> </span><span class="function">my_func</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
 <span class="normal">    </span><span class="function">duk_push_int</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">123</span><span class="symbol">);</span>
 <span class="normal">    </span><span class="keyword">return</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
 <span class="cbracket">}</span>
 </pre><p>Argument count given in value stack is specified when the corresponding
-Ecmascript function object is created: either a fixed number of arguments
+ECMAScript function object is created: either a fixed number of arguments
 of <code>DUK_VARARGS</code> for getting arguments "as is".  Extra arguments
 are dropped and missing arguments padded with <code>undefined</code> as necessary.
 Use <code><a href="#duk_get_top">duk_get_top()</a></code> to determine number of
@@ -514,8 +525,8 @@ actual arguments.
 <span class="normal">    </span><span class="comment">/* ... */</span>
 <span class="cbracket">}</span>
 </pre><h2 class="sectiontitle" id="concepts.10">Stashes <a class="sectionlink" href="#concepts.10">§</a></h2><p>A stash is an object reachable from C code using the Duktape/C API, but
-which is unreachable from Ecmascript code.  Stashes allow C code to store
-internal state which can be safely isolated from Ecmascript code.  There are
+which is unreachable from ECMAScript code.  Stashes allow C code to store
+internal state which can be safely isolated from ECMAScript code.  There are
 three stashes:</p><ul>
 <li>Heap stash: shared by all threads in the same heap.</li>
 <li>Global stash: shared by all threads which share a global object.</li>
@@ -525,7 +536,7 @@ three stashes:</p><ul>
 reorganized for readability.  Don't rely on specific define values, only
 the define names.  When in doubt, consult the header directly.</p><h2 class="sectiontitle" id="defines.1">Duktape version <a class="sectionlink" href="#defines.1">§</a></h2><p>Duktape version is available through the <code>DUK_VERSION</code> define,
 with the numeric value <code>(major * 10000 + minor * 100 + patch)</code>.
-The same value is available to Ecmascript code through <code>Duktape.version</code>.
+The same value is available to ECMAScript code through <code>Duktape.version</code>.
 For example, version 1.2.3 would have <code>DUK_VERSION</code> and
 <code>Duktape.version</code> set to 10203.  For pre-releases <code>DUK_VERSION</code>
 is one less than the actual release, e.g. 1199 for a 0.12.0 pre-release and 10299
@@ -546,7 +557,7 @@ version information, e.g. "v1.0.0-155-g5b7ef1f-dirty".</td>
 <td>Branch where the distributable was built from.  This is useful to
 identify prototypes built from a development branch.</td>
 </tr>
-</table><p>There are no equivalent defines in the Ecmascript environment.</p><h2 class="sectiontitle" id="defines.3">Debug protocol version <a class="sectionlink" href="#defines.3">§</a></h2><p>Debug protocol version number:</p><table>
+</table><p>There are no equivalent defines in the ECMAScript environment.</p><h2 class="sectiontitle" id="defines.3">Debug protocol version <a class="sectionlink" href="#defines.3">§</a></h2><p>Debug protocol version number:</p><table>
 <tr>
 <td><code>DUK_DEBUG_PROTOCOL_VERSION</code></td>
 <td>Version number of the debug protocol (a single integer)</td>
@@ -1153,17 +1164,38 @@ values:</p><table>
 <li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
 <li><a href="#duk_require_object">duk_require_object</a></li>
 <li><a href="#duk_seal">duk_seal</a></li>
+</ul><h2 class="sectiontitle" id="taglist-2.3.0">2.3.0 <a class="sectionlink" href="#taglist-2.3.0">§</a></h2><ul class="taglist">
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+<li><a href="#duk_push_literal">duk_push_literal</a></li>
+<li><a href="#duk_push_new_target">duk_push_new_target</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
+<li><a href="#duk_random">duk_random</a></li>
+</ul><h2 class="sectiontitle" id="taglist-base64">base64 <a class="sectionlink" href="#taglist-base64">§</a></h2><ul class="taglist">
+<li><a href="#duk_base64_decode">duk_base64_decode</a></li>
+<li><a href="#duk_base64_encode">duk_base64_encode</a></li>
 </ul><h2 class="sectiontitle" id="taglist-borrowed">borrowed <a class="sectionlink" href="#taglist-borrowed">§</a></h2><ul class="taglist">
+<li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
 <li><a href="#duk_get_context">duk_get_context</a></li>
 <li><a href="#duk_get_context_default">duk_get_context_default</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
 <li><a href="#duk_get_heapptr">duk_get_heapptr</a></li>
 <li><a href="#duk_get_heapptr_default">duk_get_heapptr_default</a></li>
+<li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
+<li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
 <li><a href="#duk_opt_context">duk_opt_context</a></li>
 <li><a href="#duk_opt_heapptr">duk_opt_heapptr</a></li>
 <li><a href="#duk_push_current_thread">duk_push_current_thread</a></li>
 <li><a href="#duk_push_heapptr">duk_push_heapptr</a></li>
 <li><a href="#duk_push_thread">duk_push_thread</a></li>
 <li><a href="#duk_push_thread_new_globalenv">duk_push_thread_new_globalenv</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
+<li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
 <li><a href="#duk_require_context">duk_require_context</a></li>
 <li><a href="#duk_require_heapptr">duk_require_heapptr</a></li>
 </ul><h2 class="sectiontitle" id="taglist-buffer">buffer <a class="sectionlink" href="#taglist-buffer">§</a></h2><ul class="taglist">
@@ -1282,9 +1314,13 @@ values:</p><table>
 <li><a href="#duk_uri_error">duk_uri_error</a></li>
 <li><a href="#duk_uri_error_va">duk_uri_error_va</a></li>
 </ul><h2 class="sectiontitle" id="taglist-experimental">experimental <a class="sectionlink" href="#taglist-experimental">§</a></h2><ul class="taglist">
-<li><a href="#duk_components_to_time">duk_components_to_time</a></li>
-<li><a href="#duk_get_now">duk_get_now</a></li>
-<li><a href="#duk_time_to_components">duk_time_to_components</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+<li><a href="#duk_push_literal">duk_push_literal</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
 </ul><h2 class="sectiontitle" id="taglist-finalizer">finalizer <a class="sectionlink" href="#taglist-finalizer">§</a></h2><ul class="taglist">
 <li><a href="#duk_get_finalizer">duk_get_finalizer</a></li>
 <li><a href="#duk_set_finalizer">duk_set_finalizer</a></li>
@@ -1303,6 +1339,7 @@ values:</p><table>
 <li><a href="#duk_push_c_lightfunc">duk_push_c_lightfunc</a></li>
 <li><a href="#duk_push_current_function">duk_push_current_function</a></li>
 <li><a href="#duk_push_current_thread">duk_push_current_thread</a></li>
+<li><a href="#duk_push_new_target">duk_push_new_target</a></li>
 <li><a href="#duk_push_this">duk_push_this</a></li>
 <li><a href="#duk_require_c_function">duk_require_c_function</a></li>
 <li><a href="#duk_set_magic">duk_set_magic</a></li>
@@ -1312,6 +1349,21 @@ values:</p><table>
 <li><a href="#duk_destroy_heap">duk_destroy_heap</a></li>
 <li><a href="#duk_gc">duk_gc</a></li>
 <li><a href="#duk_get_memory_functions">duk_get_memory_functions</a></li>
+</ul><h2 class="sectiontitle" id="taglist-heapptr">heapptr <a class="sectionlink" href="#taglist-heapptr">§</a></h2><ul class="taglist">
+<li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
+<li><a href="#duk_get_heapptr">duk_get_heapptr</a></li>
+<li><a href="#duk_get_heapptr_default">duk_get_heapptr_default</a></li>
+<li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
+<li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
+<li><a href="#duk_opt_heapptr">duk_opt_heapptr</a></li>
+<li><a href="#duk_push_heapptr">duk_push_heapptr</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
+<li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
+<li><a href="#duk_require_heapptr">duk_require_heapptr</a></li>
+</ul><h2 class="sectiontitle" id="taglist-hex">hex <a class="sectionlink" href="#taglist-hex">§</a></h2><ul class="taglist">
+<li><a href="#duk_hex_decode">duk_hex_decode</a></li>
+<li><a href="#duk_hex_encode">duk_hex_encode</a></li>
 </ul><h2 class="sectiontitle" id="taglist-inspect">inspect <a class="sectionlink" href="#taglist-inspect">§</a></h2><ul class="taglist">
 <li><a href="#duk_inspect_callstack_entry">duk_inspect_callstack_entry</a></li>
 <li><a href="#duk_inspect_value">duk_inspect_value</a></li>
@@ -1320,6 +1372,14 @@ values:</p><table>
 <li><a href="#duk_json_encode">duk_json_encode</a></li>
 </ul><h2 class="sectiontitle" id="taglist-lightfunc">lightfunc <a class="sectionlink" href="#taglist-lightfunc">§</a></h2><ul class="taglist">
 <li><a href="#duk_push_c_lightfunc">duk_push_c_lightfunc</a></li>
+</ul><h2 class="sectiontitle" id="taglist-literal">literal <a class="sectionlink" href="#taglist-literal">§</a></h2><ul class="taglist">
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+<li><a href="#duk_push_literal">duk_push_literal</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
 </ul><h2 class="sectiontitle" id="taglist-magic">magic <a class="sectionlink" href="#taglist-magic">§</a></h2><ul class="taglist">
 <li><a href="#duk_get_current_magic">duk_get_current_magic</a></li>
 <li><a href="#duk_get_magic">duk_get_magic</a></li>
@@ -1374,32 +1434,40 @@ values:</p><table>
 <li><a href="#duk_del_prop">duk_del_prop</a></li>
 <li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
 <li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
 <li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
 <li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
 <li><a href="#duk_enum">duk_enum</a></li>
 <li><a href="#duk_freeze">duk_freeze</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
 <li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
 <li><a href="#duk_get_global_string">duk_get_global_string</a></li>
 <li><a href="#duk_get_prop">duk_get_prop</a></li>
 <li><a href="#duk_get_prop_desc">duk_get_prop_desc</a></li>
 <li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
 <li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
 <li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
 <li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
 <li><a href="#duk_has_prop">duk_has_prop</a></li>
 <li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
 <li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
 <li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
 <li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
 <li><a href="#duk_next">duk_next</a></li>
 <li><a href="#duk_pcall_prop">duk_pcall_prop</a></li>
 <li><a href="#duk_put_function_list">duk_put_function_list</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
 <li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
 <li><a href="#duk_put_global_string">duk_put_global_string</a></li>
 <li><a href="#duk_put_number_list">duk_put_number_list</a></li>
 <li><a href="#duk_put_prop">duk_put_prop</a></li>
 <li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
 <li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
 <li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
 <li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
 <li><a href="#duk_seal">duk_seal</a></li>
@@ -1424,6 +1492,8 @@ values:</p><table>
 </ul><h2 class="sectiontitle" id="taglist-prototype">prototype <a class="sectionlink" href="#taglist-prototype">§</a></h2><ul class="taglist">
 <li><a href="#duk_get_prototype">duk_get_prototype</a></li>
 <li><a href="#duk_set_prototype">duk_set_prototype</a></li>
+</ul><h2 class="sectiontitle" id="taglist-random">random <a class="sectionlink" href="#taglist-random">§</a></h2><ul class="taglist">
+<li><a href="#duk_random">duk_random</a></li>
 </ul><h2 class="sectiontitle" id="taglist-sandbox">sandbox <a class="sectionlink" href="#taglist-sandbox">§</a></h2><ul class="taglist">
 <li><a href="#duk_def_prop">duk_def_prop</a></li>
 <li><a href="#duk_get_prop_desc">duk_get_prop_desc</a></li>
@@ -1551,8 +1621,10 @@ values:</p><table>
 <li><a href="#duk_push_heap_stash">duk_push_heap_stash</a></li>
 <li><a href="#duk_push_heapptr">duk_push_heapptr</a></li>
 <li><a href="#duk_push_int">duk_push_int</a></li>
+<li><a href="#duk_push_literal">duk_push_literal</a></li>
 <li><a href="#duk_push_lstring">duk_push_lstring</a></li>
 <li><a href="#duk_push_nan">duk_push_nan</a></li>
+<li><a href="#duk_push_new_target">duk_push_new_target</a></li>
 <li><a href="#duk_push_null">duk_push_null</a></li>
 <li><a href="#duk_push_number">duk_push_number</a></li>
 <li><a href="#duk_push_object">duk_push_object</a></li>
@@ -1630,22 +1702,50 @@ values:</p><table>
 </ul><h2 class="sectiontitle" id="taglist-string">string <a class="sectionlink" href="#taglist-string">§</a></h2><ul class="taglist">
 <li><a href="#duk_buffer_to_string">duk_buffer_to_string</a></li>
 <li><a href="#duk_char_code_at">duk_char_code_at</a></li>
+<li><a href="#duk_compile_lstring">duk_compile_lstring</a></li>
+<li><a href="#duk_compile_lstring_filename">duk_compile_lstring_filename</a></li>
+<li><a href="#duk_compile_string">duk_compile_string</a></li>
+<li><a href="#duk_compile_string_filename">duk_compile_string_filename</a></li>
 <li><a href="#duk_concat">duk_concat</a></li>
 <li><a href="#duk_decode_string">duk_decode_string</a></li>
+<li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
+<li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
+<li><a href="#duk_eval_lstring">duk_eval_lstring</a></li>
+<li><a href="#duk_eval_lstring_noresult">duk_eval_lstring_noresult</a></li>
+<li><a href="#duk_eval_string">duk_eval_string</a></li>
+<li><a href="#duk_eval_string_noresult">duk_eval_string_noresult</a></li>
+<li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
+<li><a href="#duk_get_global_string">duk_get_global_string</a></li>
 <li><a href="#duk_get_lstring">duk_get_lstring</a></li>
 <li><a href="#duk_get_lstring_default">duk_get_lstring_default</a></li>
+<li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
+<li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
 <li><a href="#duk_get_string">duk_get_string</a></li>
 <li><a href="#duk_get_string_default">duk_get_string_default</a></li>
+<li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
+<li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
 <li><a href="#duk_is_string">duk_is_string</a></li>
 <li><a href="#duk_is_symbol">duk_is_symbol</a></li>
 <li><a href="#duk_join">duk_join</a></li>
 <li><a href="#duk_map_string">duk_map_string</a></li>
 <li><a href="#duk_opt_lstring">duk_opt_lstring</a></li>
 <li><a href="#duk_opt_string">duk_opt_string</a></li>
+<li><a href="#duk_pcompile_lstring">duk_pcompile_lstring</a></li>
+<li><a href="#duk_pcompile_lstring_filename">duk_pcompile_lstring_filename</a></li>
+<li><a href="#duk_pcompile_string">duk_pcompile_string</a></li>
+<li><a href="#duk_pcompile_string_filename">duk_pcompile_string_filename</a></li>
+<li><a href="#duk_peval_lstring">duk_peval_lstring</a></li>
+<li><a href="#duk_peval_lstring_noresult">duk_peval_lstring_noresult</a></li>
+<li><a href="#duk_peval_string">duk_peval_string</a></li>
+<li><a href="#duk_peval_string_noresult">duk_peval_string_noresult</a></li>
 <li><a href="#duk_push_lstring">duk_push_lstring</a></li>
 <li><a href="#duk_push_sprintf">duk_push_sprintf</a></li>
 <li><a href="#duk_push_string">duk_push_string</a></li>
 <li><a href="#duk_push_vsprintf">duk_push_vsprintf</a></li>
+<li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
+<li><a href="#duk_put_global_string">duk_put_global_string</a></li>
+<li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
+<li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
 <li><a href="#duk_require_lstring">duk_require_lstring</a></li>
 <li><a href="#duk_require_string">duk_require_string</a></li>
 <li><a href="#duk_safe_to_lstring">duk_safe_to_lstring</a></li>
@@ -1773,6 +1873,7 @@ arbitrary garbage.</p>
 <a href="#duk_base64_decode"><span class="hidechar">.</span>duk_base64_decode()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
 <a class="apitag" href="#taglist-codec">codec</a>
+<a class="apitag" href="#taglist-base64">base64</a>
  <a class="sectionlink" href="#duk_base64_decode">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_base64_decode.1">Prototype <a class="sectionlink" href="#duk_base64_decode.1">§</a></h2>
@@ -1810,6 +1911,7 @@ If the input is invalid, throws an error.</p>
 <a href="#duk_base64_encode"><span class="hidechar">.</span>duk_base64_encode()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
 <a class="apitag" href="#taglist-codec">codec</a>
+<a class="apitag" href="#taglist-base64">base64</a>
  <a class="sectionlink" href="#duk_base64_encode">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_base64_encode.1">Prototype <a class="sectionlink" href="#duk_base64_encode.1">§</a></h2>
@@ -2324,7 +2426,7 @@ compacted.
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_compile.3">Summary <a class="sectionlink" href="#duk_compile.3">§</a></h2>
-<p>Compile Ecmascript source code and replace it with a compiled function
+<p>Compile ECMAScript source code and replace it with a compiled function
 object (the code is not executed).  The <code>filename</code> argument is stored
 as the <code>fileName</code> property of the resulting function, and is the name
 used in e.g. tracebacks to identify the function.  May throw a <code>SyntaxError</code>
@@ -2334,11 +2436,11 @@ internal limit errors, etc).</p>
 <table>
 <tr>
 <td>DUK_COMPILE_EVAL</td>
-<td>Compile the input as eval code instead of as an Ecmascript program</td>
+<td>Compile the input as eval code instead of as an ECMAScript program</td>
 </tr>
 <tr>
 <td>DUK_COMPILE_FUNCTION</td>
-<td>Compile the input as a function instead of as an Ecmascript program</td>
+<td>Compile the input as a function instead of as an ECMAScript program</td>
 </tr>
 <tr>
 <td>DUK_COMPILE_STRICT</td>
@@ -2353,14 +2455,14 @@ internal limit errors, etc).</p>
 <p>The source code being compiled may be:</p>
 <ul>
 <li>Global code: compiles into a function with zero arguments, which
-    executes like a top level Ecmascript program (default)</li>
+    executes like a top level ECMAScript program (default)</li>
 <li>Eval code: compiles into a function with zero arguments, which
-    executes like an Ecmascript <code>eval</code> call
+    executes like an ECMAScript <code>eval</code> call
     (flag <code>DUK_COMPILE_EVAL</code>)</li>
 <li>Function code: compiles into a function with zero or more arguments
     (flag <code>DUK_COMPILE_FUNCTION</code>)</li>
 </ul>
-<p>All of these have slightly different semantics in Ecmascript.  See
+<p>All of these have slightly different semantics in ECMAScript.  See
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-10.4">Establishing an Execution Context</a>
 for a detailed discussion.
 One major difference is that global and eval contexts have an implicit
@@ -2374,7 +2476,7 @@ eval expression:</p>
 <pre class="ecmascript-code"><span class="function">print</span><span class="symbol">(</span><span class="string">"Hello world!"</span><span class="symbol">);</span>
 <span class="number">123</span><span class="symbol">;</span><span class="normal">  </span><span class="comment">// implicit return value</span>
 </pre>
-<p>Function code follows the Ecmascript <code>function</code> syntax
+<p>Function code follows the ECMAScript <code>function</code> syntax
 (the function name is optional):</p>
 <pre class="ecmascript-code"><span class="keyword">function</span><span class="normal"> </span><span class="function">adder</span><span class="symbol">(</span><span class="normal">x</span><span class="symbol">,</span><span class="normal">y</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
 <span class="normal">    </span><span class="keyword">return</span><span class="normal"> x</span><span class="symbol">+</span><span class="normal">y</span><span class="symbol">;</span>
@@ -2395,7 +2497,7 @@ of program and eval code generates some unnecessary bytecode.  From a
 performance point of view (both memory and execution performance) it is
 thus preferable to have as much code inside functions as possible.</p>
 <p>When compiling eval and global expressions, be careful to avoid the
-usual Ecmascript gotchas, such as:</p>
+usual ECMAScript gotchas, such as:</p>
 <pre class="ecmascript-code"><span class="comment">/* Function at top level is a function declaration which registers a global</span>
 <span class="comment"> * function, and is different from a function expression.  Use parentheses</span>
 <span class="comment"> * around the top level expression.</span>
@@ -2465,6 +2567,7 @@ usual Ecmascript gotchas, such as:</p>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_compile_lstring">
 <a href="#duk_compile_lstring"><span class="hidechar">.</span>duk_compile_lstring()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_compile_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -2498,6 +2601,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_compile_lstring_filename">
 <a href="#duk_compile_lstring_filename"><span class="hidechar">.</span>duk_compile_lstring_filename()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_compile_lstring_filename">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -2531,6 +2635,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_compile_string">
 <a href="#duk_compile_string"><span class="hidechar">.</span>duk_compile_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_compile_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -2561,6 +2666,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_compile_string_filename">
 <a href="#duk_compile_string_filename"><span class="hidechar">.</span>duk_compile_string_filename()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_compile_string_filename">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -2592,7 +2698,6 @@ useful in low memory environments.
 <a href="#duk_components_to_time"><span class="hidechar">.</span>duk_components_to_time()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
 <a class="apitag" href="#taglist-time">time</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
  <a class="sectionlink" href="#duk_components_to_time">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_components_to_time.1">Prototype <a class="sectionlink" href="#duk_components_to_time.1">§</a></h2>
@@ -2608,7 +2713,7 @@ useful in low memory environments.
 <p>Convert components (year, month, day, etc), interpreted in UTC, into a
 time value.  The <code>comp-&gt;weekday</code> argument is ignored in the
 conversion.  If the component values are invalid, an error is thrown.</p>
-<p>There are some differences to the Ecmascript <code>Date.UTC()</code>
+<p>There are some differences to the ECMAScript <code>Date.UTC()</code>
 built-in:</p>
 <ul>
 <li>There's no special handling of two-digit years.  For example,
@@ -2617,7 +2722,7 @@ built-in:</p>
 <li>The milliseconds component is allowed fractions (sub-millisecond
     resolution) so that the resulting time value may have fractions.</li>
 </ul>
-<p>Like the Ecmascript primitives, the components can exceed their natural
+<p>Like the ECMAScript primitives, the components can exceed their natural
 range and are normalized.  For example, specifying <code>comp-&gt;minutes</code>
 as 120 is interpreted as adding 2 hours to the time value.  The components are
 expressed as IEEE doubles to allow large and negative values to be used.</p>
@@ -2668,6 +2773,10 @@ are automatically coerced with
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.8">ToString()</a>.</p>
 <p>This primitive minimizes the number of intermediate string interning
 operations and is better than concatenating strings manually.</p>
+<div class="note">
+Unlike <code>Array.prototype.concat()</code>, this API call does not
+flatten array arguments or support <code>Symbol.isConcatSpreadable</code>.
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_concat.4">Example <a class="sectionlink" href="#duk_concat.4">§</a></h2>
@@ -3119,16 +3228,16 @@ to use application specific notifications.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_debugger_pause.3">Summary <a class="sectionlink" href="#duk_debugger_pause.3">§</a></h2>
 <p>Request a debugger pause as soon as possible and return without blocking.
-The pause will be triggered the next time Ecmascript bytecode is executed,
+The pause will be triggered the next time ECMAScript bytecode is executed,
 which is usually almost immediate.  However, if a native call such as a
-Duktape/C function is in progress or no Ecmascript code is currently
+Duktape/C function is in progress or no ECMAScript code is currently
 executing, it may take longer for the pause to take effect.</p>
 <p>The call is a no-op if (1) debugger support has not been compiled in, (2)
 the debugger is not attached, or (3) Duktape is already paused.  This mimics
-the semantics of the Ecmascript <code>debugger</code> statement.</p>
+the semantics of the ECMAScript <code>debugger</code> statement.</p>
 <div class="note">
 Like all Duktape API calls, this call is not thread safe.  It may be tempting
-to trigger a pause from a thread different than one running Ecmascript code
+to trigger a pause from a thread different than one running ECMAScript code
 for the context, but this is unsafe and not currently supported.
 </div>
 </div>
@@ -3210,7 +3319,7 @@ are changed, which models the partial property descriptors allowed by
 and enumerable attributes are given in the flags field, while property value,
 getter, and setter are given as value stack arguments.  When creating a new
 property, missing attribute values cause
-<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.6.1">Ecmascript defaults</a>
+<a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.6.1">ECMAScript defaults</a>
 to be used (false for all boolean attributes, undefined for value, getter, setter);
 when modifying an existing property missing attribute values mean that existing
 attribute values are not touched.</p>
@@ -3227,7 +3336,7 @@ attribute values are not touched.</p>
 </pre>
 <p>With the <code>DUK_DEFPROP_FORCE</code> flag property changes can be forced
 even when an operation would normally fail due to a non-extensible target object
-or a non-configurable property.  This cannot be done from Ecmascript code with
+or a non-configurable property.  This cannot be done from ECMAScript code with
 <code>Object.defineProperty()</code> and is useful for e.g. sandboxing setup.
 In some cases even a forced change is not possible and will cause an error to be
 thrown.  For instance, properties implemented internally as virtual properties
@@ -3439,7 +3548,7 @@ start invoking the trap or forwarding the operation to the target object.
 <span class="function">duk_def_prop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> obj_idx</span><span class="symbol">,</span><span class="normal"> DUK_DEFPROP_CLEAR_CONFIGURABLE</span><span class="symbol">);</span>
 
 <span class="comment">/* Create an accessor property which is non-configurable and non-enumerable.</span>
-<span class="comment"> * Attribute flags are not given so they default to Ecmascript defaults</span>
+<span class="comment"> * Attribute flags are not given so they default to ECMAScript defaults</span>
 <span class="comment"> * (false) automatically.  Equivalent to:</span>
 <span class="comment"> *</span>
 <span class="comment"> *   object.defineproperty(obj, 'my_accessor_1', {</span>
@@ -3457,7 +3566,7 @@ start invoking the trap or forwarding the operation to the target object.
 
 <span class="comment">/* Create an accessor property which is non-configurable but enumerable.</span>
 <span class="comment"> * Attribute flags are given explicitly which is easier to read without</span>
-<span class="comment"> * knowing about Ecmascript attribute default values.  Equivalent to:</span>
+<span class="comment"> * knowing about ECMAScript attribute default values.  Equivalent to:</span>
 <span class="comment"> *</span>
 <span class="comment"> *   Object.defineProperty(obj, 'my_accessor_2', {</span>
 <span class="comment"> *      get: my_getter, set: my_setter, enumerable: true, configurable: false</span>
@@ -3487,7 +3596,7 @@ start invoking the trap or forwarding the operation to the target object.
 <span class="normal">             DUK_DEFPROP_HAVE_SET_ENUMERABLE</span><span class="symbol">);</span>
 
 <span class="comment">/* Change the value of a non-configurable property by force.</span>
-<span class="comment"> * No Ecmascript equivalent.</span>
+<span class="comment"> * No ECMAScript equivalent.</span>
 <span class="comment"> */</span>
 
 <span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"my_nonconfigurable_prop"</span><span class="symbol">);</span>
@@ -3534,12 +3643,12 @@ behavior:</p>
     throws an error.</li>
 <li>If <code>obj_idx</code> is invalid, throws an error.</li>
 </ul>
-<p>The property deletion is equivalent to the Ecmascript expression
+<p>The property deletion is equivalent to the ECMAScript expression
 <code>res = delete obj[key]</code>.  For precise semantics, see
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.2.1">Property Accessors</a>,
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.4.1">The delete operator</a>
 and <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.12.7">[[Delete]] (P, Throw)</a>.
-The return value and error throwing behavior mirrors the Ecmascript
+The return value and error throwing behavior mirrors the ECMAScript
 <code>delete</code> operator behavior.
 Both the target value and the <code>key</code> are coerced:</p>
 <ul>
@@ -3554,7 +3663,7 @@ Both the target value and the <code>key</code> are coerced:</p>
 trap, the trap is invoked and the API call return value matches the trap return value.</p>
 <div class="note">
 This API call returns <code>1</code> when the target property does not exist.
-This is not very intuitive, but follows Ecmascript semantics:
+This is not very intuitive, but follows ECMAScript semantics:
 <code>delete obj.nonexistent</code> also evaluates to <code>true</code>.
 </div>
 <p>If the key is a fixed string you can avoid one API call and use the
@@ -3581,15 +3690,19 @@ e.g. call methods on them: <code>(12345).toString(16)</code>.
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_del_prop.5">See also <a class="sectionlink" href="#duk_del_prop.5">§</a></h2>
 <ul>
+<li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
 <li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
 <li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
-<li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+<li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_del_prop_heapptr">
 <a href="#duk_del_prop_heapptr"><span class="hidechar">.</span>duk_del_prop_heapptr()</a>
 <a class="apitag" href="#taglist-2.2.0">2.2.0</a>
 <a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
+<a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_del_prop_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_del_prop_heapptr.1">Prototype <a class="sectionlink" href="#duk_del_prop_heapptr.1">§</a></h2>
@@ -3619,6 +3732,16 @@ property name is given as a Duktape heap pointer obtained e.g. using
 <span class="normal">rc </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_del_prop_heapptr</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> ptr</span><span class="symbol">);</span>
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"delete obj.propertyName -&gt; rc=%d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> rc</span><span class="symbol">);</span>
 </pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_del_prop_heapptr.5">See also <a class="sectionlink" href="#duk_del_prop_heapptr.5">§</a></h2>
+<ul>
+<li><a href="#duk_del_prop">duk_del_prop</a></li>
+<li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
+<li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
+<li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+</ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_del_prop_index">
 <a href="#duk_del_prop_index"><span class="hidechar">.</span>duk_del_prop_index()</a>
@@ -3653,9 +3776,60 @@ possible.</p>
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"delete obj[123] -&gt; rc=%d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> rc</span><span class="symbol">);</span>
 </pre>
 </div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_del_prop_index.5">See also <a class="sectionlink" href="#duk_del_prop_index.5">§</a></h2>
+<ul>
+<li><a href="#duk_del_prop">duk_del_prop</a></li>
+<li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
+<li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+<li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_del_prop_literal">
+<a href="#duk_del_prop_literal"><span class="hidechar">.</span>duk_del_prop_literal()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-literal">literal</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+ <a class="sectionlink" href="#duk_del_prop_literal">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_del_prop_literal.1">Prototype <a class="sectionlink" href="#duk_del_prop_literal.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_del_prop_literal(duk_context *ctx, int obj_idx, const char *key_literal);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_del_prop_literal</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> obj_idx</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key_literal</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_del_prop_literal.2">Stack <a class="sectionlink" href="#duk_del_prop_literal.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_del_prop_literal.3">Summary <a class="sectionlink" href="#duk_del_prop_literal.3">§</a></h2>
+<p>Like <code><a href="#duk_del_prop">duk_del_prop()</a></code>,
+but the property name is given as a string literal (see
+<code><a href="#duk_push_literal">duk_push_literal()</a></code>).</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_del_prop_literal.4">Example <a class="sectionlink" href="#duk_del_prop_literal.4">§</a></h2>
+<pre class="c-code"><span class="usertype">duk_bool_t</span><span class="normal"> rc</span><span class="symbol">;</span>
+
+<span class="normal">rc </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_del_prop_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"myPropertyKey"</span><span class="symbol">);</span>
+<span class="function">printf</span><span class="symbol">(</span><span class="string">"delete obj.myPropertyKey -&gt; rc=%d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> rc</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_del_prop_literal.5">See also <a class="sectionlink" href="#duk_del_prop_literal.5">§</a></h2>
+<ul>
+<li><a href="#duk_del_prop">duk_del_prop</a></li>
+<li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
+<li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
+<li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
+<li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_del_prop_lstring">
 <a href="#duk_del_prop_lstring"><span class="hidechar">.</span>duk_del_prop_lstring()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_del_prop_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -3683,12 +3857,17 @@ but the property name is given as a string with explicit length.</p>
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_del_prop_lstring.5">See also <a class="sectionlink" href="#duk_del_prop_lstring.5">§</a></h2>
 <ul>
+<li><a href="#duk_del_prop">duk_del_prop</a></li>
+<li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
 <li><a href="#duk_del_prop_string">duk_del_prop_string</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+<li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_del_prop_string">
 <a href="#duk_del_prop_string"><span class="hidechar">.</span>duk_del_prop_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_del_prop_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -3717,7 +3896,11 @@ but the property name is given as a NUL-terminated C string
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_del_prop_string.5">See also <a class="sectionlink" href="#duk_del_prop_string.5">§</a></h2>
 <ul>
+<li><a href="#duk_del_prop">duk_del_prop</a></li>
+<li><a href="#duk_del_prop_index">duk_del_prop_index</a></li>
 <li><a href="#duk_del_prop_lstring">duk_del_prop_lstring</a></li>
+<li><a href="#duk_del_prop_literal">duk_del_prop_literal</a></li>
+<li><a href="#duk_del_prop_heapptr">duk_del_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_destroy_heap">
@@ -3764,7 +3947,7 @@ linked to the heap, and also all string and buffer pointers within the heap.</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_dump_function.3">Summary <a class="sectionlink" href="#duk_dump_function.3">§</a></h2>
-<p>Dump an Ecmascript function at stack top into
+<p>Dump an ECMAScript function at stack top into
 <a href="https://github.com/svaarala/duktape/blob/master/doc/bytecode.rst">bytecode</a>,
 replacing the function with a buffer containing the bytecode data.
 The bytecode can be loaded back using
@@ -3917,7 +4100,7 @@ is not an object, throws an error.</p>
 <p>Without any flags the enumeration behaves like <code>for-in</code>:
 own and inherited enumerable properties are included, and enumeration
 order follows the
-<a href="http://www.ecma-international.org/ecma-262/6.0/#sec-ordinary-object-internal-methods-and-internal-slots-ownpropertykeys">Ecmascript ES2015 [[OwnPropertyKeys]]</a>
+<a href="http://www.ecma-international.org/ecma-262/6.0/#sec-ordinary-object-internal-methods-and-internal-slots-ownpropertykeys">ECMAScript ES2015 [[OwnPropertyKeys]]</a>
 enumeration order, applied for each inheritance level.</p>
 <p>Once the enumerator has been created, use
 <code><a href="#duk_next">duk_next()</a></code> to extract keys (or key/value
@@ -3969,7 +4152,7 @@ sorted using <code>DUK_ENUM_SORT_ARRAY_INDICES</code>.
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_equals.3">Summary <a class="sectionlink" href="#duk_equals.3">§</a></h2>
 <p>Compare values at <code>idx1</code> and <code>idx2</code> for equality.
-Returns 1 if values are considered equal using Ecmascript
+Returns 1 if values are considered equal using ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.9.1">Equals</a>
 operator (<code>==</code>) semantics, otherwise returns 0.  Also returns 0 if either
 index is invalid.</p>
@@ -4027,10 +4210,16 @@ value which allows code such as:</p>
 <span class="normal">    </span><span class="keyword">return</span><span class="normal"> </span><span class="function">duk_error</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> DUK_ERR_TYPE_ERROR</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"invalid argument value: %d"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> argvalue</span><span class="symbol">);</span>
 <span class="cbracket">}</span>
 </pre>
+<p>If the return value is ignored, cast to void to avoid compilation
+warnings:</p>
+<pre class="c-code"><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">argvalue </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_error</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> DUK_ERR_TYPE_ERROR</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"invalid argument value: %d"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> argvalue</span><span class="symbol">);</span>
+<span class="cbracket">}</span>
+</pre>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_error.4">Example <a class="sectionlink" href="#duk_error.4">§</a></h2>
-<pre class="c-code"><span class="function">duk_error</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> DUK_ERR_RANGE_ERROR</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"argument out of range: %d"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> argval</span><span class="symbol">);</span>
+<pre class="c-code"><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_error</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> DUK_ERR_RANGE_ERROR</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"argument out of range: %d"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> argval</span><span class="symbol">);</span>
 </pre>
 </div>
 <div class="api-part">
@@ -4067,6 +4256,15 @@ value which allows code such as:</p>
 <h2 class="api-summary sectiontitle" id="duk_error_va.3">Summary <a class="sectionlink" href="#duk_error_va.3">§</a></h2>
 <p>Vararg variant of
 <code><a href="#duk_error">duk_error()</a></code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_error_va.4">Example <a class="sectionlink" href="#duk_error_va.4">§</a></h2>
@@ -4110,7 +4308,7 @@ value which allows code such as:</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_eval.3">Summary <a class="sectionlink" href="#duk_eval.3">§</a></h2>
-<p>Evaluate the Ecmascript source code at the top of the stack, and leave a single
+<p>Evaluate the ECMAScript source code at the top of the stack, and leave a single
 return value on top of the stack.  May throw an error, errors are not caught
 automatically.  The filename associated with the temporary eval function is
 <code>"eval"</code>.</p>
@@ -4130,7 +4328,7 @@ used inside a Duktape/C function call (strict mode) or outside of one
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_eval.4">Example <a class="sectionlink" href="#duk_eval.4">§</a></h2>
-<pre class="c-code"><span class="comment">/* Eval result in Ecmascript is the last non-empty statement; here, the</span>
+<pre class="c-code"><span class="comment">/* Eval result in ECMAScript is the last non-empty statement; here, the</span>
 <span class="comment"> * result of the eval is the number 123.</span>
 <span class="comment"> */</span>
 
@@ -4202,6 +4400,15 @@ used inside a Duktape/C function call (strict mode) or outside of one
 <p>Convenience API call, equivalent to
 <code><a href="#duk_error_va">duk_error_va()</a></code> with an error code
 <code>DUK_ERR_EVAL_ERROR</code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_eval_error_va.4">Example <a class="sectionlink" href="#duk_eval_error_va.4">§</a></h2>
@@ -4223,6 +4430,7 @@ used inside a Duktape/C function call (strict mode) or outside of one
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_eval_lstring">
 <a href="#duk_eval_lstring"><span class="hidechar">.</span>duk_eval_lstring()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_eval_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -4264,6 +4472,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_eval_lstring_noresult">
 <a href="#duk_eval_lstring_noresult"><span class="hidechar">.</span>duk_eval_lstring_noresult()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_eval_lstring_noresult">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -4329,6 +4538,7 @@ the value stack.</p>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_eval_string">
 <a href="#duk_eval_string"><span class="hidechar">.</span>duk_eval_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_eval_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -4367,6 +4577,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_eval_string_noresult">
 <a href="#duk_eval_string_noresult"><span class="hidechar">.</span>duk_eval_string_noresult()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_eval_string_noresult">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -4620,6 +4831,15 @@ unreachable after finalization and then frees the object.</p>
 <p>Convenience API call, equivalent to
 <code><a href="#duk_error_va">duk_error_va()</a></code> with an error code
 <code>DUK_ERR_ERROR</code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_generic_error_va.4">Example <a class="sectionlink" href="#duk_generic_error_va.4">§</a></h2>
@@ -4657,7 +4877,7 @@ unreachable after finalization and then frees the object.</p>
 <p>Get the boolean value at <code>idx</code> without modifying or coercing
 the value.  Returns 1 if the value is <code>true</code>, 0 if the value is
 <code>false</code>, not a boolean, or the index is invalid.</p>
-<p>Note that the value is not coerced, so even a "truthy" Ecmascript value
+<p>Note that the value is not coerced, so even a "truthy" ECMAScript value
 (like a non-empty string) will be treated as false.  If you want to coerce
 the value, use <code><a href="#duk_to_boolean">duk_to_boolean()</a></code>.</p>
 </div>
@@ -4808,7 +5028,7 @@ fixed buffer, the returned pointer is stable and won't change during the
 lifetime of the buffer.  For dynamic and external buffers the pointer may
 change as the buffer is resized or reconfigured; the caller is responsible for
 ensuring pointer values returned from this API call are not used after the
-buffer is resized/reconfigured.  Buffers created from Ecmascript code directly
+buffer is resized/reconfigured.  Buffers created from ECMAScript code directly
 e.g. as <code>new Buffer(8)</code> are backed by an automatic fixed buffer, so
 their pointers are always stable.</p>
 <p>In special cases it's possible that a buffer object is backed by a plain
@@ -4959,7 +5179,7 @@ lifetime of the libc allocated string.
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_get_c_function.3">Summary <a class="sectionlink" href="#duk_get_c_function.3">§</a></h2>
 <p>Get the Duktape/C function pointer (a <code>duk_c_function</code>) from an
-Ecmascript function object associated with a Duktape/C function.  If the
+ECMAScript function object associated with a Duktape/C function.  If the
 value is not such a function or <code>idx</code> is invalid, returns <code>NULL</code>.</p>
 <p>If you prefer an error to be thrown for an invalid value or index, use
 <code><a href="#duk_require_c_function">duk_require_c_function()</a></code>.</p>
@@ -5223,9 +5443,87 @@ value is not an object or it is an object without a finalizer,
 <li><a href="#duk_set_finalizer">duk_set_finalizer</a></li>
 </ul>
 </div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_get_global_heapptr">
+<a href="#duk_get_global_heapptr"><span class="hidechar">.</span>duk_get_global_heapptr()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
+<a class="apitag" href="#taglist-borrowed">borrowed</a>
+ <a class="sectionlink" href="#duk_get_global_heapptr">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_get_global_heapptr.1">Prototype <a class="sectionlink" href="#duk_get_global_heapptr.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_get_global_heapptr(duk_context *ctx, void *ptr);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_get_global_heapptr</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_get_global_heapptr.2">Stack <a class="sectionlink" href="#duk_get_global_heapptr.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="cap">]</span> </span> <span class="stack-comment">(if key exists)</span> </div>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active literal">undefined</span> <span class="cap">]</span> </span> <span class="stack-comment">(if key doesn't exist)</span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_get_global_heapptr.3">Summary <a class="sectionlink" href="#duk_get_global_heapptr.3">§</a></h2>
+<p>Like <code><a href="#duk_get_global_string">duk_get_global_string()</a></code>,
+but the property name is given as a Duktape heap pointer obtained e.g. using
+<code><a href="#duk_get_heapptr">duk_get_heapptr()</a></code>.  If
+<code>ptr</code> is NULL, <code>undefined</code> is used as the key.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_get_global_heapptr.4">Example <a class="sectionlink" href="#duk_get_global_heapptr.4">§</a></h2>
+<pre class="c-code"><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_get_global_heapptr</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> my_ptr_ref</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_get_global_heapptr.5">See also <a class="sectionlink" href="#duk_get_global_heapptr.5">§</a></h2>
+<ul>
+<li><a href="#duk_get_global_string">duk_get_global_string</a></li>
+<li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_get_global_literal">
+<a href="#duk_get_global_literal"><span class="hidechar">.</span>duk_get_global_literal()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-literal">literal</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+ <a class="sectionlink" href="#duk_get_global_literal">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_get_global_literal.1">Prototype <a class="sectionlink" href="#duk_get_global_literal.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_get_global_literal(duk_context *ctx, const char *key_literal);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_get_global_literal</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key_literal</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_get_global_literal.2">Stack <a class="sectionlink" href="#duk_get_global_literal.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="cap">]</span> </span> <span class="stack-comment">(if key exists)</span> </div>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active literal">undefined</span> <span class="cap">]</span> </span> <span class="stack-comment">(if key doesn't exist)</span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_get_global_literal.3">Summary <a class="sectionlink" href="#duk_get_global_literal.3">§</a></h2>
+<p>Like <code><a href="#duk_get_global_string">duk_get_global_string()</a></code>,
+but the property name is given as a string literal (see
+<code><a href="#duk_push_literal">duk_push_literal()</a></code>).</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_get_global_literal.4">Example <a class="sectionlink" href="#duk_get_global_literal.4">§</a></h2>
+<pre class="c-code"><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_get_global_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"encodeURIComponent"</span><span class="symbol">);</span>
+<span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"foo bar"</span><span class="symbol">);</span>
+<span class="function">duk_call</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span><span class="normal">  </span><span class="comment">/* [ ... encodeURIComponent "foo bar" ] -&gt; [ "foo%20bar" ] */</span>
+<span class="function">printf</span><span class="symbol">(</span><span class="string">"encoded: %s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">duk_to_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
+<span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_get_global_literal.5">See also <a class="sectionlink" href="#duk_get_global_literal.5">§</a></h2>
+<ul>
+<li><a href="#duk_get_global_string">duk_get_global_string</a></li>
+<li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_global_lstring">
 <a href="#duk_get_global_lstring"><span class="hidechar">.</span>duk_get_global_lstring()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_get_global_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -5252,13 +5550,14 @@ but the key is given as a string with explicit length.</p>
 <h2 class="api-seealso sectiontitle" id="duk_get_global_lstring.5">See also <a class="sectionlink" href="#duk_get_global_lstring.5">§</a></h2>
 <ul>
 <li><a href="#duk_get_global_string">duk_get_global_string</a></li>
-<li><a href="#duk_put_global_string">duk_put_global_string</a></li>
-<li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_global_string">
 <a href="#duk_get_global_string"><span class="hidechar">.</span>duk_get_global_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_get_global_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -5297,14 +5596,15 @@ This is a convenience function which does the equivalent of:</p>
 <h2 class="api-seealso sectiontitle" id="duk_get_global_string.5">See also <a class="sectionlink" href="#duk_get_global_string.5">§</a></h2>
 <ul>
 <li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
-<li><a href="#duk_put_global_string">duk_put_global_string</a></li>
-<li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
+<li><a href="#duk_get_global_literal">duk_get_global_literal</a></li>
+<li><a href="#duk_get_global_heapptr">duk_get_global_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_heapptr">
 <a href="#duk_get_heapptr"><span class="hidechar">.</span>duk_get_heapptr()</a>
 <a class="apitag" href="#taglist-1.1.0">1.1.0</a>
 <a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
 <a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_get_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -5364,6 +5664,7 @@ it is memory unsafe to use
 <a href="#duk_get_heapptr_default"><span class="hidechar">.</span>duk_get_heapptr_default()</a>
 <a class="apitag" href="#taglist-2.1.0">2.1.0</a>
 <a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
 <a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_get_heapptr_default">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -5440,7 +5741,7 @@ returns 0.</p>
 <div class="note">
 The coercion is different from a basic C cast from <code>double</code> to
 integer, which may have counterintuitive (and non-portable) behavior like coercing
-NaN to <code>DUK_INT_MIN</code>.  The coercion is also different from Ecmascript
+NaN to <code>DUK_INT_MIN</code>.  The coercion is also different from ECMAScript
 <code>ToInt32()</code> coercion because the full range of the native
 <code>duk_int_t</code> is allowed (which may be more than 32 bits).
 </div>
@@ -5696,7 +5997,6 @@ such as
 <a href="#duk_get_now"><span class="hidechar">.</span>duk_get_now()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
 <a class="apitag" href="#taglist-time">time</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
  <a class="sectionlink" href="#duk_get_now">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_get_now.1">Prototype <a class="sectionlink" href="#duk_get_now.1">§</a></h2>
@@ -5710,7 +6010,7 @@ such as
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_get_now.3">Summary <a class="sectionlink" href="#duk_get_now.3">§</a></h2>
 <p>
-Get current time in POSIX milliseconds, as seen by the Ecmascript
+Get current time in POSIX milliseconds, as seen by the ECMAScript
 environment.  The return value matches Date.now() with the reservation
 that sub-millisecond resolution may be available.
 </p>
@@ -5878,7 +6178,7 @@ Return code and error throwing behavior:</p>
     throws an error.</li>
 <li>If <code>obj_idx</code> is invalid, throws an error.</li>
 </ul>
-<p>The property read is equivalent to the Ecmascript expression
+<p>The property read is equivalent to the ECMAScript expression
 <code>res = obj[key]</code> with the exception that the presence or absence of the
 property is indicated by the call return value.  For precise semantics, see
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.2.1">Property Accessors</a>,
@@ -5938,9 +6238,10 @@ e.g. call methods on them: <code>(12345).toString(16)</code>.
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_get_prop.5">See also <a class="sectionlink" href="#duk_get_prop.5">§</a></h2>
 <ul>
+<li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
 <li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
 <li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
-<li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
 <li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
 </ul>
 </div>
@@ -5998,6 +6299,8 @@ an error is thrown.</p>
 <a href="#duk_get_prop_heapptr"><span class="hidechar">.</span>duk_get_prop_heapptr()</a>
 <a class="apitag" href="#taglist-2.2.0">2.2.0</a>
 <a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
+<a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_get_prop_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_get_prop_heapptr.1">Prototype <a class="sectionlink" href="#duk_get_prop_heapptr.1">§</a></h2>
@@ -6028,6 +6331,16 @@ property name is given as a Duktape heap pointer obtained e.g. using
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"obj.propertyName = %s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">duk_to_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
 <span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 </pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_get_prop_heapptr.5">See also <a class="sectionlink" href="#duk_get_prop_heapptr.5">§</a></h2>
+<ul>
+<li><a href="#duk_get_prop">duk_get_prop</a></li>
+<li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
+<li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
+<li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
+</ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_prop_index">
 <a href="#duk_get_prop_index"><span class="hidechar">.</span>duk_get_prop_index()</a>
@@ -6062,9 +6375,60 @@ possible.</p>
 <span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 </pre>
 </div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_get_prop_index.5">See also <a class="sectionlink" href="#duk_get_prop_index.5">§</a></h2>
+<ul>
+<li><a href="#duk_get_prop">duk_get_prop</a></li>
+<li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
+<li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
+<li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_get_prop_literal">
+<a href="#duk_get_prop_literal"><span class="hidechar">.</span>duk_get_prop_literal()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-literal">literal</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+ <a class="sectionlink" href="#duk_get_prop_literal">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_get_prop_literal.1">Prototype <a class="sectionlink" href="#duk_get_prop_literal.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_get_prop_literal(duk_context *ctx, duk_idx_t obj_idx, const char *key_literal);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_get_prop_literal</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key_literal</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_get_prop_literal.2">Stack <a class="sectionlink" href="#duk_get_prop_literal.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="cap">]</span> </span> <span class="stack-comment">(if key exists)</span> </div>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="elem active literal">undefined</span> <span class="cap">]</span> </span> <span class="stack-comment">(if key doesn't exist)</span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_get_prop_literal.3">Summary <a class="sectionlink" href="#duk_get_prop_literal.3">§</a></h2>
+<p>Like <code><a href="#duk_get_prop">duk_get_prop()</a></code>,
+but the property name is given as a string literal (see
+<code><a href="#duk_push_literal">duk_push_literal()</a></code>).</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_get_prop_literal.4">Example <a class="sectionlink" href="#duk_get_prop_literal.4">§</a></h2>
+<pre class="c-code"><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_get_prop_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"myPropertyName"</span><span class="symbol">);</span>
+<span class="function">printf</span><span class="symbol">(</span><span class="string">"obj.myPropertyName = %s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">duk_to_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
+<span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_get_prop_literal.5">See also <a class="sectionlink" href="#duk_get_prop_literal.5">§</a></h2>
+<ul>
+<li><a href="#duk_get_prop">duk_get_prop</a></li>
+<li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
+<li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
+<li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
+<li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_prop_lstring">
 <a href="#duk_get_prop_lstring"><span class="hidechar">.</span>duk_get_prop_lstring()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_get_prop_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -6085,19 +6449,24 @@ but the property name is given as a string with explicit length.</p>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_get_prop_lstring.4">Example <a class="sectionlink" href="#duk_get_prop_lstring.4">§</a></h2>
 <pre class="c-code"><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_get_prop_lstring</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"internal"</span><span class="normal"> </span><span class="string">"</span><span class="specialchar">\x</span><span class="string">00"</span><span class="normal"> </span><span class="string">"nul"</span><span class="symbol">,</span><span class="normal"> </span><span class="number">12</span><span class="symbol">);</span>
-<span class="function">printf</span><span class="symbol">(</span><span class="string">"obj.propertyName = %s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">duk_to_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
+<span class="function">printf</span><span class="symbol">(</span><span class="string">"obj.internal[00]nul = %s</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="function">duk_to_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
 <span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 </pre>
 </div>
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_get_prop_lstring.5">See also <a class="sectionlink" href="#duk_get_prop_lstring.5">§</a></h2>
 <ul>
+<li><a href="#duk_get_prop">duk_get_prop</a></li>
+<li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
 <li><a href="#duk_get_prop_string">duk_get_prop_string</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
+<li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_prop_string">
 <a href="#duk_get_prop_string"><span class="hidechar">.</span>duk_get_prop_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_get_prop_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -6126,7 +6495,11 @@ but the property name is given as a NUL-terminated C string
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_get_prop_string.5">See also <a class="sectionlink" href="#duk_get_prop_string.5">§</a></h2>
 <ul>
+<li><a href="#duk_get_prop">duk_get_prop</a></li>
+<li><a href="#duk_get_prop_index">duk_get_prop_index</a></li>
 <li><a href="#duk_get_prop_lstring">duk_get_prop_lstring</a></li>
+<li><a href="#duk_get_prop_literal">duk_get_prop_literal</a></li>
+<li><a href="#duk_get_prop_heapptr">duk_get_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_get_prototype">
@@ -6449,7 +6822,7 @@ returns 0.</p>
 <div class="note">
 The coercion is different from a basic C cast from <code>double</code> to
 unsigned integer, which may have counterintuitive (and non-portable) behavior
-for e.g. NaN values.  The coercion is also different from Ecmascript
+for e.g. NaN values.  The coercion is also different from ECMAScript
 <code>ToUint32()</code> coercion because the full range of the native
 <code>duk_uint_t</code> is allowed (which may be more than 32 bits).
 </div>
@@ -6521,7 +6894,7 @@ behavior:</p>
 <li>If the value at <code>obj_idx</code> is not an object, throws an error.</li>
 <li>If <code>obj_idx</code> is invalid, throws an error.</li>
 </ul>
-<p>The property existence check is equivalent to the Ecmascript expression
+<p>The property existence check is equivalent to the ECMAScript expression
 <code>res = key in obj</code>.  For semantics, see
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.2.1">Property Accessors</a>,
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.8.7">The in operator</a>,
@@ -6542,7 +6915,7 @@ the trap is invoked and the API call return value matches the trap return value.
 Instead of accepting any
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.10">object coercible</a>
 value (like most property related API calls) this call accepts only an object
-as its target value.  This is intentional as it follows Ecmascript operator semantics.
+as its target value.  This is intentional as it follows ECMAScript operator semantics.
 </div>
 <p>If the key is a fixed string you can avoid one API call and use the
 <code><a href="#duk_has_prop_string">duk_has_prop_string()</a></code> variant.
@@ -6569,15 +6942,19 @@ e.g. call methods on them: <code>(12345).toString(16)</code>.
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_has_prop.5">See also <a class="sectionlink" href="#duk_has_prop.5">§</a></h2>
 <ul>
+<li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
 <li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
 <li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
-<li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+<li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_has_prop_heapptr">
 <a href="#duk_has_prop_heapptr"><span class="hidechar">.</span>duk_has_prop_heapptr()</a>
 <a class="apitag" href="#taglist-2.2.0">2.2.0</a>
 <a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
+<a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_has_prop_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_has_prop_heapptr.1">Prototype <a class="sectionlink" href="#duk_has_prop_heapptr.1">§</a></h2>
@@ -6609,6 +6986,16 @@ property name is given as a Duktape heap pointer obtained e.g. using
 <span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"obj does not have 'myProperty'</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
 <span class="cbracket">}</span>
 </pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_has_prop_heapptr.5">See also <a class="sectionlink" href="#duk_has_prop_heapptr.5">§</a></h2>
+<ul>
+<li><a href="#duk_has_prop">duk_has_prop</a></li>
+<li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
+<li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
+<li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+</ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_has_prop_index">
 <a href="#duk_has_prop_index"><span class="hidechar">.</span>duk_has_prop_index()</a>
@@ -6644,9 +7031,61 @@ possible.</p>
 <span class="cbracket">}</span>
 </pre>
 </div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_has_prop_index.5">See also <a class="sectionlink" href="#duk_has_prop_index.5">§</a></h2>
+<ul>
+<li><a href="#duk_has_prop">duk_has_prop</a></li>
+<li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
+<li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+<li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_has_prop_literal">
+<a href="#duk_has_prop_literal"><span class="hidechar">.</span>duk_has_prop_literal()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-literal">literal</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+ <a class="sectionlink" href="#duk_has_prop_literal">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_has_prop_literal.1">Prototype <a class="sectionlink" href="#duk_has_prop_literal.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_has_prop_literal(duk_context *ctx, int obj_idx, const char *key_literal);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_has_prop_literal</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> obj_idx</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key_literal</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_has_prop_literal.2">Stack <a class="sectionlink" href="#duk_has_prop_literal.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_has_prop_literal.3">Summary <a class="sectionlink" href="#duk_has_prop_literal.3">§</a></h2>
+<p>Like <code><a href="#duk_has_prop">duk_has_prop()</a></code>,
+but the property name is given as a string literal (see
+<code><a href="#duk_push_literal">duk_push_literal()</a></code>).</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_has_prop_literal.4">Example <a class="sectionlink" href="#duk_has_prop_literal.4">§</a></h2>
+<pre class="c-code"><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">duk_has_prop_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"myPropertyKey"</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"obj has 'myPropertyKey'</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
+<span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"obj does not have 'myPropertyKey'</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
+<span class="cbracket">}</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_has_prop_literal.5">See also <a class="sectionlink" href="#duk_has_prop_literal.5">§</a></h2>
+<ul>
+<li><a href="#duk_has_prop">duk_has_prop</a></li>
+<li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
+<li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
+<li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
+<li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_has_prop_lstring">
 <a href="#duk_has_prop_lstring"><span class="hidechar">.</span>duk_has_prop_lstring()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_has_prop_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -6675,12 +7114,17 @@ but the property name is given as a string with explicit length.</p>
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_has_prop_lstring.5">See also <a class="sectionlink" href="#duk_has_prop_lstring.5">§</a></h2>
 <ul>
+<li><a href="#duk_has_prop">duk_has_prop</a></li>
+<li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
 <li><a href="#duk_has_prop_string">duk_has_prop_string</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+<li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_has_prop_string">
 <a href="#duk_has_prop_string"><span class="hidechar">.</span>duk_has_prop_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_has_prop_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -6710,12 +7154,17 @@ but the property name is given as a NUL-terminated C string
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_has_prop_string.5">See also <a class="sectionlink" href="#duk_has_prop_string.5">§</a></h2>
 <ul>
+<li><a href="#duk_has_prop">duk_has_prop</a></li>
+<li><a href="#duk_has_prop_index">duk_has_prop_index</a></li>
 <li><a href="#duk_has_prop_lstring">duk_has_prop_lstring</a></li>
+<li><a href="#duk_has_prop_literal">duk_has_prop_literal</a></li>
+<li><a href="#duk_has_prop_heapptr">duk_has_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_hex_decode">
 <a href="#duk_hex_decode"><span class="hidechar">.</span>duk_hex_decode()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-hex">hex</a>
 <a class="apitag" href="#taglist-codec">codec</a>
  <a class="sectionlink" href="#duk_hex_decode">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -6753,6 +7202,7 @@ If the input is invalid, throws an error.</p>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_hex_encode">
 <a href="#duk_hex_encode"><span class="hidechar">.</span>duk_hex_encode()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-hex">hex</a>
 <a class="apitag" href="#taglist-codec">codec</a>
  <a class="sectionlink" href="#duk_hex_encode">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -6876,12 +7326,12 @@ interpreting the result fields.
 </tr>
 <tr>
 <td class="propname">pc</td>
-<td>Program counter for Ecmascript functions.  Zero if executing a native
+<td>Program counter for ECMAScript functions.  Zero if executing a native
     function.</td>
 </tr>
 <tr>
 <td class="propname">lineNumber</td>
-<td>Line number for Ecmascript functions.  Zero if executing a native
+<td>Line number for ECMAScript functions.  Zero if executing a native
     function or if pc-to-line translation data is not available.</td>
 </tr>
 </tbody>
@@ -6971,7 +7421,7 @@ depending on the allocation functions being used.</p>
 </tr>
 <tr>
 <td class="propname">bcbytes</td>
-<td>Byte size of Ecmascript function bytecode (instructions, constants).
+<td>Byte size of ECMAScript function bytecode (instructions, constants).
     Shared between all instances (closures) of a certain function template.</td>
 </tr>
 <tr>
@@ -7039,7 +7489,7 @@ depending on the allocation functions being used.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_instanceof.3">Summary <a class="sectionlink" href="#duk_instanceof.3">§</a></h2>
 <p>Compare values at <code>idx1</code> and <code>idx2</code> using the
-Ecmascript <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.8.6">instanceof</a>
+ECMAScript <a href="https://www.ecma-international.org/ecma-262/6.0/#sec-instanceofoperator">instanceof</a>
 operator.  Returns 1 if <code>val1 instanceof val2</code>, 0 if not.  Throws an error
 if either index is invalid; <code>instanceof</code> itself also throws errors for
 invalid argument types.</p>
@@ -7078,10 +7528,10 @@ instanceof strictness.
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_is_array.3">Summary <a class="sectionlink" href="#duk_is_array.3">§</a></h2>
-<p>Returns 1 if value at <code>idx</code> is an object and is an Ecmascript array
+<p>Returns 1 if value at <code>idx</code> is an object and is an ECMAScript array
 (has the internal class <code>Array</code>), otherwise returns 0.  If <code>idx</code>
 is invalid, also returns 0.</p>
-<p>This function returns 1 when the following Ecmascript expression is true:</p>
+<p>This function returns 1 when the following ECMAScript expression is true:</p>
 <pre class="ecmascript-code"><span class="normal">Object</span><span class="symbol">.</span><span class="keyword">prototype</span><span class="symbol">.</span><span class="normal">toString</span><span class="symbol">.</span><span class="function">call</span><span class="symbol">(</span><span class="normal">val</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">===</span><span class="normal"> </span><span class="string">'[object Array]'</span>
 </pre>
 </div>
@@ -7136,9 +7586,9 @@ returns 0.  If <code>idx</code> is invalid, also returns 0.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_is_bound_function.3">Summary <a class="sectionlink" href="#duk_is_bound_function.3">§</a></h2>
 <p>Returns 1 if value at <code>idx</code> is a Function object which has
-been created with Ecmascript <code>Function.prototype.bind()</code>,
+been created with ECMAScript <code>Function.prototype.bind()</code>,
 otherwise returns 0.  If <code>idx</code> is invalid, also returns 0.</p>
-<p>Bound functions are an Ecmascript concept: they point to a target
+<p>Bound functions are an ECMAScript concept: they point to a target
 function and supply a <code>this</code> binding and zero or more argument
 bindings.  See
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.4.5">Function.prototype.bind (thisArg [, arg1 [, arg2, ...]])</a>.
@@ -7383,10 +7833,10 @@ returns 0.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_is_ecmascript_function.3">Summary <a class="sectionlink" href="#duk_is_ecmascript_function.3">§</a></h2>
 <p>Returns 1 if value at <code>idx</code> is a Function object which has
-been compiled from Ecmascript source code, otherwise returns 0.
+been compiled from ECMAScript source code, otherwise returns 0.
 If <code>idx</code> is invalid, also returns 0.</p>
-<p>Internally Ecmascript functions are compiled into bytecode and executed
-with the Ecmascript bytecode interpreter.</p>
+<p>Internally ECMAScript functions are compiled into bytecode and executed
+with the ECMAScript bytecode interpreter.</p>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_is_ecmascript_function.4">Example <a class="sectionlink" href="#duk_is_ecmascript_function.4">§</a></h2>
@@ -7502,7 +7952,7 @@ returns 0.</p>
 <p>Returns 1 if value at <code>idx</code> is an object and is a function (has the
 internal class <code>Function</code>), otherwise returns 0.  If <code>idx</code> is
 invalid, also returns 0.</p>
-<p>This function returns 1 when the following Ecmascript expression is true:</p>
+<p>This function returns 1 when the following ECMAScript expression is true:</p>
 <pre class="ecmascript-code"><span class="normal">Object</span><span class="symbol">.</span><span class="keyword">prototype</span><span class="symbol">.</span><span class="normal">toString</span><span class="symbol">.</span><span class="function">call</span><span class="symbol">(</span><span class="normal">val</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">===</span><span class="normal"> </span><span class="string">'[object Function]'</span>
 </pre>
 <p>To determine the specific type of the function, use:</p>
@@ -7618,7 +8068,7 @@ returns 0.  If <code>idx</code> is invalid, also returns 0.</p>
 <h2 class="api-summary sectiontitle" id="duk_is_null_or_undefined.3">Summary <a class="sectionlink" href="#duk_is_null_or_undefined.3">§</a></h2>
 <p>Returns 1 if value at <code>idx</code> is either <code>null</code> or <code>undefined</code>,
 otherwise returns 0.  If <code>idx</code> is invalid, also returns 0.</p>
-<p>This API call is similar to a <code>(x == null)</code> comparison in Ecmascript, which
+<p>This API call is similar to a <code>(x == null)</code> comparison in ECMAScript, which
 is true for both <code>null</code> and <code>undefined</code>.</p>
 </div>
 <div class="api-part">
@@ -7675,9 +8125,9 @@ returns 0.  If <code>idx</code> is invalid, also returns 0.</p>
 returns 0.  If <code>idx</code> is invalid, also returns 0.</p>
 <p>Note that many values are considered to be an object, e.g.:</p>
 <ul>
-<li>Ecmascript object</li>
-<li>Ecmascript array</li>
-<li>Ecmascript function</li>
+<li>ECMAScript object</li>
+<li>ECMAScript array</li>
+<li>ECMAScript function</li>
 <li>Duktape thread (coroutine)</li>
 <li>Duktape internal objects</li>
 </ul>
@@ -7711,7 +8161,7 @@ e.g. <code><a href="#duk_is_array">duk_is_array()</a></code>.</p>
 <p>Returns 1 if value at <code>idx</code> is object coercible, as defined in
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.10">CheckObjectCoercible</a>,
 otherwise returns 0.  If <code>idx</code> is invalid, also returns 0.</p>
-<p>All Ecmascript types are object coercible except <code>undefined</code> and
+<p>All ECMAScript types are object coercible except <code>undefined</code> and
 <code>null</code>.  The custom buffer and pointer types are object coercible.</p>
 </div>
 <div class="api-part">
@@ -8253,7 +8703,7 @@ operation.  Returns pointer to the resulting string for convenience.</p>
 <h2 class="api-summary sectiontitle" id="duk_load_function.3">Summary <a class="sectionlink" href="#duk_load_function.3">§</a></h2>
 <p>Load a buffer containing
 <a href="https://github.com/svaarala/duktape/blob/master/doc/bytecode.rst">bytecode</a>,
-recreating the original Ecmascript function (with some limitations).  You <b>must</b>
+recreating the original ECMAScript function (with some limitations).  You <b>must</b>
 ensure that the bytecode has been dumped with a compatible Duktape version and that the
 bytecode has not been modified since.  <b>Loading bytecode from an untrusted source is
 memory unsafe and may load to exploitable vulnerabilities.</b></p>
@@ -8361,7 +8811,7 @@ See <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-13.2.2">[[Const
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_new.4">Example <a class="sectionlink" href="#duk_new.4">§</a></h2>
 <pre class="c-code"><span class="comment">/* Assume target function is already on stack at func_idx.</span>
-<span class="comment"> * Equivalent to Ecmascript 'new func("foo", 123)'.</span>
+<span class="comment"> * Equivalent to ECMAScript 'new func("foo", 123)'.</span>
 <span class="comment"> */</span>
 <span class="usertype">duk_idx_t</span><span class="normal"> func_idx </span><span class="symbol">=</span><span class="normal"> </span><span class="comment">/* ... */</span><span class="symbol">;</span>
 
@@ -8625,7 +9075,7 @@ lifetime of the libc allocated string.
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_opt_c_function.3">Summary <a class="sectionlink" href="#duk_opt_c_function.3">§</a></h2>
 <p>Get the Duktape/C function pointer (a <code>duk_c_function</code>) from an
-Ecmascript function object associated with a Duktape/C function.  If the
+ECMAScript function object associated with a Duktape/C function.  If the
 value is <code>undefined</code> or the index is invalid, <code>def_value</code>
 default value is returned.  In other cases (<code>null</code> or non-matching
 type) throws an error.</p>
@@ -8681,6 +9131,7 @@ lifetime of the libc allocated string.
 <a href="#duk_opt_heapptr"><span class="hidechar">.</span>duk_opt_heapptr()</a>
 <a class="apitag" href="#taglist-2.1.0">2.1.0</a>
 <a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
 <a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_opt_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -9190,6 +9641,7 @@ A non-zero return value indicates an error, and the error is left on the stack t
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_pcompile_lstring">
 <a href="#duk_pcompile_lstring"><span class="hidechar">.</span>duk_pcompile_lstring()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_pcompile_lstring">§</a></h1><div class="api-call">
@@ -9231,6 +9683,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_pcompile_lstring_filename">
 <a href="#duk_pcompile_lstring_filename"><span class="hidechar">.</span>duk_pcompile_lstring_filename()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_pcompile_lstring_filename">§</a></h1><div class="api-call">
@@ -9272,6 +9725,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_pcompile_string">
 <a href="#duk_pcompile_string"><span class="hidechar">.</span>duk_pcompile_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_pcompile_string">§</a></h1><div class="api-call">
@@ -9310,6 +9764,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_pcompile_string_filename">
 <a href="#duk_pcompile_string_filename"><span class="hidechar">.</span>duk_pcompile_string_filename()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_pcompile_string_filename">§</a></h1><div class="api-call">
@@ -9394,6 +9849,7 @@ A non-zero return value indicates an error, and the error is left on the stack t
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_peval_lstring">
 <a href="#duk_peval_lstring"><span class="hidechar">.</span>duk_peval_lstring()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_peval_lstring">§</a></h1><div class="api-call">
@@ -9440,6 +9896,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_peval_lstring_noresult">
 <a href="#duk_peval_lstring_noresult"><span class="hidechar">.</span>duk_peval_lstring_noresult()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_peval_lstring_noresult">§</a></h1><div class="api-call">
@@ -9514,6 +9971,7 @@ on the value stack (regardless of success/error result).</p>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_peval_string">
 <a href="#duk_peval_string"><span class="hidechar">.</span>duk_peval_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_peval_string">§</a></h1><div class="api-call">
@@ -9557,6 +10015,7 @@ useful in low memory environments.
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_peval_string_noresult">
 <a href="#duk_peval_string_noresult"><span class="hidechar">.</span>duk_peval_string_noresult()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag apitagprotected" href="#taglist-protected">protected</a>
 <a class="apitag" href="#taglist-compile">compile</a>
  <a class="sectionlink" href="#duk_peval_string_noresult">§</a></h1><div class="api-call">
@@ -9776,7 +10235,7 @@ of the pushed array.</p>
 <span class="function">duk_put_prop_index</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> arr_idx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
 
 <span class="comment">/* array is now: [ "foo", "bar" ], and array.length is 2 (automatically</span>
-<span class="comment"> * updated for Ecmascript arrays).</span>
+<span class="comment"> * updated for ECMAScript arrays).</span>
 <span class="comment"> */</span>
 
 <span class="function">duk_pop</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span><span class="normal">  </span><span class="comment">/* pop array */</span>
@@ -10014,7 +10473,7 @@ might be resized later.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_push_c_function.3">Summary <a class="sectionlink" href="#duk_push_c_function.3">§</a></h2>
 <p>Push a new function object, associated with a C function, to the stack.
-The function object is an Ecmascript function object; when called, <code>func</code>
+The function object is an ECMAScript function object; when called, <code>func</code>
 will be called using the Duktape/C function interface.  Returns non-negative index
 (relative to stack bottom) of the pushed function.</p>
 <p>The <code>nargs</code> argument controls how the value stack looks like when
@@ -10032,7 +10491,7 @@ will be called using the Duktape/C function interface.  Returns non-negative ind
 and as a constructor (<code>new func()</code>).  You can differentiate between the two
 call styles using <code><a href="#duk_is_constructor_call">duk_is_constructor_call()</a></code>.
 Although the function can be used as a constructor, it doesn't have an automatic
-<code>prototype</code> property like Ecmascript functions.</p>
+<code>prototype</code> property like ECMAScript functions.</p>
 <div class="note">
 If you intend to use the pushed function as a constructor, you should usually
 create a prototype object and set the <code>prototype</code> property of the
@@ -10197,7 +10656,7 @@ You should not leave dump calls in production code.
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_push_current_function.3">Summary <a class="sectionlink" href="#duk_push_current_function.3">§</a></h2>
 <p>Push the currently running function to the stack.  The value pushed is
-an Ecmascript Function object.  If there is no current function,
+an ECMAScript Function object.  If there is no current function,
 <code>undefined</code> is pushed instead.</p>
 <p>If the current function was called via one or more bound functions or a
 Proxy object, the function returned from this call is the final, resolved
@@ -10233,7 +10692,7 @@ can also act as an internal state stash.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_push_current_thread.3">Summary <a class="sectionlink" href="#duk_push_current_thread.3">§</a></h2>
 <p>Push the currently running Duktape thread to the stack.  The value pushed
-is a thread object which is also an Ecmascript object.  If there is no current
+is a thread object which is also an ECMAScript object.  If there is no current
 thread, <code>undefined</code> is pushed instead.</p>
 <p>The current thread is (almost always) the thread represented by the
 <code>ctx</code> pointer.</p>
@@ -10334,6 +10793,15 @@ codes is [1,16777215].</p>
 <h2 class="api-summary sectiontitle" id="duk_push_error_object_va.3">Summary <a class="sectionlink" href="#duk_push_error_object_va.3">§</a></h2>
 <p>Vararg variant of
 <code><a href="#duk_push_error_object">duk_push_error_object()</a></code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_push_error_object_va.4">Example <a class="sectionlink" href="#duk_push_error_object_va.4">§</a></h2>
@@ -10378,7 +10846,7 @@ managed by Duktape.  The initial external buffer pointer is NULL and size
 is zero.  You can use
 <code><a href="#duk_config_buffer">duk_config_buffer()</a></code>
 to update the external buffer pointer and size.</p>
-<p>External buffers are useful to allow Ecmascript code access externally
+<p>External buffers are useful to allow ECMAScript code access externally
 allocated data structures.  You can use it to e.g. write bytes to an
 externally allocated frame buffer.  The external buffer has no alignment
 requirements (Duktape makes no alignment assumptions when accessing it).</p>
@@ -10398,12 +10866,12 @@ requirements (Duktape makes no alignment assumptions when accessing it).</p>
 <span class="function">duk_push_external_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 <span class="function">duk_config_buffer</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">,</span><span class="normal"> p</span><span class="symbol">,</span><span class="normal"> len</span><span class="symbol">);</span>
 
-<span class="comment">/* Ecmascript code with access to the buffer object could now do</span>
+<span class="comment">/* ECMAScript code with access to the buffer object could now do</span>
 <span class="comment"> * something like:</span>
 <span class="comment"> *</span>
 <span class="comment"> *    buf[100] = 123;</span>
 <span class="comment"> *</span>
-<span class="comment"> * Calling code must make sure Ecmascript never reads/writes an</span>
+<span class="comment"> * Calling code must make sure ECMAScript never reads/writes an</span>
 <span class="comment"> * external buffer whose backing buffer is no longer valid.</span>
 <span class="comment"> */</span>
 </pre>
@@ -10513,7 +10981,7 @@ with <code>dynamic = 0</code>.</p>
 <h2 class="api-summary sectiontitle" id="duk_push_global_stash.3">Summary <a class="sectionlink" href="#duk_push_global_stash.3">§</a></h2>
 <p>Push the global stash object to the stack.  The global stash is an internal
 object which can be used to store key/value pairs from C code so that they are
-reachable for garbage collection, but are not accessible from Ecmascript code.
+reachable for garbage collection, but are not accessible from ECMAScript code.
 The stash is only accessible from C code with a <code>ctx</code> argument
 associated with the same global object.</p>
 </div>
@@ -10556,7 +11024,7 @@ associated with the same global object.</p>
 <h2 class="api-summary sectiontitle" id="duk_push_heap_stash.3">Summary <a class="sectionlink" href="#duk_push_heap_stash.3">§</a></h2>
 <p>Push the heap stash object to the stack.  The heap stash is an internal
 object which can be used to store key/value pairs from C code so that they are
-reachable for garbage collection, but are not accessible from Ecmascript code.
+reachable for garbage collection, but are not accessible from ECMAScript code.
 The stash is only accessible from C code; the same stash object is used by all
 code sharing the same Duktape heap (even if they don't share the same global
 object).</p>
@@ -10578,6 +11046,7 @@ object).</p>
 <a class="apitag" href="#taglist-1.1.0">1.1.0</a>
 <a class="apitag" href="#taglist-stack">stack</a>
 <a class="apitag" href="#taglist-object">object</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
 <a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_push_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -10669,6 +11138,76 @@ at least a successful entry into a native finalizer function, see
 <pre class="c-code"><span class="function">duk_push_int</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="number">123</span><span class="symbol">);</span>
 </pre>
 </div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_push_literal">
+<a href="#duk_push_literal"><span class="hidechar">.</span>duk_push_literal()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag" href="#taglist-literal">literal</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+ <a class="sectionlink" href="#duk_push_literal">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_push_literal.1">Prototype <a class="sectionlink" href="#duk_push_literal.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): const char *duk_push_literal(duk_context *ctx, const char *str_literal);"><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="function">duk_push_literal</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">str_literal</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_push_literal.2">Stack <a class="sectionlink" href="#duk_push_literal.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">str</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_push_literal.3">Summary <a class="sectionlink" href="#duk_push_literal.3">§</a></h2>
+<p>Push a C literal into the stack and return a pointer to the interned
+string data area (which may or may not be the same as the argument literal).
+The argument <code>str_literal</code>:</p>
+<ul>
+<li>must be a non-NULL C literal like <code>"foo"</code> which can be operated
+    on using e.g. <code>sizeof(str)</code>, where sizeof() yields string
+    length, including the automatic NUL terminator (for example, sizeof("foo")
+    is 4);</li>
+<li>must have immutable data contents, i.e. read-only memory, or writable
+    memory but guaranteed not to be changed; and</li>
+<li>must not contain internal NUL characters, and must have a terminating
+    NUL as usual for C strings.</li>
+</ul>
+<p>The <code>str_literal</code> argument may be evaluated multiple times by
+the API macro.  No runtime NULL pointer check is made for the
+<code>str_literal</code> argument so passing in a NULL causes memory unsafe
+behavior.</p>
+<p>This call is conceptually equivalent to duk_push_string().  Calling code
+only needs to use it if the minor differences in footprint or speed
+matter.  The properties of immutable C literals allows minor optimizations
+in Duktape internals:</p>
+<ul>
+<li>The length of the string can be computed at compile time using
+    <code>sizeof(str_literal) - 1</code> at the call site.</li>
+<li>By default heap strings accessed via C literals (duk_push_literal()
+    or any of the literal convenience calls like duk_get_prop_literal())
+    are automatically pinned until the next mark-and-sweep round, and
+    there's a lookup cache for mapping a C literal address to the pinned
+    internal heap string.  This optimization doesn't assume string
+    deduplication (which is common but not guaranteed), i.e. there may be
+    multiple addresses with the same literal data.</li>
+<li>Because the string data is assumed to be immutable, the internal
+    string representation could just point to the data instead of
+    making a copy.  (This optimization is not done as of Duktape 2.3.)</li>
+</ul>
+<p>If input string might contain internal NUL characters, use
+<code><a href="#duk_push_lstring">duk_push_lstring()</a></code> instead.
+For <code>duk_push_literal()</code> handling of embedded NULs depends
+on config options and calling code should never rely on the behavior.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_push_literal.4">Example <a class="sectionlink" href="#duk_push_literal.4">§</a></h2>
+<pre class="c-code"><span class="comment">/* Basic case. */</span>
+<span class="function">duk_push_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"foo"</span><span class="symbol">);</span>
+
+<span class="comment">/* Argument may involve compile time concatenation and parentheses. */</span>
+<span class="function">duk_push_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="string">"foo"</span><span class="normal"> </span><span class="string">"bar"</span><span class="symbol">));</span>
+
+<span class="comment">/* Argument may also be e.g. DUK_HIDDEN_SYMBOL() which produces a literal. */</span>
+<span class="function">duk_push_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="function">DUK_HIDDEN_SYMBOL</span><span class="symbol">(</span><span class="string">"mySymbol"</span><span class="symbol">));</span>
+</pre>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_push_lstring">
 <a href="#duk_push_lstring"><span class="hidechar">.</span>duk_push_lstring()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
@@ -10733,6 +11272,33 @@ Pushes a &lt;code&gt;NaN&lt;/code&gt; (not-a-number) to the stack.
 <pre class="c-code"><span class="function">duk_push_nan</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"NaN is number: %d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_is_number</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">1</span><span class="symbol">));</span>
+</pre>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_push_new_target">
+<a href="#duk_push_new_target"><span class="hidechar">.</span>duk_push_new_target()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag" href="#taglist-function">function</a>
+ <a class="sectionlink" href="#duk_push_new_target">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_push_new_target.1">Prototype <a class="sectionlink" href="#duk_push_new_target.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): void duk_push_new_target(duk_context *ctx);"><span class="type">void</span><span class="normal"> </span><span class="function">duk_push_new_target</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_push_new_target.2">Stack <a class="sectionlink" href="#duk_push_new_target.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active literal">undefined</span> <span class="cap">]</span> </span> <span class="stack-comment">(if no current function or not a constructor call)</span> </div>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">func</span> <span class="cap">]</span> </span> <span class="stack-comment">(if current function call is a constructor call)</span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_push_new_target.3">Summary <a class="sectionlink" href="#duk_push_new_target.3">§</a></h2>
+<p>Push the equivalent of <code>new.target</code> for the currently running
+function to the stack.  The value pushed is <code>undefined</code> if the
+current call is not a constructor call, or if the call stack is empty.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_push_new_target.4">Example <a class="sectionlink" href="#duk_push_new_target.4">§</a></h2>
+<pre class="c-code"><span class="function">duk_push_new_target</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 </pre>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_push_null">
@@ -10946,7 +11512,7 @@ platforms and may even be memory unsafe.
 with a <code>strlen()</code> equivalent (i.e. looking for the first NUL character).
 A pointer to the interned string data is returned.  If the operation fails,
 throws an error.</p>
-<p>If <code>str</code> is <code>NULL</code>, an Ecmascript <code>null</code> is pushed
+<p>If <code>str</code> is <code>NULL</code>, an ECMAScript <code>null</code> is pushed
 to the stack and <code>NULL</code> is returned.  This behavior differs from
 <code><a href="#duk_push_lstring">duk_push_lstring</a></code> on purpose.</p>
 <div class="note">
@@ -10954,7 +11520,7 @@ C code should normally only push valid CESU-8 strings to the stack.
 Some invalid CESU-8/UTF-8 byte sequences are reserved for special
 uses such as representing Symbol values.  When you push such an invalid
 byte sequence, the value on the value stack will behave like a string for
-C code but will appear as a <code>Symbol</code> for Ecmascript code.
+C code but will appear as a <code>Symbol</code> for ECMAScript code.
 See <a href="guide.html#symbols">Symbols</a> for more discussion.
 </div>
 <p>If input string might contain internal NUL characters, use
@@ -11102,7 +11668,7 @@ a context pointer for API calls.</p>
 <code>ctx</code> and <code>target_ctx</code> arguments may refer to the same
 thread).  The thread stash is an internal object which can be used to store
 key/value pairs from C code so that they are reachable for garbage collection,
-but are not accessible from Ecmascript code.  The stash is only accessible
+but are not accessible from ECMAScript code.  The stash is only accessible
 from C code with a matching <code>target_ctx</code> argument.</p>
 <p>If <code>target_ctx</code> is <code>NULL</code>, throws an error.</p>
 </div>
@@ -11223,6 +11789,15 @@ large enough buffer is found for the temporary formatted value.</p>
 <p>The <code>ap</code> argument cannot be safely reused for multiple calls.
 This is a limitation of the vararg mechanism.</p>
 </div>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_push_vsprintf.4">Example <a class="sectionlink" href="#duk_push_vsprintf.4">§</a></h2>
@@ -11289,9 +11864,83 @@ as a set of Duktape/C functions.</p>
 <li><a href="#duk_put_number_list">duk_put_number_list</a></li>
 </ul>
 </div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_put_global_heapptr">
+<a href="#duk_put_global_heapptr"><span class="hidechar">.</span>duk_put_global_heapptr()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
+<a class="apitag" href="#taglist-borrowed">borrowed</a>
+ <a class="sectionlink" href="#duk_put_global_heapptr">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_put_global_heapptr.1">Prototype <a class="sectionlink" href="#duk_put_global_heapptr.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_put_global_heapptr(duk_context *ctx, void *ptr);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_put_global_heapptr</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_put_global_heapptr.2">Stack <a class="sectionlink" href="#duk_put_global_heapptr.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_put_global_heapptr.3">Summary <a class="sectionlink" href="#duk_put_global_heapptr.3">§</a></h2>
+<p>Like <code><a href="#duk_put_global_string">duk_put_global_string()</a></code>,
+but the property name is given as a Duktape heap pointer obtained e.g. using
+<code><a href="#duk_get_heapptr">duk_get_heapptr()</a></code>.  If
+<code>ptr</code> is NULL, <code>undefined</code> is used as the key.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_put_global_heapptr.4">Example <a class="sectionlink" href="#duk_put_global_heapptr.4">§</a></h2>
+<pre class="c-code"><span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"1.2.3"</span><span class="symbol">);</span>
+<span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_put_global_heapptr</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> my_ptr_ref</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_put_global_heapptr.5">See also <a class="sectionlink" href="#duk_put_global_heapptr.5">§</a></h2>
+<ul>
+<li><a href="#duk_put_global_string">duk_put_global_string</a></li>
+<li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_put_global_literal">
+<a href="#duk_put_global_literal"><span class="hidechar">.</span>duk_put_global_literal()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-literal">literal</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+ <a class="sectionlink" href="#duk_put_global_literal">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_put_global_literal.1">Prototype <a class="sectionlink" href="#duk_put_global_literal.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_put_global_literal(duk_context *ctx, const char *key_literal);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_put_global_literal</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key_literal</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_put_global_literal.2">Stack <a class="sectionlink" href="#duk_put_global_literal.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_put_global_literal.3">Summary <a class="sectionlink" href="#duk_put_global_literal.3">§</a></h2>
+<p>Like <code><a href="#duk_put_global_string">duk_put_global_string()</a></code>,
+but the property name is given as a string literal (see
+<code><a href="#duk_push_literal">duk_push_literal()</a></code>).</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_put_global_literal.4">Example <a class="sectionlink" href="#duk_put_global_literal.4">§</a></h2>
+<pre class="c-code"><span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"1.2.3"</span><span class="symbol">);</span>
+<span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_put_global_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"my_app_version"</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_put_global_literal.5">See also <a class="sectionlink" href="#duk_put_global_literal.5">§</a></h2>
+<ul>
+<li><a href="#duk_put_global_string">duk_put_global_string</a></li>
+<li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_put_global_lstring">
 <a href="#duk_put_global_lstring"><span class="hidechar">.</span>duk_put_global_lstring()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_put_global_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -11318,13 +11967,14 @@ but the key is given as a string with explicit length.</p>
 <h2 class="api-seealso sectiontitle" id="duk_put_global_lstring.5">See also <a class="sectionlink" href="#duk_put_global_lstring.5">§</a></h2>
 <ul>
 <li><a href="#duk_put_global_string">duk_put_global_string</a></li>
-<li><a href="#duk_get_global_string">duk_get_global_string</a></li>
-<li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_put_global_string">
 <a href="#duk_put_global_string"><span class="hidechar">.</span>duk_put_global_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_put_global_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -11361,8 +12011,8 @@ This is a convenience function which does the equivalent of:</p>
 <h2 class="api-seealso sectiontitle" id="duk_put_global_string.5">See also <a class="sectionlink" href="#duk_put_global_string.5">§</a></h2>
 <ul>
 <li><a href="#duk_put_global_lstring">duk_put_global_lstring</a></li>
-<li><a href="#duk_get_global_string">duk_get_global_string</a></li>
-<li><a href="#duk_get_global_lstring">duk_get_global_lstring</a></li>
+<li><a href="#duk_put_global_literal">duk_put_global_literal</a></li>
+<li><a href="#duk_put_global_heapptr">duk_put_global_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_put_number_list">
@@ -11435,9 +12085,9 @@ from the stack.  Return code and error throwing behavior:</p>
     throws an error.</li>
 <li>If <code>obj_idx</code> is invalid, throws an error.</li>
 </ul>
-<p>The property write is equivalent to the Ecmascript expression
+<p>The property write is equivalent to the ECMAScript expression
 <code>obj[key] = val</code>.  The exact rules of when a property write
-succeeds or fails are the same as for Ecmascript code making the
+succeeds or fails are the same as for ECMAScript code making the
 equivalent assignment.  For precise semantics, see
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.2.1">Property Accessors</a>,
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.7.2">PutValue (V, W)</a>,
@@ -11446,7 +12096,7 @@ Both the target value and the <code>key</code> are coerced:</p>
 <ul>
 <li>The target value is automatically coerced to an object.  However, the object
     is transitory so writing its properties is not very useful.  Moreover,
-    Ecmascript semantics prevent new properties from being created for such
+    ECMAScript semantics prevent new properties from being created for such
     transitory objects (see
     <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-8.7.2">PutValue (V, W)</a>,
     step 7 of the special [[Put]] variant).</li>
@@ -11458,10 +12108,10 @@ Both the target value and the <code>key</code> are coerced:</p>
 <p>If the target is a Proxy object which implements the <code>set</code> trap,
 the trap is invoked and the API call return value matches the trap return value.</p>
 <div class="note">
-In Ecmascript an assignment expression has the value of the right-hand-side
+In ECMAScript an assignment expression has the value of the right-hand-side
 expression, regardless of whether or not the assignment succeeds.  The return
-value for this API call is not specified by Ecmascript or available to
-Ecmascript code: the API call returns <code>0</code> or <code>1</code>
+value for this API call is not specified by ECMAScript or available to
+ECMAScript code: the API call returns <code>0</code> or <code>1</code>
 depending on whether the assignment succeeded or not (with the <code>0</code>
 return value promoted to an error in strict code).
 </div>
@@ -11490,15 +12140,19 @@ e.g. call methods on them: <code>(12345).toString(16)</code>.
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_put_prop.5">See also <a class="sectionlink" href="#duk_put_prop.5">§</a></h2>
 <ul>
+<li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
 <li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
 <li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
-<li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
+<li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_put_prop_heapptr">
 <a href="#duk_put_prop_heapptr"><span class="hidechar">.</span>duk_put_prop_heapptr()</a>
 <a class="apitag" href="#taglist-2.2.0">2.2.0</a>
 <a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
+<a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_put_prop_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_put_prop_heapptr.1">Prototype <a class="sectionlink" href="#duk_put_prop_heapptr.1">§</a></h2>
@@ -11529,6 +12183,16 @@ property name is given as a Duktape heap pointer obtained e.g. using
 <span class="normal">rc </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_put_prop_heapptr</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> ptr</span><span class="symbol">);</span>
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"rc=%d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> rc</span><span class="symbol">);</span>
 </pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_put_prop_heapptr.5">See also <a class="sectionlink" href="#duk_put_prop_heapptr.5">§</a></h2>
+<ul>
+<li><a href="#duk_put_prop">duk_put_prop</a></li>
+<li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
+<li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
+<li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
+</ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_put_prop_index">
 <a href="#duk_put_prop_index"><span class="hidechar">.</span>duk_put_prop_index()</a>
@@ -11562,9 +12226,61 @@ possible.</p>
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"rc=%d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> rc</span><span class="symbol">);</span>
 </pre>
 </div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_put_prop_index.5">See also <a class="sectionlink" href="#duk_put_prop_index.5">§</a></h2>
+<ul>
+<li><a href="#duk_put_prop">duk_put_prop</a></li>
+<li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
+<li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
+<li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
+</ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_put_prop_literal">
+<a href="#duk_put_prop_literal"><span class="hidechar">.</span>duk_put_prop_literal()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-property">property</a>
+<a class="apitag" href="#taglist-literal">literal</a>
+<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
+ <a class="sectionlink" href="#duk_put_prop_literal">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_put_prop_literal.1">Prototype <a class="sectionlink" href="#duk_put_prop_literal.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): int duk_put_prop_literal(duk_context *ctx, int obj_idx, const char *key_literal);"><span class="usertype">duk_bool_t</span><span class="normal"> </span><span class="function">duk_put_prop_literal</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">duk_idx_t</span><span class="normal"> obj_idx</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">key_literal</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_put_prop_literal.2">Stack <a class="sectionlink" href="#duk_put_prop_literal.2">§</a></h2>
+<div class="stack-wrapper"> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="elem active">val</span> <span class="cap">]</span> </span> <span class="arrow"><b>→</b></span> <span class="stack"> <span class="cap">[</span> <span class="elem ellipsis">. . .</span> <span class="elem active">obj</span> <span class="elem ellipsis">. . .</span> <span class="cap">]</span> </span> </div>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_put_prop_literal.3">Summary <a class="sectionlink" href="#duk_put_prop_literal.3">§</a></h2>
+<p>Like <code><a href="#duk_put_prop">duk_put_prop()</a></code>,
+but the property name is given as a string literal (see
+<code><a href="#duk_push_literal">duk_push_literal()</a></code>).</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_put_prop_literal.4">Example <a class="sectionlink" href="#duk_put_prop_literal.4">§</a></h2>
+<pre class="c-code"><span class="usertype">duk_bool_t</span><span class="normal"> rc</span><span class="symbol">;</span>
+
+<span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"value"</span><span class="symbol">);</span>
+<span class="normal">rc </span><span class="symbol">=</span><span class="normal"> </span><span class="function">duk_put_prop_literal</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">-</span><span class="number">3</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"myPropertyName"</span><span class="symbol">);</span>
+<span class="function">printf</span><span class="symbol">(</span><span class="string">"rc=%d</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> rc</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-seealso sectiontitle" id="duk_put_prop_literal.5">See also <a class="sectionlink" href="#duk_put_prop_literal.5">§</a></h2>
+<ul>
+<li><a href="#duk_put_prop">duk_put_prop</a></li>
+<li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
+<li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
+<li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
+<li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
+</ul>
+</div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_put_prop_lstring">
 <a href="#duk_put_prop_lstring"><span class="hidechar">.</span>duk_put_prop_lstring()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_put_prop_lstring">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -11593,12 +12309,17 @@ but the property name is given as a string with explicit length.</p>
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_put_prop_lstring.5">See also <a class="sectionlink" href="#duk_put_prop_lstring.5">§</a></h2>
 <ul>
+<li><a href="#duk_put_prop">duk_put_prop</a></li>
+<li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
 <li><a href="#duk_put_prop_string">duk_put_prop_string</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
+<li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
 </ul>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_put_prop_string">
 <a href="#duk_put_prop_string"><span class="hidechar">.</span>duk_put_prop_string()</a>
 <a class="apitag" href="#taglist-1.0.0">1.0.0</a>
+<a class="apitag" href="#taglist-string">string</a>
 <a class="apitag" href="#taglist-property">property</a>
  <a class="sectionlink" href="#duk_put_prop_string">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -11628,8 +12349,38 @@ but the property name is given as a NUL-terminated C string
 <div class="api-part">
 <h2 class="api-seealso sectiontitle" id="duk_put_prop_string.5">See also <a class="sectionlink" href="#duk_put_prop_string.5">§</a></h2>
 <ul>
+<li><a href="#duk_put_prop">duk_put_prop</a></li>
+<li><a href="#duk_put_prop_index">duk_put_prop_index</a></li>
 <li><a href="#duk_put_prop_lstring">duk_put_prop_lstring</a></li>
+<li><a href="#duk_put_prop_literal">duk_put_prop_literal</a></li>
+<li><a href="#duk_put_prop_heapptr">duk_put_prop_heapptr</a></li>
 </ul>
+</div>
+</div><hr/><h1 class="apih1 sectiontitle" id="duk_random">
+<a href="#duk_random"><span class="hidechar">.</span>duk_random()</a>
+<a class="apitag" href="#taglist-2.3.0">2.3.0</a>
+<a class="apitag" href="#taglist-random">random</a>
+ <a class="sectionlink" href="#duk_random">§</a></h1><div class="api-call">
+<div class="api-part">
+<h2 class="api-proto sectiontitle" id="duk_random.1">Prototype <a class="sectionlink" href="#duk_random.1">§</a></h2>
+<pre class="c-code" title="C99/C++11 (32-bit): double duk_random(duk_context *ctx);"><span class="usertype">duk_double_t</span><span class="normal"> </span><span class="function">duk_random</span><span class="symbol">(</span><span class="usertype">duk_context</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ctx</span><span class="symbol">);</span>
+</pre>
+</div>
+<div class="api-part">
+<h2 class="api-stack sectiontitle" id="duk_random.2">Stack <a class="sectionlink" href="#duk_random.2">§</a></h2>
+<p>(No effect on value stack.)</p>
+</div>
+<div class="api-part">
+<h2 class="api-summary sectiontitle" id="duk_random.3">Summary <a class="sectionlink" href="#duk_random.3">§</a></h2>
+<p>C API counterpart to <code>Math.random()</code>; returns a
+random IEEE double in the range [0,1[.</p>
+</div>
+<div class="api-part">
+<h2 class="api-example sectiontitle" id="duk_random.4">Example <a class="sectionlink" href="#duk_random.4">§</a></h2>
+<pre class="c-code"><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function">duk_random</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;=</span><span class="normal"> </span><span class="number">0.01</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="function">printf</span><span class="symbol">(</span><span class="string">"surprise!</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">);</span>
+<span class="cbracket">}</span>
+</pre>
 </div>
 </div><hr/><h1 class="apih1 sectiontitle" id="duk_range_error">
 <a href="#duk_range_error"><span class="hidechar">.</span>duk_range_error()</a>
@@ -11682,6 +12433,15 @@ but the property name is given as a NUL-terminated C string
 <p>Convenience API call, equivalent to
 <code><a href="#duk_error_va">duk_error_va()</a></code> with an error code
 <code>DUK_ERR_RANGE_ERROR</code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_range_error_va.4">Example <a class="sectionlink" href="#duk_range_error_va.4">§</a></h2>
@@ -11865,6 +12625,15 @@ arguments as follows:</p>
 <p>Convenience API call, equivalent to
 <code><a href="#duk_error_va">duk_error_va()</a></code> with an error code
 <code>DUK_ERR_REFERENCE_ERROR</code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_reference_error_va.4">Example <a class="sectionlink" href="#duk_reference_error_va.4">§</a></h2>
@@ -12072,7 +12841,7 @@ fully cover the buffer object's apparent size, or the index is invalid.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_require_c_function.3">Summary <a class="sectionlink" href="#duk_require_c_function.3">§</a></h2>
 <p>Like <code><a href="#duk_get_c_function">duk_get_c_function()</a></code>, but
-throws an error if the value at <code>idx</code> is not an Ecmascript function
+throws an error if the value at <code>idx</code> is not an ECMAScript function
 associated with a Duktape/C function or if the index is invalid.</p>
 </div>
 <div class="api-part">
@@ -12172,6 +12941,7 @@ no useful C return value for an arbitrary function.
 <a href="#duk_require_heapptr"><span class="hidechar">.</span>duk_require_heapptr()</a>
 <a class="apitag" href="#taglist-1.1.0">1.1.0</a>
 <a class="apitag" href="#taglist-stack">stack</a>
+<a class="apitag" href="#taglist-heapptr">heapptr</a>
 <a class="apitag" href="#taglist-borrowed">borrowed</a>
  <a class="sectionlink" href="#duk_require_heapptr">§</a></h1><div class="api-call">
 <div class="api-part">
@@ -13020,7 +13790,7 @@ and other internal errors which trigger fatal error handling anyway.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_samevalue.3">Summary <a class="sectionlink" href="#duk_samevalue.3">§</a></h2>
 <p>Compare values at <code>idx1</code> and <code>idx2</code> for equality.
-Returns 1 if values are considered equal using Ecmascript
+Returns 1 if values are considered equal using ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.12">SameValue</a>
 algorithm (<code>Object.is()</code> in ES2015) semantics, otherwise returns 0.
 Also returns 0 if either index is invalid.</p>
@@ -13161,7 +13931,7 @@ for discussion of detailed behavior after the change.</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_set_length.3">Summary <a class="sectionlink" href="#duk_set_length.3">§</a></h2>
-<p>Set "length" for value at <code>idx</code>.  Equivalent to the Ecmascript
+<p>Set "length" for value at <code>idx</code>.  Equivalent to the ECMAScript
 statement <code>obj.length = len;</code>.</p>
 </div>
 <div class="api-part">
@@ -13231,7 +14001,7 @@ at stack top (which must be an object or <code>undefined</code>).  If the
 target value is not an object or the prototype value is not an object or
 <code>undefined</code>, an error is thrown.</p>
 <div class="note">
-Unlike Ecmascript prototype manipulation primitives, this API call allows
+Unlike ECMAScript prototype manipulation primitives, this API call allows
 creation of a prototype loop.  Calling code should always avoid creating a
 prototype loop: although Duktape detects long or looped prototype chains
 and throws an error when it encounters one, such behavior is only intended
@@ -13373,7 +14143,7 @@ when the dynamic buffer itself is freed.</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_strict_equals.3">Summary <a class="sectionlink" href="#duk_strict_equals.3">§</a></h2>
 <p>Compare values at <code>idx1</code> and <code>idx2</code> for equality.
-Returns 1 if values are considered equal using Ecmascript
+Returns 1 if values are considered equal using ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-11.9.4">Strict Equals</a>
 operator (<code>===</code>) semantics, otherwise returns 0.  Also returns 0 if either index
 is invalid.</p>
@@ -13634,6 +14404,15 @@ to the stack top, the call is a no-op.  If the value stack is empty or
 <p>Convenience API call, equivalent to
 <code><a href="#duk_error_va">duk_error_va()</a></code> with an error code
 <code>DUK_ERR_SYNTAX_ERROR</code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_syntax_error_va.4">Example <a class="sectionlink" href="#duk_syntax_error_va.4">§</a></h2>
@@ -13676,16 +14455,23 @@ value which allows code such as:</p>
 <span class="normal">    </span><span class="keyword">return</span><span class="normal"> </span><span class="function">duk_throw</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 <span class="cbracket">}</span>
 </pre>
+<p>If the return value is ignored, cast to void to avoid compilation
+warnings:</p>
+<pre class="c-code"><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">argvalue </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="normal">    </span><span class="function">duk_push_error_object</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> DUK_ERR_TYPE_ERROR</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"invalid argument: %d"</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="normal"> argvalue</span><span class="symbol">);</span>
+<span class="normal">    </span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_throw</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+<span class="cbracket">}</span>
+</pre>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_throw.4">Example <a class="sectionlink" href="#duk_throw.4">§</a></h2>
-<pre class="c-code"><span class="comment">/* Throw a string value; equivalent to the Ecmascript code:</span>
+<pre class="c-code"><span class="comment">/* Throw a string value; equivalent to the ECMAScript code:</span>
 <span class="comment"> *</span>
 <span class="comment"> *   throw "this string is thrown";</span>
 <span class="comment"> */</span>
 
 <span class="function">duk_push_string</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"this string is thrown"</span><span class="symbol">);</span>
-<span class="function">duk_throw</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
+<span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span><span class="normal"> </span><span class="function">duk_throw</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">);</span>
 </pre>
 </div>
 <div class="api-part">
@@ -13699,7 +14485,6 @@ value which allows code such as:</p>
 <a href="#duk_time_to_components"><span class="hidechar">.</span>duk_time_to_components()</a>
 <a class="apitag" href="#taglist-2.0.0">2.0.0</a>
 <a class="apitag" href="#taglist-time">time</a>
-<a class="apitag apitagwarn" href="#taglist-experimental">experimental</a>
  <a class="sectionlink" href="#duk_time_to_components">§</a></h1><div class="api-call">
 <div class="api-part">
 <h2 class="api-proto sectiontitle" id="duk_time_to_components.1">Prototype <a class="sectionlink" href="#duk_time_to_components.1">§</a></h2>
@@ -13713,9 +14498,9 @@ value which allows code such as:</p>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_time_to_components.3">Summary <a class="sectionlink" href="#duk_time_to_components.3">§</a></h2>
 <p>Convert a time value to components (year, month, day, etc) interpreted
-in UTC.  If the time value is invalid, e.g. beyond the valid Ecmascript
+in UTC.  If the time value is invalid, e.g. beyond the valid ECMAScript
 time range, an error is thrown.</p>
-<p>There are some differences to the Ecmascript <code>Date</code> UTC
+<p>There are some differences to the ECMAScript <code>Date</code> UTC
 accessors like <code>Date.prototype.getUTCMinutes()</code>:</p>
 <ul>
 <li>The time value is allowed to have fractions (sub-millisecond
@@ -13732,9 +14517,9 @@ accessors like <code>Date.prototype.getUTCMinutes()</code>:</p>
 <span class="normal">  </span><span class="string">"Thursday"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"Friday"</span><span class="symbol">,</span><span class="normal"> </span><span class="string">"Saturday"</span>
 <span class="cbracket">}</span><span class="symbol">;</span>
 
-<span class="comment">/* Note that month is zero-based to match the Ecmascript API, so for</span>
+<span class="comment">/* Note that month is zero-based to match the ECMAScript API, so for</span>
 <span class="comment"> * human readable printing add 1 to the month.  Time components are</span>
-<span class="comment"> * IEEE doubles to match Ecmascript Date behavior.</span>
+<span class="comment"> * IEEE doubles to match ECMAScript Date behavior.</span>
 <span class="comment"> */</span>
 <span class="function">duk_time_to_components</span><span class="symbol">(</span><span class="normal">ctx</span><span class="symbol">,</span><span class="normal"> time</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal">comp</span><span class="symbol">);</span>
 <span class="function">printf</span><span class="symbol">(</span><span class="string">"Datetime: %04d-%02d-%02d %02d:%02d:%02d.%03dZ</span><span class="specialchar">\n</span><span class="string">"</span><span class="symbol">,</span>
@@ -13767,7 +14552,7 @@ accessors like <code>Date.prototype.getUTCMinutes()</code>:</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_boolean.3">Summary <a class="sectionlink" href="#duk_to_boolean.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.2">ToBoolean()</a>
 coerced value.  Returns 1 if the result of the coercion <code>true</code>, 0 otherwise.
 If <code>idx</code> is invalid, throws an error.</p>
@@ -13808,7 +14593,7 @@ is non-<code>NULL</code>).  If <code>idx</code> is invalid, throws an error.</p>
 <ul>
 <li>Buffer: no change, dynamic/fixed/external nature not changed</li>
 <li>String: coerces into a fixed size buffer, byte-for-byte</li>
-<li>Other types: first apply Ecmascript
+<li>Other types: first apply ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.8">ToString()</a>,
 then coerce into a fixed size buffer, byte-for-byte</li>
 </ul>
@@ -13899,7 +14684,7 @@ The result is thus always a fixed buffer (unless an error is thrown).</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_int.3">Summary <a class="sectionlink" href="#duk_to_int.3">§</a></h2>
-<p>Replace the value at <code>index</code> with an Ecmascript
+<p>Replace the value at <code>index</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.4">ToInteger()</a>
 coerced value.  Returns an <code>duk_int_t</code> further coerced from the <code>ToInteger()</code>
 result using the algorithm described in
@@ -13945,7 +14730,7 @@ reflected on the value stack.  For instance, if value stack contains the string
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_int32.3">Summary <a class="sectionlink" href="#duk_to_int32.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.5">ToInt32()</a>
 coerced value.  Returns the coerced value.  If <code>idx</code> is invalid, throws
 an error.</p>
@@ -13976,7 +14761,7 @@ an error.</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_lstring.3">Summary <a class="sectionlink" href="#duk_to_lstring.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.8">ToString()</a>
 coerced value.  Returns a non-<code>NULL</code> pointer to the read-only,
 NUL-terminated string data, and writes the string byte length to <code>*out_len</code>
@@ -14046,7 +14831,7 @@ to target index.
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_number.3">Summary <a class="sectionlink" href="#duk_to_number.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.3">ToNumber()</a>
 coerced value.  Returns the coerced value.  If <code>idx</code> is invalid, throws
 an error.</p>
@@ -14077,7 +14862,7 @@ an error.</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_object.3">Summary <a class="sectionlink" href="#duk_to_object.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.9">ToObject()</a>
 coerced value.  There is no return value.  Throws an error if value at
 <code>idx</code> is not
@@ -14155,14 +14940,14 @@ differs from the one returned by <code>duk_get_string()</code> and
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_primitive.3">Summary <a class="sectionlink" href="#duk_to_primitive.3">§</a></h2>
-<p>Replace the object at <code>idx</code> with an Ecmascript
+<p>Replace the object at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.1">ToPrimitive()</a>
 coerced value.  The <code>hint</code> argument affects coercion of an object into a
 primitive type, and indicates preference for a string (<code>DUK_HINT_STRING</code>),
 a number (<code>DUK_HINT_NUMBER</code>), or neither (<code>DUK_HINT_NONE</code>).
 <code>DUK_HINT_NONE</code> causes a preference to a number, unless the input value
 is a <code>Date</code> instance, in which case a string is preferred (the exact
-coercion behavior is described in the Ecmascript specification).  If <code>idx</code>
+coercion behavior is described in the ECMAScript specification).  If <code>idx</code>
 is invalid, throws an error.</p>
 <p>Custom type coercion:</p>
 <ul>
@@ -14200,7 +14985,7 @@ is invalid, throws an error.</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_string.3">Summary <a class="sectionlink" href="#duk_to_string.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.8">ToString()</a>
 coerced value.  Returns a non-<code>NULL</code> pointer to the read-only,
 NUL-terminated string data.  If <code>idx</code> is invalid, throws an error.</p>
@@ -14278,7 +15063,7 @@ reflected on the value stack.  For instance, if value stack contains the string
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_uint16.3">Summary <a class="sectionlink" href="#duk_to_uint16.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.7">ToUint16()</a>
 coerced value.  Returns the coerced value.  If <code>idx</code> is invalid, throws
 an error.</p>
@@ -14308,7 +15093,7 @@ an error.</p>
 </div>
 <div class="api-part">
 <h2 class="api-summary sectiontitle" id="duk_to_uint32.3">Summary <a class="sectionlink" href="#duk_to_uint32.3">§</a></h2>
-<p>Replace the value at <code>idx</code> with an Ecmascript
+<p>Replace the value at <code>idx</code> with an ECMAScript
 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-9.6">ToUint32()</a>
 coerced value.  Returns the coerced value.  If <code>idx</code> is invalid, throws
 an error.</p>
@@ -14439,6 +15224,15 @@ The trimming behavior matches those of
 <p>Convenience API call, equivalent to
 <code><a href="#duk_error_va">duk_error_va()</a></code> with an error code
 <code>DUK_ERR_TYPE_ERROR</code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_type_error_va.4">Example <a class="sectionlink" href="#duk_type_error_va.4">§</a></h2>
@@ -14508,6 +15302,15 @@ The trimming behavior matches those of
 <p>Convenience API call, equivalent to
 <code><a href="#duk_error_va">duk_error_va()</a></code> with an error code
 <code>DUK_ERR_URI_ERROR</code>.</p>
+<div>
+<div class="note">
+This API call is not fully portable because the va_end() macro in the calling
+code may never be reached (e.g. due to an error throw).  Some implementations
+rely on va_end() to e.g. free memory allocated by va_start(); see
+<a href="https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown">https://stackoverflow.com/questions/11645282/do-i-need-to-va-end-when-an-exception-is-thrown</a>.
+However, such implementations are rare so this isn't usually a practical concern.
+</div>
+</div>
 </div>
 <div class="api-part">
 <h2 class="api-example sectiontitle" id="duk_uri_error_va.4">Example <a class="sectionlink" href="#duk_uri_error_va.4">§</a></h2>
