@@ -110,7 +110,7 @@ result is: 'TESTSTRING'
 Hello world!
 return value is: 123 (rc=0)
 return value is: Error: eval error (rc=1)
-return value is: SyntaxError: invalid object literal (line 1) (rc=1)
+return value is: SyntaxError: invalid object literal (line 1, end of input) (rc=1)
 top=0
 Hello world!
 top=0
@@ -127,7 +127,7 @@ result is: 'TESTSTRING'
 Hello world!
 return value is: 123 (rc=0)
 return value is: Error: eval error (rc=1)
-return value is: SyntaxError: invalid object literal (line 1) (rc=1)
+return value is: SyntaxError: invalid object literal (line 1, end of input) (rc=1)
 top=0
 Hello world!
 top=0

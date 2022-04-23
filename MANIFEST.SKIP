@@ -5,6 +5,8 @@ Makefile$
 README.pod
 .gitignore
 .git/
+.hgignore
+.hg/
 blib/
 pm_to_blib
 MYMETA.*

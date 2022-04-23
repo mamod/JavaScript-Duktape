@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 use Data::Dumper;
 use Scalar::Util qw( weaken );
-our $VERSION = '2.4.2';
+our $VERSION = '2.7.0';
 
 my $GlobalRef = {};
 
@@ -1385,7 +1385,7 @@ See C<examples/this.pl>
 
 =back
 
-=head1 DEAFULT JAVASCRIPT FUNCTIONS
+=head1 DEFAULT JAVASCRIPT FUNCTIONS
 
 JavaScript::Duktape has C<alert> and C<print> functions available as global
 functions to javascript, where C<alert> prints to STDERR and C<print> prints
@@ -1475,6 +1475,8 @@ or suggestions
 =item * Slaven Rezić L<@eserte|https://github.com/eserte>
 
 =item * Max Maischein L<@Corion|https://github.com/Corion>
+
+=item * Rene "cavac" Schickbauer L<@cavac|https://github.com/cavac>
 
 =back
 
