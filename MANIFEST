@@ -90,3 +90,5 @@ t/uncaught.t
 t/undefined.t
 t/use.t
 t/utf8.t
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)

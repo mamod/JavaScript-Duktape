@@ -20,3 +20,5 @@ nytprof.out
 /_eumm/
 _Inline/
 ex/
+.hg/
+.hgignore
